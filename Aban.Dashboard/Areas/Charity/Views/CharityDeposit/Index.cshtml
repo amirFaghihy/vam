@@ -1,0 +1,559 @@
+﻿@model X.PagedList.IPagedList<CharityDeposit>
+
+@using Aban.Service.Interfaces
+@using Aban.Common
+@inject IUserIdentityService _userIdentityService;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.PageTitle = "واریزی ها";
+    breadCrumb.Title = "واریزی ها";
+
+    breadCrumb.Links = new List<string[]> {
+#pragma warning disable CS8601 // Possible null reference assignment.
+        new string[2] { Url.Action("Index","Home" , new {area="Charity" }), "خانه" }
+#pragma warning disable CS8601 // Possible null reference assignment.
+    };
+
+    string sortColumn = ViewBag.sortColumn;
+    object RouteValue(string sortColumn)
+
+        => new
+        {
+            pageNumber = ViewBag.pageNumber,
+            lastColumn = ViewBag.lastColumn,
+            sortColumn = sortColumn,
+            isDesc = ViewBag.isDesc,
+            pageSize = ViewBag.pageSize,
+
+
+            userIdentityId = ViewBag.userIdentityId,
+            helper = ViewBag.helper,
+            charityAccount = ViewBag.charityAccount,
+            amount = ViewBag.amount,
+            isConfirm = ViewBag.isConfirm,
+            issueTracking = ViewBag.issueTracking,
+            registerDateFrom = ViewBag.registerDateFrom,
+            registerDateTo = ViewBag.registerDateTo,
+            documentRegisterDateTime = ViewBag.documentRegisterDateTime,
+            lastFourDigits = ViewBag.lastFourDigits,
+            confirmType = ViewBag.confirmType
+        };
+
+
+}
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+
+            <partial name="./Partial/_FilterTablePartial" />
+
+            @await Html.PartialAsync("~/Views/Shared/Generic/_CreateButtonWithPageSize.cshtml", "واریزی جدید")
+            <div class="table-responsive text-center">
+                <table class="table table-bordered table-hover mb-4">
+                    <thead>
+                        <tr>
+
+                            <th style="width: 162px;">
+
+                                @Html.ActionLink("کد", "Index", "CharityDeposit", RouteValue("Id"), new { @id = "Id" })
+
+
+                            </th>
+
+                            @if (User.IsInRole("Admin") || User.IsInRole("Foreman"))
+                            {
+                                <th style="width: 162px;">
+
+                                    @Html.ActionLink("ثبت کننده", "Index", "CharityDeposit", RouteValue("UserIdentityId"), new { @id = "UserIdentityId" })
+
+                                </th>
+                            }
+                            <th style="width: 162px;">
+
+                                @Html.ActionLink("مددکار", "Index", "CharityDeposit",
+                                RouteValue("HelperId")
+                                , new { @id = "HelperId" })
+
+
+                            </th>
+                            <th style="width: 162px;">
+                                @Html.ActionLink("مبلغ", "Index", "CharityDeposit",
+                                RouteValue("Amount")
+                                , new { @id = "Amount" })
+                            </th>
+                            <th style="width: 162px;">
+                                @Html.ActionLink("شماره پیگیری", "Index", "CharityDeposit",
+                                RouteValue("IssueTracking")
+                                , new { @id = "IssueTracking" })
+                            </th>
+
+
+                            <th style="width: 162px;">
+                                @Html.ActionLink("تاریخ سند", "Index", "CharityDeposit",
+
+                                RouteValue("DocumentRegisterDateTime")
+                                , new { @id = "DocumentRegisterDateTime" })
+                            </th>
+                            <th style="width: 162px;">
+                                @Html.ActionLink("تاریخ ثبت", "Index", "CharityDeposit",
+                                RouteValue("RegisterDate")
+                                , new { @id = "RegisterDate" })
+                            </th>
+
+                            <th style="width: 162px;">
+                                @Html.ActionLink("وضعیت", "Index", "CharityDeposit",
+                                RouteValue("IsConfirm")
+
+                                , new { @id = "IsConfirm" })
+                            </th>
+
+
+
+                            <th style="width: 162px;">عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+
+                            <tr>
+                                <td>
+                                    @item.Id
+                                    <br />
+                                    @if (User.IsInRole("Admin") && item.IsDone)
+                                    {
+                                        <i class="fa fa-check isVisible" style="color:lightgreen"></i>
+                                        <text>محاسبه شده در حقوق</text>
+                                    }
+                                </td>
+                                @if (User.IsInRole("Admin") || User.IsInRole("Foreman"))
+                                {
+                                    <td>
+
+                                        @{
+                                            string foremanId = "foremanName" + item.Id;
+
+                                        }
+                                        <span id="@item.UserIdentityId" data-userId="@item.UserIdentityId" class="get-user-data">
+                                        </span>
+                                        <br />
+                                        <span id="@foremanId" class="get-foreman-name" data-depositid="@item.Id">
+                                            سرکاربر:(در حال بازیابی)
+                                        </span>
+                                    </td>
+
+                                }
+                                <td>
+                                    <span id="@item.HelperId" data-userId="@item.HelperId" class="get-user-data">
+                                    </span>
+                                    <br />
+                                    <span>  کارت: @item.LastFourDigits</span>
+                                </td>
+                                <td>
+                                    <span id="amount@(item.Id)" class="amount">@item.Amount.ToString("N0")</span>
+                                    ريال
+                                </td>
+                                <td>
+                                    @item.IssueTracking
+                                    <br />
+                                    <span>  بانک: @item.CharityAccount.BankName.ToString()</span>
+                                    <br />
+                                    <span>  حساب: @item.CharityAccount.Title</span>
+
+                                </td>
+
+
+                                <td>
+                                    @item.DocumentRegisterDateTime.ToConvertDateTimeToPersianDateTime()
+                                </td>
+                                <td>
+                                    @item.RegisterDate.ToConvertDateTimeToPersianDateTime()
+                                </td>
+                                <td>
+                                    @if (item.IsConfirm)
+                                    {
+
+                                        <i class="fa fa-check isVisible" style="color:lightgreen"></i>
+                                        @item.ConfirmType.GetDescription()
+                                        <br />
+                                        <span> غیر قابل ویرایش</span>
+                                        <br />
+                                        <span>@item.ConfirmDate?.ToConvertDateTimeToPersianDateTime()</span>
+                                        if (item.CharityBankRecordId is not null && User.IsInRole("Admin"))
+                                        {
+                                            <br />
+                                            <a asp-action="Index" asp-controller="CharityBankRecord" asp-area="Charity"
+                                   asp-route-id="@item.CharityBankRecordId" class="btn-xs btn-success" target="_blank">
+                                                نمایش رکورد بانکی
+                                            </a>
+                                        }
+
+
+
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-times isHidden" style="color:red"></i>
+                                        <br />
+                                        <span>قابل ویرایش</span>
+                                    }
+                                </td>
+
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
+                                        <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
+                                            @if (item.UserIdentityId == _userIdentityService.GetUserId(User) && !item.IsConfirm)
+                                            {
+                                                <a class="btn btn-secondary" href="@Url.Action("Edit", new { id = item.Id })">ویرایش</a>
+
+                                                <a class="btn btn-danger" href="@Url.Action("Delete", new { id = item.Id })" onclick="if(confirm('این رکورد حذف شود؟')) location.href=this.href; return false;">حذف</a>
+
+                                            }
+                                            @if (User.IsInRole("Admin") && !item.IsConfirm)
+                                            {
+
+                                                <a data-depositid="@item.Id" class="dropdown-item show-user-info" style="cursor:pointer;"><i class="flaticon-home-fill-1 mr-1"></i>تایید</a>
+
+                                                //<a class="btn btn-success" asp-action="ConfirmDeposit" asp-route-id="@item.Id" onclick="if(confirm('این رکورد تایید شود؟')) location.href=this.href; return false;">تایید</a>
+                                            }
+                                        </div>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th style="width: 162px;">کد</th>
+                            @if (User.IsInRole("Admin") || User.IsInRole("Foreman"))
+                            {
+                                <th>
+                                    ثبت کننده
+                                </th>
+                            }
+                            <th style="width: 162px;">
+                                مددکار
+                            </th>
+                            <th style="width: 162px;">
+                                مبلغ
+                            </th>
+                            <th style="width: 162px;">
+                                شماره پیگیری
+                            </th>
+
+
+                            <th style="width: 162px;">
+                                تاریخ سند
+                            </th>
+                            <th style="width: 162px;">
+                                تاریخ ثبت
+                            </th>
+
+                            <th style="width: 162px;">
+                                وضعیت
+                            </th>
+
+                            <th>عملیات</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <partial name="./Partial/_PaginationCountPartial" model="new PaginationInfo(Model)" />
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="usereModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title">تایید پرداختی</h5>
+            </div>
+            <div class="modal-body">
+                <div id="modal-text ">
+                    <label class="control-label">شناسه بانکی</label>
+                    <input type="hidden" name="deposithiddenid" id="deposithiddenid" />
+                    <input type="hidden" name="isForceToConfirm" id="isForceToConfirm" value="false" />
+                    <div class="row col-12">
+
+                        <button class="btn btn-info btn-xs col-2" type="button" onclick="Paste()" title="الصاق">
+                            <i class="fas fa-paste fa-2x"></i>
+                        </button>
+                        <input type="text" name="bankRecordId" id="bankRecordId" class="form-control col-10" />
+                        <span class="error-alert" style="color:red;font-size:bold"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-warning btn-close-modal" data-dismiss="modal" onclick="CloseModal()"><i class="flaticon-cancel-12"></i> بستن </button>
+                <button type="button" id="confirmDepositAdmin" class="btn btn-primary confirmDepositAdmin" onclick="ConfirmPayment()"> ذخیره </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="custom_load_screen" style="display: none;">
+    <div class="loader">
+        <div class="loader-content">
+            <div class="spinner-grow align-self-center"></div>
+        </div>
+    </div>
+</div>
+
+
+@section Styles{
+    <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+}
+
+    @section Scripts{
+    <script src="~/plugins/select2/select2.min.js"></script>
+    <script src="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+
+    <script>
+        // With postfix
+        $("input[name='PercentSalary']").TouchSpin({
+            postfix: '%',
+        });
+        function GetForemanName(depositId) {
+            $.ajax({
+                url: '/find-foreman',
+                type: 'GET',
+                data: { depositId: depositId },
+                contentType: false,
+                success: function (response) {
+                    $("#foremanName" + depositId).html(response.data);
+
+                },
+                error: function (xhr, status, error) {
+                    // Request failed, handle the error here
+                    console.error('Error: ' + error);
+                }
+            });
+        }
+
+
+        function GetUsersData() {
+
+            // تعریف یک آرایه برای ذخیره آی‌دی‌ها
+            var arrUsersIds = [];
+            // گرفتن تمام عناصر span با کلاس "get-user-data"
+            $("span.get-user-data").each(function () {
+                // افزودن آی‌دی هر عنصر به آرایه
+                arrUsersIds.push($(this).attr('id'));
+            });
+
+            var usersIds = JSON.stringify(arrUsersIds);
+
+            $.ajax({
+                url: '/find-user-data',
+                type: 'POST',
+                dataType: 'json', // نوع داده دریافتی از بک‌اند
+                data: { stringUserIds: usersIds },
+                success: function (result) {
+
+                    if (result == null) {
+                        alert('خطایی رخ داده است، برای بارگزاری اطلاعات صفحه را رفرش کنید.')
+                    }
+                    else {
+
+                        var usersDataResult = result.data;
+
+                        for (var i = 0; i < usersDataResult.length; i++) {
+                            // انتخاب تمام تگ‌هایی که ویژگی data-userId
+                            var elementsWithSameUserId = $('[data-userId="' + usersDataResult[i].id + '"]');
+
+                            // تنظیم مقدار جدید به تمام تگ‌های انتخاب شده
+                            elementsWithSameUserId.each(function () {
+                                $(this).html(usersDataResult[i].firstName + " " + usersDataResult[i].lastName);
+                            });
+
+                            //$("#" + usersDataResult[i].id).html(usersDataResult[i].firstName + usersDataResult[i].lastName);
+                        }
+                    }
+
+                },
+                error: function (xhr, status, error) {
+                    // Request failed, handle the error here
+                    console.error('Error: ' + error);
+                }
+            });
+        }
+
+
+        $("#userIdentityId").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class23');
+
+        $("#charityAccount").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class23');
+
+
+        $("#helper").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class58');
+
+    </script>
+
+    @if (User.IsInRole("Admin"))
+    {
+        <script>
+
+            function Paste() {
+                navigator.clipboard.readText()
+                    .then(text => {
+                        $('#bankRecordId').val(text);
+                    });
+            }
+
+            $('.show-user-info').click(function () {
+
+                const depositId = $(this).data("depositid");
+                $('#userModal').modal('show');
+                $('#deposithiddenid').val(depositId);
+                //loadScrean();
+
+
+            });
+
+            $('.btn-close-modal').click(function () {
+                $('#bankRecordId').val('');
+            });
+            $('.btn-close-modal').click(function () {
+                hideScrean();
+            });
+
+
+            function loadScrean() {
+                $('#custom_load_screen').css('display', 'block');
+            }
+
+            function hideScrean() {
+                $('#custom_load_screen').css('display', 'none');
+            }
+
+            function ResetModal() {
+                setFalseToForce();
+
+            }
+            function CloseModal() {
+                setFalseToForce();
+                $(".error-alert").html(``);
+
+            }
+
+            function setFalseToForce() {
+                $("#isForceToConfirm").val('false');
+                $('#bankRecordId').val('');
+                $(".modal-footer").html(` <button class="btn btn-warning btn-close-modal" data-dismiss="modal" ><i class="flaticon-cancel-12"></i> بستن </button>
+                                                                                                                                                    <button type="button" id="confirmDepositAdmin" class="btn btn-primary confirmDepositAdmin" onclick="ConfirmPayment()"> ذخیره </button>`);
+            }
+
+            function ConfirmPayment() {
+
+
+                var depositId = $('#deposithiddenid').val();
+                var bankRecordId = $('#bankRecordId').val();
+                var isForceToConfirm = $("#isForceToConfirm").val();
+                loadScrean();
+                $.ajax(
+                    {
+                        method: "POST",
+                        url: "/Charity/CharityDeposit/ConfirmDeposit",
+                        data: { deposithiddenid: depositId, bankRecordId: bankRecordId, isForceToConfirm: isForceToConfirm },
+                        success: function (data) {
+
+                            //Success = 0,
+                            //    Danger = 1,
+                            //    Warning = 2,
+                            //    Info = 3,
+                            hideScrean();
+
+                            if (data.data.type == 1) {
+                                $(".error-alert").html(data.data.message);
+                                $('#bankRecordId').val('');
+                                $("#isForceToConfirm").val('false');
+
+                                setFalseToForce();
+                            } else if (data.data.type == 2) {
+                                $(".error-alert").html(``);
+                                $(".modal-footer").html(`<h2 style="color:yellow">` + data.data.message + ` </h2>`);
+                                $(".modal-footer").append(`<br />`);
+                                $(".modal-footer").append(`<p style="color:yellow;font-size:bold"> از انجام تایید اطمینان دارید؟</p> `);
+                                $(".modal-footer").css({ 'color': 'yellow' });
+                                $("#isForceToConfirm").val('true');
+                                $(".modal-footer").append(` <button type="button"  class="btn btn-primary confirmDepositAdmin" onclick="ConfirmPayment()"> بله </button>`);
+                                $(".modal-footer").append(`  <button class="btn btn-warning btn-close-modal setFalseToForce" onclick="setFalseToForce()" data-dismiss="modal"><i class="flaticon-cancel-12"></i> خیر </button>`);
+
+                            } else if (data.data.type == 0) {
+
+                                setFalseToForce();
+                                $(".error-alert").html(``);
+                                $(".modal-footer").html(`<h2 style="color:green">` + data.data.message + ` </h2>`);
+                                $(".modal-footer").append(`<p style="color:green;font-size:bold"> تا هدایت شدن به صفحه جدید منتظر بمانید</p> `);
+                                loadScrean();
+                                location.reload();
+                            }
+
+
+                        },
+                        error: function () {
+                            hideScrean();
+                            $('#bankRecordId').val('');
+                            $("#isForceToConfirm").val('false');
+                            $(".error-alert").html(``);
+                            alert('خطایی رخ داده است، دوباره تلاش کنید !');
+                        }
+                    }
+                );
+
+            }
+
+            $(".setFalseToForce").click(function () {
+                setFalseToForce();
+            });
+
+
+            $(document).ready(function () {
+
+                setTimeout(function () {
+
+                    var spans = $("span.get-foreman-name");
+                    spans.each(function () {
+                        // Get the value of the data-depositId attribute using .data() method
+                        var depositId = $(this).data("depositid");
+                        GetForemanName(depositId);
+                    });
+
+                    //GetUsersData();
+
+
+                }, 3000); // 3000 milliseconds = 3 seconds
+            });
+
+        </script>
+    }
+
+    <script>
+        $(document).ready(function () {
+            GetUsersData();
+        });
+    </script>
+}

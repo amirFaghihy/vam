@@ -1,0 +1,101 @@
+﻿@model CharityWage
+<div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
+    <div class="info">
+        <div class="r!importantw">
+            <div class="col-md-11 mx-auto">
+                <div class="row">
+
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("right")" />
+                        <br />
+                        <br />
+                    </div>
+
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="IsDelete" />
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="WageReceiverId"></label>
+                            <select asp-for="WageReceiverId" class="form-control basic" asp-items="ViewBag.listWageReceiver">
+                            </select>
+                            <span asp-validation-for="WageReceiverId" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="AccountNumber"></label>
+                            <input asp-for="AccountNumber" type="text" class="form-control">
+                            <span asp-validation-for="AccountNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="FixedSalary"></label>
+                            <input asp-for="FixedSalary" type="text" class="form-control" onkeyup="formatNumber(this.id, this.value)" value="@Model.FixedSalary.ToString("N0")" onclick="select()">
+                            <span asp-validation-for="FixedSalary" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="PercentSalary"></label>
+                            <input asp-for="PercentSalary" type="text" class="form-control" onclick="select()">
+                            <span asp-validation-for="PercentSalary" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="WageDateFrom"></label>
+                            @if (Model.WageDateFrom != new DateTime())
+                            {
+                                <input id="wageDateFrom" name="wageDateFromString" type="text" class="form-control mb-4 PersianDatePicker" readonly value="@Html.ConvertToPersianDate(Model.WageDateFrom)" autocomplete="off" />
+                            }
+                            else
+                            {
+                                <input id="wageDateFrom" name="wageDateFromString" type="text" class="form-control mb-4 PersianDatePicker" readonly value="@Html.ConvertToPersianDate(DateTime.Now)" autocomplete="off" />
+                            }
+                            <span asp-validation-for="WageDateFrom" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="WageDateTo"></label>
+                            @if (Model.WageDateTo != new DateTime())
+                            {
+                                <input id="wageDateTo" name="wageDateToString" type="text" class="form-control mb-4 PersianDatePicker" readonly value="@Html.ConvertToPersianDate(Model.WageDateTo)" autocomplete="off" />
+                            }
+                            else
+                            {
+                                <input id="wageDateTo" name="wageDateFromTo" type="text" class="form-control mb-4 PersianDatePicker" readonly value="@Html.ConvertToPersianDate(DateTime.Now)" autocomplete="off" />
+                            }
+                            <span asp-validation-for="WageDateTo" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="SumOfDeposits"></label>
+                            <input asp-for="SumOfDeposits" type="text" class="form-control" onkeyup="formatNumber(this.id, this.value)" value="@Model.SumOfDeposits.ToString("N0")" onclick="select()">
+                            <span asp-validation-for="SumOfDeposits" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Description"></label>
+                            <textarea class="form-control" asp-for="Description" name="Description"></textarea><span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("left")" />

@@ -1,0 +1,246 @@
+﻿@model List<CharityUserIdentityDepositViewModel>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.PageTitle = "حقوق";
+    breadCrumb.Title = "حقوق";
+
+    breadCrumb.Links = new List<string[]> {
+#pragma warning disable CS8601 // Possible null reference assignment.
+        new string[2] { Url.Action("Index"), breadCrumb.PageTitle }
+#pragma warning disable CS8601 // Possible null reference assignment.
+    };
+
+}
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
+
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+
+            <form method="post" asp-action="SetSalaryCalculation">
+
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="col-md-12" style="float: right !important; margin-bottom: 15px;">
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-success mb-2 pr-5 pl-5 btn-showloader"> تأیید </button>
+                            <a class="btn btn-danger mb-2 btn-showloader" href="/Charity/CharityAccount/Index">انصراف</a>
+                        </div>
+                    </div>
+
+                    <br>
+                    <br>
+                </div>
+
+                <input hidden name="startDate" id="startDate" asp-for="@Model[0].WageDateFrom" />
+                <input hidden name="endDate" id="endDate" asp-for="@Model[0].WageDateTo" />
+                <input hidden name="roleId" asp-for="@Model[0].RoleId" />
+
+                <div class="table-responsive text-center">
+                    <table class="table table-bordered table-hover mb-4">
+                        <thead>
+                            <tr>
+
+                                <th style="width: 7%;">ردیف</th>
+                                <th style="width: 7%;">نام</th>
+                                <th style="width: 10%;">نام خانوادگی</th>
+                                <th style="width: 10%;">نام پدر</th>
+                                <th style="width: 20%;">حقوق ثابت</th>
+                                <th style="width: 23%;">درصد سود</th>
+                                <th style="width: 13%;">جمع واریزی ها</th>
+
+                                <th style="width: 10%;">عملیات</th>
+                            </tr>
+                        </thead>
+                        @{
+                            int counter = 0;
+                        }
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @(counter + 1)
+                                    <input type="hidden" value="@item.UserIdentityId" name="[@counter].UserIdentityId">
+                                </td>
+                                <td>@item.FirstName</td>
+                                <td>@item.LastName</td>
+                                <td>@item.FatherName</td>
+                                <td>
+                                    <input class="form-control" id="FixedSalary_@counter" name="[@counter].FixedSalary" type="text" onkeyup="formatNumber(this.id, this.value)" onclick="select()" value="@item.FixedSalary.ToString("N0")" />
+                                </td>
+                                <td>
+                                    <input class="form-control" id="PercentSalary_@counter" name="[@counter].PercentSalary" type="text" value="@item.PercentSalary" />
+                                </td>
+                                <td>@item.TotalOfDeposits.ToString("N0")</td>
+
+
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
+                                        <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
+                                            <a class="dropdown-item btnWage" data-userid="@item.UserIdentityId" style="cursor: pointer;"> آخرین حقوق دریافتی </a>
+                                            <a class="dropdown-item btnAddition" data-userid="@item.UserIdentityId" style="cursor: pointer;"> اضافات </a>
+                                            <a class="dropdown-item btnDeducation" data-userid="@item.UserIdentityId" style="cursor: pointer;"> کسورات </a>
+                                            <a class="dropdown-item btnLoan" data-userid="@item.UserIdentityId" style="cursor: pointer;"> اقساط سررسید شده </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            counter++;
+
+                        }
+                        <tfoot>
+                            <tr>
+                                <th style="width: 162px;">ردیف</th>
+                                <th style="width: 162px;">نام</th>
+                                <th style="width: 162px;">نام خانوادگی</th>
+                                <th style="width: 162px;">نام پدر</th>
+                                <th style="width: 162px;">حقوق ثابت</th>
+                                <th style="width: 162px;">درصد سود</th>
+                                <th style="width: 162px;">جمع واریزی ها</th>
+
+                                <th style="width: 162px;">عملیات</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <div class="col-md-12" style="float: left !important; margin-bottom: 15px;">
+                        <div class="text-left">
+                            <button id="Savechanges" type="submit" class="btn btn-success mb-2 pr-5 pl-5"> تأیید </button>
+                            <a class="btn btn-danger mb-2" href="/Charity/CharityAccount/Index">انصراف</a>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="wageModal" tabindex="-1" role="dialog" aria-labelledby="wageeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title">پیغام سیستم</h5>
+            </div>
+            <div class="modal-body">
+                <div id="modal-text">
+                    پیغام سیستم !!!
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info" data-dismiss="modal"><i class="flaticon-cancel-12"></i> بستن </button>
+                @*<button type="button" class="btn btn-primary"> ذخیره </button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="custom_load_screen" style="display: none;">
+    <div class="loader">
+        <div class="loader-content">
+            <div class="spinner-grow align-self-center"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+@section Styles{
+    <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+}
+
+    @section Scripts{
+    <script src="~/plugins/select2/select2.min.js"></script>
+    <script src="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+
+    <script>
+        // With postfix
+        for (var i = 0; i < @(Model.Count()); i++) {
+            $("#PercentSalary_" + i).TouchSpin({
+                postfix: '%',
+            });
+        }
+
+
+        $('.btnWage, .btnAddition, .btnDeducation, .btnLoan').click(function () {
+
+            const userId = $(this).data("userid");
+            const paymentDateFrom = $('#startDate').val();
+            const paymentDateTo = $('#endDate').val();
+
+            var allClass = $(this).attr("class").split(' ');
+            var thisClass = allClass[allClass.length - 1];
+
+            var actionName = ""
+
+            switch (thisClass) {
+                case 'btnWage':
+                    actionName = "GetWageByUserId";
+                    $('#modal-title').text('آخرین حقوق دریافتی');
+                    break;
+                case 'btnAddition':
+                    actionName = "GetAdditionsByUserId";
+                    $('#modal-title').text('لیست اضافات');
+                    break;
+                case 'btnDeducation':
+                    actionName = "GetDeducationsByUserId";
+                    $('#modal-title').text('لیست کسورات');
+                    break;
+                case 'btnLoan':
+                    actionName = "GetLoanInstallmentsByUserId";
+                    $('#modal-title').text('لیست اقساط سررسید شده');
+                    break;
+            }
+
+            loadScrean();
+
+            $.ajax(
+                {
+                    method: "POST",
+                    url: "/Charity/CharityWage/" + actionName,
+                    data: { userId: userId, paymentDateFrom: paymentDateFrom, paymentDateTo: paymentDateTo },
+                    success: function (data) {
+
+                        if (data.result.length == 1) {
+                            $('#modal-text').html(`<p>- ${data.result} </p>`);
+                        }
+                        else if (data.result.length > 1) {
+                            $('#modal-text').html(`<p>- ${data.result[0]} </p>`);
+                            for (var i = 1; i < data.result.length; i++) {
+                                $('#modal-text').append(`<p>- ${data.result[i]} </p>`);
+                            }
+                        }
+                        else {
+
+                        }
+
+                        hideScrean();
+                        $('#wageModal').modal('show');
+                    },
+                    error: function () {
+                        hideScrean();
+                        alert('خطایی رخ داده است، دوباره تلاش کنید !');
+                    }
+                }
+            );
+        });
+
+
+        function loadScrean() {
+            $('#custom_load_screen').css('display', 'block');
+        }
+
+        function hideScrean() {
+            $('#custom_load_screen').css('display', 'none');
+        }
+    </script>
+    }

@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.Title = "وقایع";
+    breadCrumb.PageTitle = "وقایع";
+
+    breadCrumb.Links = new List<string[]>
+    {
+#pragma warning disable CS8601 // Possible null reference assignment.
+        new string[2]{Url.Action("Index","Home", new {area= "Charity" }),"خانه" },
+        new string[2]{Url.Action("Index","CharityBankRecord", new {area= "Charity" }),"سوابق بانکی" },
+
+#pragma warning disable CS8601 // Possible null reference assignment.
+    };
+}
+
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+            <form enctype="multipart/form-data" method="post" class="section contact">
+
+                <fieldset>
+                    <partial name="./Partial/_CreateOrEditPartial" model="Model" />
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

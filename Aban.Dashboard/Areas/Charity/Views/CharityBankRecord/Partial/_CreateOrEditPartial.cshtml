@@ -1,0 +1,65 @@
+﻿
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("left")" />
+        <br />
+        <br />
+    </div>
+</div>
+
+
+<div class="row">
+
+
+    <div class="col-12" style="color:red">
+        <ul>
+            <li>لطفا پس از بارگزاری فایل، تا هدایت شدن به صفحه ی جدید منتظر بمانید</li>
+            <li> لطفا در انتخاب حساب، دقت کنید</li>
+            <li>فقط فایل اکسل اجازه ی آپلود دارد</li>
+
+        </ul>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>حساب</label>
+            <select name="charityAccountId" id="charityAccount" class="form-control basic" asp-items="@ViewBag.listCharityAccount"></select>
+
+        </div>
+    </div>
+
+    @*<div class="col-md-12" id="">
+        <div class="form-group">
+            <label>فایل داری کد پیگیری</label>
+            <input class="form-control" type="radio" name="containIssueTrackNumber" value="true" />
+            <label>فایل بدن کد پیگیری</label>
+            <input class="form-control" type="radio" name="containIssueTrackNumber" value="false" />
+
+        </div>
+    </div>*@
+
+
+    <div class="col-12">
+        <div role="form">
+            <div class="form-group">
+                <label>فایل اکسل بانکی</label>
+                <br />
+                <input type="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" />
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+</div>
+
+
+
+<partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("right")" />
+

@@ -1,0 +1,40 @@
+﻿<nav class="navbar-default navbar-static-side" role="navigation" style="left: 1111px; direction: rtl;">
+    <div class="sidebar-collapse">
+        <ul class="nav" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <span>
+                        <img alt="image" class="img-circle" src="~/img/logo.png" style="width: 100px" />
+                    </span>
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <span class="clear">
+                            <span class="block m-t-xs">
+                                <strong class="font-bold">مدیر سایت</strong>
+                            </span> <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a href="@Url.Action("Profile", "AppViews")">Profile</a></li>
+                        <li><a href="@Url.Action("Contacts", "AppViews")">Contacts</a></li>
+                        <li><a href="@Url.Action("Inbox", "Mailbox")">Mailbox</a></li>
+                        <li class="divider"></li>
+                        <li><a href="@Url.Action("Logout", "UserIdentity", new{area="User"})">خروج</a></li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    IN+
+                </div>
+            </li>
+            <li class="@Html.IsSelected(controller: "Content")">
+                <a href="@Url.Action("Index", "UserIdentity", new {area = "User"})"><i class="fa fa-user"></i> <span class="nav-label" data-i18n="nav.dashboard">مدیریت کاربران</span></a>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">سیستم مدیریت محتوا</span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li><a href="@Url.Action("Index", "BlogCategory", new {area = "Blog"})">دسته بندی</a></li>
+                    <li><a href="@Url.Action("Index", "BlogArticle", new {area = "Blog"})">مدیریت محتوا</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>

@@ -1,0 +1,313 @@
+﻿@model X.PagedList.IPagedList<CharityBankRecord>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.PageTitle = "سوابق بانکی";
+    breadCrumb.Title = "سوابق بانکی";
+
+    breadCrumb.Links = new List<string[]> {
+#pragma warning disable CS8601 // Possible null reference assignment.
+        new string[2] { Url.Action("Index","Home" , new {area="Charity" }), "خانه" }
+#pragma warning disable CS8601 // Possible null reference assignment.
+    };
+
+    string sortColumn = ViewBag.sortColumn;
+    object RouteValue(string sortColumn)
+
+       => new
+       {
+           pageNumber = ViewBag.pageNumber,
+           lastColumn = ViewBag.lastColumn,
+           sortColumn = sortColumn,
+           isDesc = !ViewBag.isDesc,
+           pageSize = ViewBag.pageSize,
+
+
+           userIdentityId = ViewBag.userIdentityId,
+           charityAccountId = ViewBag.charityAccountId,
+           paperNumber = ViewBag.paperNumber,
+           documentNumber = ViewBag.documentNumber,
+           creditor = ViewBag.creditor,
+           debtor = ViewBag.debtor,
+           inventory = ViewBag.inventory,
+           documentRegisterDateTimeFrom = ViewBag.documentRegisterDateTimeFrom,
+           documentRegisterDateTimeTo = ViewBag.documentRegisterDateTimeTo,
+           registerDateFrom = ViewBag.registerDateFrom,
+           registerDateTo = ViewBag.registerDateTo,
+           description = ViewBag.description
+       };
+
+}
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+
+            <partial name="./Partial/_FilterTablePartial" />
+
+            @await Html.PartialAsync("~/Views/Shared/Generic/_CreateButtonWithPageSize.cshtml", "سابقه بانک جدید")
+            <div class="table-responsive text-center">
+                <table class="table table-bordered table-hover mb-4">
+                    <thead>
+                        <tr>
+
+                            <th style="width: 162px;">
+
+                                @Html.ActionLink("کد", "Index", "CharityBankRecord", RouteValue("Id"), new { @id = "Id" })
+                            </th>
+
+                            <th style="width: 162px;">
+
+                                @Html.ActionLink("حساب بانکی", "Index", "CharityBankRecord", RouteValue("CharityAccountId"), new { @id = "CharityAccountId" })
+                            </th>
+
+
+
+                            <th style="width: 162px;">
+
+                                @Html.ActionLink("شماره برگه/واریز کننده", "Index", "CharityBankRecord", RouteValue("PaperNumber"), new { @id = "PaperNumber" })
+
+
+                            </th>
+                            <th style="width: 162px;">
+                                @Html.ActionLink("شماره سریال/شماره سند", "Index", "CharityBankRecord", RouteValue("DocumentNumber"), new { @id = "DocumentNumber" })
+                            </th>
+                            <th style="width: 162px;">
+                                @Html.ActionLink("کد حسابگری/کارت واریز کننده", "Index", "CharityBankRecord", RouteValue("Accountant"), new { @id = "Accountant" })
+                            </th>
+
+                            <th style="width: 162px;">
+                                @Html.ActionLink("بستانکار/واریزی", "Index", "CharityBankRecord",RouteValue("Creditor"), new { @id = "Creditor" })
+                            </th>
+
+                            @*<th style="width: 162px;">
+                                @Html.ActionLink("بدهکار/برداشت", "Index", "CharityBankRecord", RouteValue("Debtor"), new { @id = "Debtor" })
+                            </th>*@
+
+                            <th style="width: 162px;">
+                                @Html.ActionLink("موجودی", "Index", "CharityBankRecord", RouteValue("Inventory"), new { @id = "Inventory" })
+                            </th>
+
+
+                            <th style="width: 162px;">
+                                @Html.ActionLink("شرح سند", "Index", "CharityBankRecord",RouteValue("Description"), new { @id = "Description" })
+                            </th>
+
+                            <th style="width: 162px;">
+                                @Html.ActionLink("تاریخ سند", "Index", "CharityBankRecord", RouteValue("DocumentRegisterDateTime"), new { @id = "DocumentRegisterDateTime" })
+                            </th>
+
+                            <th style="width: 162px;">
+                                حذف
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+
+                            <tr>
+                                <td class="spanId" data-id="@item.Id">
+                                    <span id="bankRecordSpanId@(item.Id)" data-id="@item.Id" >
+                                        @item.Id
+
+                                    </span>
+                                    <i class="far fa-copy fa-2x d-none" id="bankRecordIconId@(item.Id)" data-id="@item.Id" class="iconId" onclick="CopyValue(@item.Id)" title="کپی">
+
+                                    </i>
+                                </td>
+                                <td>
+                                    @item.CharityAccount!.Title
+                                    <br>
+                                    @item.CharityAccount.BankName.ToString().Replace("_" , " ")
+                                </td>
+
+                                <td>
+                                    @item.PaperNumber
+                                </td>
+                                <td>
+                                    <span data-foremanname="@item.Id" id="@("foreman"+item.Id)" class="detail-span"></span>
+                                    <span data-clerkName="@item.Id" id="@("clreck"+item.Id)"></span>
+                                    <span data-bankrecordid="@item.Id" id="@("bankrecord"+item.Id)"></span>
+
+                                    @item.DocumentNumber
+
+
+                                </td>
+                                <td>
+                                    @item.Accountant
+                                </td>
+                                <td>
+                                    @item.Creditor.ToString("N0") ريال
+                                </td>
+                                @*<td>
+                                    @item.Debtor.ToString("N0")
+                                </td>*@
+                                <td>
+                                    @item.Inventory.ToString("N0")
+                                </td>
+                                <td>
+                                    @item.Description
+                                </td>
+                                <td>
+                                    
+                                    ---تاریخ سند---
+                                    <br/>
+                                    @item.DocumentRegisterDateTime.ToConvertDateTimeToPersianDateTime()
+                                    <br/>
+                                    ---تاریخ ثبت---
+                                    <br/>
+                                    @item.RegisterDate.ToConvertDateTimeToPersianDateTime()
+
+                                </td>
+                                <td>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" onclick="if(confirm('این رکورد حذف شود؟')) location.href=this.href; return false;"> حذف</a>
+                                    @*@Html.ActionLink("حذف", "Delete", "CharityBankRecord", new { area = "Charity", Id = item.Id }, new { @class = "btn btn-danger" })*@
+                                </td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th style="width: 162px;">کد</th>
+                            <th style="width: 162px;">حساب بانکی</th>
+
+                            <th style="width: 162px;">
+                                شماره برگه/واریز کننده
+                            </th>
+                            <th style="width: 162px;">
+                                شماره سریال/شماره سند
+                            </th>
+                            <th style="width: 162px;">
+                                کد حسابگری/کارت واریز کننده
+                            </th>
+                            <th style="width: 162px;">
+                                بستانکار/واریزی
+                            </th>
+
+                            @*<th style="width: 162px;">
+                                بدهکار/برداشت
+                            </th>*@
+                            <th style="width: 162px;">
+                                موجودی
+                            </th>
+                            <th style="width: 162px;">
+                                شرح سند
+                            </th>
+
+                            <th style="width: 162px;">
+                                تاریخ سند
+                            </th>
+                            <th style="width: 162px;">
+                                حذف
+                            </th>
+
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <partial name="./Partial/_PaginationCountPartial" model="new PaginationInfo(Model)" />
+
+        </div>
+    </div>
+</div>
+
+@section Styles{
+    <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+}
+
+@section Scripts{
+    <script src="~/plugins/select2/select2.min.js"></script>
+    <script src="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+
+    <script>
+        function CopyValue(valueId) {
+            navigator.clipboard.writeText(valueId);
+        }
+        // With postfix
+        $("input[name='PercentSalary']").TouchSpin({
+            postfix: '%',
+        });
+
+
+        function GetDetail(bankRecordId) {
+            $.ajax({
+                url: '/GetDetail',
+                type: 'GET',
+                data: { bankRecordId: bankRecordId },
+                contentType: false,
+                success: function (response) {
+
+                    //foreman
+                    $("#foreman" + bankRecordId).html('سرکاربر: ' + response.foremanName);
+                    $("#foreman" + bankRecordId).append('<br />')
+                    //clreck
+                    $("#clreck" + bankRecordId).html('منشی: ' + response.clreckName);
+                    $("#clreck" + bankRecordId).append('<br />')
+                    //bankrecord
+                    if (response.depositId != null) {
+                        $("#bankrecord" + bankRecordId).html(`<a class='btn-xs btn-success' href='/charity/charitydeposit/index?id=${response.depositId}' target='_blank'> نمایش واریزی</a>`);
+                        $("#bankrecord" + bankRecordId).append('<br />')
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Request failed, handle the error here
+                    console.error('Error: ' + error);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+
+            
+
+            $('.spanId').hover(function () {
+                var getId=$(this).data('id');
+                $('#bankRecordIconId'+getId).removeClass('d-none');
+                $('#bankRecordSpanId' + getId).addClass('d-none');
+                
+            }, function () {
+                var getId=$(this).data('id');
+                $('#bankRecordIconId' + getId).addClass('d-none');
+                $('#bankRecordSpanId' + getId).removeClass('d-none');
+                
+            })
+
+
+            setTimeout(function () {
+
+                var spans = $("span.detail-span");
+                spans.each(function () {
+                    // Get the value of the data-depositId attribute using .data() method
+                    var bankRecordId = $(this).data("foremanname");
+                    GetDetail(bankRecordId);
+
+
+                });
+
+
+
+
+            }, 5000); // 5000 milliseconds = 5 seconds
+
+
+        });
+
+
+        $("#charityAccountId").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class58');
+
+
+    
+    </script>
+    }

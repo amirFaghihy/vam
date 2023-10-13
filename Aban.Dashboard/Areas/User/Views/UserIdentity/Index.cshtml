@@ -1,0 +1,277 @@
+﻿@model X.PagedList.IPagedList<UserIdentity>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.PageTitle = "مدیریت کاربران";
+    breadCrumb.Title = "مدیریت کاربران";
+
+    breadCrumb.Links = new List<string[]> {
+#pragma warning disable CS8601 // Possible null reference assignment.
+        new string[2] { Url.Action("Index"), breadCrumb.PageTitle }
+#pragma warning disable CS8601 // Possible null reference assignment.
+    };
+
+    bool isUserAdmin = false;
+    if (User.IsInRole("Admin"))
+    {
+        isUserAdmin = true;
+    }
+
+    string sortColumn = ViewBag.sortColumn;
+    object RouteValue(string sortColumn)
+
+           => new
+           {
+               id = ViewBag.id,
+               userName = ViewBag.userName,
+               phoneNumber = ViewBag.phoneNumber,
+               firstName = ViewBag.firstName,
+               lastName = ViewBag.lastName,
+               nationalCode = ViewBag.nationalCode,
+               ismale = ViewBag.ismale,
+               islocked = ViewBag.islocked,
+               isconfirm = ViewBag.isconfirm,
+               birthDateFrom = ViewBag.birthDateFrom,
+               birthDateTo = ViewBag.birthDateTo,
+               registerDateFrom = ViewBag.registerDateFrom,
+               registerDateTo = ViewBag.registerDateTo,
+               roleNames = ViewBag.rolesList,
+
+
+               pageNumber = ViewBag.pageNumber,
+               pageSize = ViewBag.pageSize,
+               sortColumn = sortColumn,
+               isDesc = ViewBag.isDesc,
+               lastColumn = ViewBag.lastColumn
+           };
+
+}
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
+
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+
+            <partial name="_FilterTablePartial" />
+
+            @await Html.PartialAsync("~/Views/Shared/Generic/_CreateButtonWithPageSize.cshtml", "کاربر جدید")
+            <div class="table-responsive text-center">
+                <table class="table table-bordered table-hover mb-4">
+                    <thead>
+                        <tr>
+
+                            <th style="width: 162px;">@Html.ActionLink("کد", "Index", "UserIdentity", RouteValue("Id"), new { @id = "Id" })
+                            <th style="width: 162px;">@Html.ActionLink("نام کاربری", "Index", "UserIdentity", RouteValue("UserName"), new { @id = "UserName" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("شماره موبایل", "Index", "UserIdentity", RouteValue("PhoneNumber"), new { @id = "PhoneNumber" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("نام", "Index", "UserIdentity", RouteValue("FirstName"), new { @id = "FirstName" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("نام خانوادگی", "Index", "UserIdentity", RouteValue("LastName"), new { @id = "LastName" })</th>
+                                @*<th style="width: 162px;">@Html.ActionLink("کد ملی", "Index", "UserIdentity", RouteValue("NationalCode"), new { @id = "NationalCode" })</th>*@
+                            <th style="width: 162px;">@Html.ActionLink("جنسیت", "Index", "UserIdentity", RouteValue("IsMale"), new { @id = "IsMale" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("مسدود؟", "Index", "UserIdentity", RouteValue("IsLocked"), new { @id = "IsLocked" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تأیید شده؟", "Index", "UserIdentity", RouteValue("IsConfirm"), new { @id = "IsConfirm" })</th>
+                                @*<th style="width: 162px;">@Html.ActionLink("تاریخ تولد", "Index", "UserIdentity", RouteValue("BirthDate"), new { @id = "BirthDate" })</th>*@
+                            <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "UserIdentity", RouteValue("RegisterDate"), new { @id = "RegisterDate" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تاریخ تغییر", "Index", "UserIdentity", RouteValue("ModifiedDate"), new { @id = "ModifiedDate" })</th>
+
+                            <th style="width: 162px;">عملیات</th>
+                        </tr>
+                    </thead>
+                    @if (Model != null && Model.Count() != 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Id.Split("-").FirstOrDefault()</td>
+                                <td>@item.UserName </td>
+                                <td>@item.PhoneNumber </td>
+                                <td>@item.FirstName </td>
+                                <td>@item.LastName </td>
+                                @*<td>@item.NationalCode </td>*@
+                                <td>
+                                    @(item.IsMale ? "آقا" : "خانم")
+                                </td>
+                                <td>
+                                    <i class="fa fa-@(((bool)item.IsLocked) ? "check isVisible" : "times isHidden")"></i>
+                                </td>
+                                <td>
+                                    <i class="fa fa-@(((bool)item.IsConfirm) ? "check isVisible" : "times isHidden")"></i>
+                                </td>
+                                @*<td>
+                        @if (item.BirthDate != null)
+                        {
+                        <span>
+                        @Html.ConvertToPersianDate(item.BirthDate.Value)
+                        </span>
+                        }
+                        </td>*@
+                                <td>
+                                    @Html.ConvertPersianDateTime(item.RegisterDate)
+                                </td>
+                                <td>
+                                    @Html.ConvertPersianDateTime(item.ModifiedDate)
+                                </td>
+
+                                <td>
+
+                                    <div class="btn-group" role="group">
+                                        <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
+                                        <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
+                                            <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
+
+                                            @if (isUserAdmin)
+                                            {
+                                                <a data-userid="@item.Id" class="dropdown-item show-user-info" style="cursor:pointer;"><i class="flaticon-home-fill-1 mr-1"></i>ثبت کننده</a>
+                                            }
+                                            @*<a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>*@
+                                        </div>
+                                    </div>
+
+                                    @*<div class="input-group-append button-center">
+                            <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false">عملیات </button>
+                            <ul class="dropdown-menu float-right dropdown-menu-rtl" x-placement="bottom-start" style="text-align:right;position: absolute; will-change: top, left;">
+                            <li><a href="@Url.Action("Edit", new { id = item.Id })"><span class="fa fa-edit"></span> ویرایش</a></li>
+                            <li><a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');"><span class="fa fa-remove"></span> حذف</a></li>
+                            </ul>
+                            </div>*@
+                                </td>
+                            </tr>
+                        }
+                    }
+                    <tfoot>
+                        <tr>
+                            <th style="width: 162px;">کد</th>
+                            <th style="width: 162px;">نام کاربری</th>
+                            <th style="width: 162px;">شماره موبایل</th>
+                            <th style="width: 162px;">نام</th>
+                            <th style="width: 162px;">نام خانوادگی</th>
+                            @*<th style="width: 162px;">کد ملی</th>*@
+                            <th style="width: 162px;">جنسیت</th>
+                            <th style="width: 162px;">مسدود؟</th>
+                            <th style="width: 162px;">تأیید شده ؟</th>
+                            @*<th style="width: 162px;">تاریخ تولد</th>*@
+                            <th style="width: 162px;">تاریخ ثبت</th>
+                            <th style="width: 162px;">تاریخ تغییر</th>
+
+                            <th>عملیات</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <partial name="_PaginationCount" model="Tuple.Create(new PaginationInfo(Model),RouteValue(sortColumn))" />
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="usereModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title">پیغام سیستم</h5>
+            </div>
+            <div class="modal-body">
+                <div id="modal-text">
+                    پیغام سیستم !!!
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info" data-dismiss="modal"><i class="flaticon-cancel-12"></i> بستن </button>
+                @*<button type="button" class="btn btn-primary"> ذخیره </button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="custom_load_screen" style="display: none;">
+    <div class="loader">
+        <div class="loader-content">
+            <div class="spinner-grow align-self-center"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+@section Styles{
+    <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
+}
+
+    @section Scripts{
+    <script src="~/plugins/select2/select2.min.js"></script>
+
+    <script>
+
+        $("#roleNames").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class23');
+
+
+
+        $('.show-user-info').click(function () {
+
+            const userId = $(this).data("userid");
+
+
+            loadScrean();
+
+            $.ajax(
+                {
+                    method: "POST",
+                    url: "/User/UserIdentity/GetUserRegistrarInfo",
+                    data: { userId: userId },
+                    success: function (data) {
+
+                        if (data.isSuccess == true) {
+                            $('#modal-title').text(`${data.userIdentityFullname}`);
+                            $('#modal-title').append(` | نقش: ${data.userIdentityRoleNames[0]}`);
+                            if (data.userIdentityRoleNames.length > 0) {
+                                for (var i = 1; i < data.userIdentityRoleNames.length; i++) {
+                                    $('#modal-title').append(` - ${data.userIdentityRoleNames[i]}`);
+                                }
+                            }
+
+
+
+                            $('#modal-text').html(`<h6> کاربر ثبت کننده: </h6>`);
+                            $('#modal-text').append(`<p>${data.userRegistrarFullName}</p>`);
+                            var userRegistrarRoleNames = data.userRegistrarRoleNames[0];
+                            if (data.userRegistrarRoleNames.length > 0) {
+                                for (var i = 1; i < data.userRegistrarRoleNames.length; i++) {
+                                    userRegistrarRoleNames += ` - ${data.userRegistrarRoleNames[i]}`;
+                                }
+                            }
+                            $('#modal-text').append(`<p>نقش: ${userRegistrarRoleNames}</p>`);
+                        }
+                        else {
+                            $('#modal-title').text(`موردی یافت نشد`);
+                            $('#modal-text').html(`<p> موردی یافت نشد </p>`);
+
+                        }
+
+                        hideScrean();
+                        $('#userModal').modal('show');
+                    },
+                    error: function () {
+                        hideScrean();
+                        alert('خطایی رخ داده است، دوباره تلاش کنید !');
+                    }
+                }
+            );
+        });
+
+
+        function loadScrean() {
+            $('#custom_load_screen').css('display', 'block');
+        }
+
+        function hideScrean() {
+            $('#custom_load_screen').css('display', 'none');
+        }
+
+    </script>
+}

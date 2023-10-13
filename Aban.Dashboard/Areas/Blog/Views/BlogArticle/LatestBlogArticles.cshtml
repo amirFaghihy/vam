@@ -1,0 +1,125 @@
+﻿@model X.PagedList.IPagedList<BlogArticle>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.PageTitle = "آخرین مطالب";
+    breadCrumb.Title = "آخرین مطالب";
+
+    breadCrumb.Links = new List<string[]> { new string[2] { Url.Action("/"), breadCrumb.PageTitle } };
+
+    string sortColumn = ViewBag.sortColumn;
+    object RouteValue(string sortColumn)
+        => new
+        {
+            userIdentityId = ViewBag.userIdentityId,
+            writerId = ViewBag.writerId,
+            title = ViewBag.title,
+            registerDateFrom = ViewBag.registerDateFrom,
+            registerDateTo = ViewBag.registerDateTo,
+            isvisible = ViewBag.isvisible,
+
+
+            pageNumber = ViewBag.pageNumber,
+            pageSize = ViewBag.pageSize,
+            sortColumn = sortColumn,
+            lastColumn = ViewBag.lastColumn,
+            isDesc = ViewBag.isDesc
+        };
+}
+
+@section breadCrumb{
+    @await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+}
+
+
+    <div class="row layout-top-spacing">
+        <div class="col-lg-12 col-12 layout-spacing">
+            <div class="statbox widget box box-shadow">
+
+                <div class="accordion" id="hd-statistics">
+
+                @if (Model != null && Model.Count() != 0)
+                {
+                    <div class="card">
+                        <div class="card-header" id="hd-statistics-@Model[0].Id">
+                            <div class="mb-0">
+                                <div class=" collapsed" data-toggle="collapse" role="navigation" data-target="#collapse-hd-statistics-@Model[0].Id" aria-expanded="true" aria-controls="collapse-hd-statistics-@Model[0].Id">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <i class="fa fa-blog" style="font-size:20px;"></i> &nbsp;
+                                            @Model[0].Title
+                                        </div>
+                                        <div class="col-md-3">
+                                            نویسنده: @Model[0].Writer?.FirstName @Model[0].Writer?.LastName
+                                        </div>
+                                        <div class="col-md-3">
+                                            تاریخ ثبت: @Html.ConvertToPersianDateTime(Model[0].RegisterDate)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="collapse-hd-statistics-@Model[0].Id" class="collapse show" aria-labelledby="hd-statistics-@Model[0].Id" data-parent="#hd-statistics">
+                            <div class="card-body">
+                                <p style="text-align: justify;">@Html.Raw(Model[0].Description)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    for (int i = 1; i < Model.Count(); i++)
+                    {
+                        <div class="card">
+                            <div class="card-header" id="hd-statistics-@Model[i].Id">
+                                <div class="mb-0">
+                                    <div class="" data-toggle="collapse" role="navigation" data-target="#collapse-hd-statistics-@Model[i].Id" aria-expanded="false" aria-controls="collapse-hd-statistics-@Model[i].Id">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <i class="fa fa-blog" style="font-size:20px;"></i> &nbsp;
+                                                @Model[i].Title
+                                            </div>
+                                            <div class="col-md-3">
+                                                نویسنده: @Model[i].Writer?.FirstName @Model[i].Writer?.LastName
+                                            </div>
+                                            <div class="col-md-3">
+                                                تاریخ ثبت: @Html.ConvertToPersianDateTime(Model[i].RegisterDate)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="collapse-hd-statistics-@Model[i].Id" class="collapse" aria-labelledby="hd-statistics-@Model[i].Id" data-parent="#hd-statistics">
+                                <div class="card-body">
+                                    <p style="text-align: justify;">@Html.Raw(Model[i].Description)</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@section Styles{
+    <link href="~/assets/css/pages/helpdesk.css" rel="stylesheet" />
+
+    <style>
+        .widget {
+            background-color: unset !important;
+        }
+
+        .card {
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+    </style>
+}

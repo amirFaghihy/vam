@@ -1,0 +1,221 @@
+﻿        <!--  BEGIN SIDEBAR  -->
+<div class="sidebar-wrapper sidebar-theme">
+
+
+    <nav id="sidebar">
+        <div class="shadow-bottom"></div>
+
+        <ul class="list-unstyled menu-categories" id="accordionExample">
+            <li class="menu">
+                <a href="#dashboard" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                    <div class="">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        <span>مدیریت کاربران</span>
+                    </div>
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </div>
+                </a>
+                <ul class="collapse submenu list-unstyled" id="dashboard" data-parent="#accordionExample">
+                    @{
+
+                        if (User.IsInRole("Clerk"))//منشی
+                        {
+                            <li class="active" id="UserManagementSystem">
+                                <a href="@Url.Action("Create", "UserIdentity", new{ area="User" })"> ثبت کاربر </a>
+                            </li>
+                            <li class="" id="CharityUserManagementSystem">
+                                <a href="@Url.Action("GetClerkAllHelper", "CharityUserIdentityCharityHelper", new{ area="Charity" })"> خیرین </a>
+                            </li>
+                        }
+                        else if (User.IsInRole("Foreman"))//سرکاربر
+                        {
+                            <li class="active" id="UserManagementSystem">
+                                <a href="@Url.Action("Create", "UserIdentity", new{ area="User" })"> ثبت کاربر </a>
+                            </li>
+                            <li class="" id="CharityUserManagementSystem">
+                                <a href="@Url.Action("GetForemanAllClerk", "CharityUserIdentityCharityHelper", new{ area="Charity" })"> منشی ها </a>
+                            </li>
+                            @*<li class="" id="CharityUserManagementSystem">
+                    <a href="@Url.Action("GetForemanAllHelper", "CharityUserIdentityCharityHelper", new{ area="Charity" })"> خیرین </a>
+                    </li>*@
+                        }
+                        else if (User.IsInRole("Admin"))//مدیر سایت
+                        {
+                            <li class="active" id="UserManagementSystem">
+                                <a href="@Url.Action("Index", "UserIdentity", new{ area="User" })"> کاربران </a>
+                            </li>
+                            <li class="" id="UserManagementSystem">
+                                <a href="@Url.Action("SetUserForUser", "UserIdentity", new{ area="User" })"> انتصاب سرکاربر/منشی/خیّر </a>
+                            </li>
+                            <li class="" id="CharityUserManagementSystem">
+                                <a href="@Url.Action("GetAdminAllForeman", "CharityUserIdentityCharityHelper", new{ area="Charity" })"> سرکاربرها </a>
+                            </li>
+                            <li class="" id="CharityUserManagementSystem">
+                                <a href="@Url.Action("GetForemanAllClerk", "CharityUserIdentityCharityHelper", new{ area="Charity" })"> منشی ها </a>
+                            </li>
+                            @*<li class="" id="CharityUserManagementSystem">
+                    <a href="@Url.Action("Index", "CharityUserIdentityCharityHelper", new{ area="Charity" })"> منشی ها </a>
+                    </li>*@
+                        }
+                    }
+                    @*<li>
+                    <a href="index2.html"> نقش کاربران </a>
+                    </li>*@
+                </ul>
+            </li>
+
+            <li class="menu">
+                <a href="@Url.Action("Index" , "CharityDeposit" , new {area="Charity"})" aria-expanded="false" class="dropdown-toggle">
+                    <div class="">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                             height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="feather feather-airplay">
+                            <path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1">
+
+                            </path>
+                            <polygon points="12 15 17 21 7 21 12 15"></polygon>
+                        </svg>
+                        <span>واریزی ها</span>
+                    </div>
+                </a>
+            </li>
+
+            @if (User.IsInRole("Admin"))
+            {
+                <li class="menu">
+                    <a href="@Url.Action("Index" , "CharityAccount" , new {area="Charity"})" aria-expanded="false" class="dropdown-toggle">
+                        <div class="">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                             height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="feather feather-airplay">
+                                <path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1">
+
+                                </path>
+                                <polygon points="12 15 17 21 7 21 12 15"></polygon>
+                            </svg>
+                            <span>حساب ها</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="menu">
+                    <a href="@Url.Action("Index" , "CharityBankRecord" , new {area="Charity"})" aria-expanded="false" class="dropdown-toggle">
+                        <div class="">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                             height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="feather feather-airplay">
+                                <path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1">
+
+                                </path>
+                                <polygon points="12 15 17 21 7 21 12 15"></polygon>
+                            </svg>
+                            <span>سوابق بانکی</span>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="menu">
+                    <a href="#dashboard2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <div class="">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                            <span>حقوق و دست مزد</span>
+                        </div>
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </div>
+                    </a>
+                    <ul class="collapse submenu list-unstyled " id="dashboard2" data-parent="">
+                        <li class="" id="">
+                            <a href="@Url.Action("GetDataForSalaryCalculation", "CharityWage", new{ area="Charity" })"> محاسبه حقوق گروهی </a>
+                        </li>
+                        <li class="" id="">
+                            <a href="@Url.Action("GetExportUsersCharity", "CharityWage", new{ area="Charity" })"> خروجی اکسل حقوق </a>
+                        </li>
+                        <li class="" id="">
+                            <a href="@Url.Action("Index", "CharityWage", new{ area="Charity" })"> حقوق ها </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index", "CharityDeducation", new{ area="Charity" })"> کسورات </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index", "CharityAddition", new{ area="Charity" })"> اضافات </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="menu">
+                    <a href="#charityLoan" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <div class="">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                            <span>مدیریت وام</span>
+                        </div>
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </div>
+                    </a>
+                    <ul class="collapse submenu list-unstyled " id="charityLoan" data-parent="">
+                        <li class="" id="">
+                            <a href="@Url.Action("Index", "CharityLoan", new{ area="Charity" })"> وام ها </a>
+                        </li>
+                        <li class="" id="">
+                            <a href="@Url.Action("Index", "CharityLoanInstallments", new{ area="Charity" })"> اقساط </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="menu">
+                    <a href="#blog" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <div class="">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                            <span>مدیریت محتوا</span>
+                        </div>
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </div>
+                    </a>
+                    <ul class="collapse submenu list-unstyled " id="blog" data-parent="">
+                        @*<li class="" id="">
+                    <a href="@Url.Action("Index", "BlogCategory", new{ area="Blog" })">دسته بندی</a>
+                    </li>*@
+                        <li class="" id="">
+                            <a href="@Url.Action("Index", "BlogArticle", new{ area="Blog" })">محتوا</a>
+                        </li>
+                    </ul>
+                </li>
+
+            }
+            else
+            {
+                <li class="menu">
+                    <a href="@Url.Action("LatestBlogArticles" , "BlogArticle" , new {area="Blog", isvisible = true})" aria-expanded="false" class="dropdown-toggle">
+                        <div class="">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                             height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="feather feather-airplay">
+                                <path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1">
+
+                                </path>
+                                <polygon points="12 15 17 21 7 21 12 15"></polygon>
+                            </svg>
+                            <span>آخرین مطالب</span>
+                        </div>
+                    </a>
+                </li>
+            }
+
+        </ul>
+        <!-- <div class="shadow-bottom"></div> -->
+
+    </nav>
+
+</div>
+<!--  END SIDEBAR  -->

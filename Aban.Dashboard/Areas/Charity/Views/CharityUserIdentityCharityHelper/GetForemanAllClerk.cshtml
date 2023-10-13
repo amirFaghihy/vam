@@ -1,0 +1,96 @@
+﻿@model Tuple<X.PagedList.IPagedList<UserIdentity>, UserIdentity>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.PageTitle = "منشی ها";
+    breadCrumb.Title = "منشی ها";
+
+    breadCrumb.Links = new List<string[]> { new string[2] {
+#pragma warning disable CS8601 // Possible null reference assignment.
+        Url.Action("GetForemanAllClerk"),
+#pragma warning disable CS8601 // Possible null reference assignment.
+        breadCrumb.PageTitle } };
+
+    string sortColumn = ViewBag.sortColumn;
+    object RouteValue(string sortColumn)
+        => new
+        {
+            userIdentityId = ViewBag.userIdentityId,
+            clerkId = ViewBag.clerkId,
+            registerDateFrom = ViewBag.registerDateFrom,
+            registerDateTo = ViewBag.registerDateTo,
+
+
+            pageNumber = ViewBag.pageNumber,
+            pageSize = ViewBag.pageSize,
+            sortColumn = sortColumn,
+            lastColumn = ViewBag.lastColumn,
+            isDesc = ViewBag.isDesc
+        };
+}
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
+
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+
+            <partial name="./Partial/_GetForemanAllClerkFilterTablePartial" />
+
+            @*@await Html.PartialAsync("~/Views/Shared/Generic/_CreateButtonWithPageSize.cshtml")*@
+            <div class="table-responsive text-center">
+                <table class="table table-bordered table-hover mb-4">
+                    <thead>
+                        <tr>
+
+                            <th style="width: 162px;">@Html.ActionLink("کد", "GetForemanAllClerk", "CharityUserIdentityCharityHelper", new {userIdentity = ViewBag.userIdentity , helper = ViewBag.helper , registerDate = ViewBag.registerDate ,  sortColumn = "Id", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Id" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("ثبت کننده", "GetForemanAllClerk", "CharityUserIdentityCharityHelper", new {userIdentity = ViewBag.userIdentity , helper = ViewBag.helper , registerDate = ViewBag.registerDate ,  sortColumn = "UserIdentity", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "UserIdentity" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("منشی", "GetForemanAllClerk", "CharityUserIdentityCharityHelper", new {userIdentity = ViewBag.userIdentity , helper = ViewBag.helper , registerDate = ViewBag.registerDate ,  sortColumn = "Helper", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Helper" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "GetForemanAllClerk", "CharityUserIdentityCharityHelper", new {userIdentity = ViewBag.userIdentity , helper = ViewBag.helper , registerDate = ViewBag.registerDate ,  sortColumn = "RegisterDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "RegisterDate" })</th>
+
+                            <th style="width: 162px;">عملیات</th>
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model.Item1)
+                    {
+                        <tr>
+                            <td>@item.Id.Split("-").FirstOrDefault()</td>
+                            <td>@Model.Item2.FirstName @Model.Item2.LastName</td>
+                            <td>@item.FirstName @item.LastName</td>
+                            <td>
+                                @Html.ConvertPersianDateTime(item.RegisterDate)
+                            </td>
+
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
+                                    <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
+                                        <a href="@Url.Action("Edit", "UserIdentity", new { area = "User", id = item.Id })" class="dropdown-item"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
+                                        <a href="@Url.Action("GetForemanAllHelper", "CharityUserIdentityCharityHelper", new { area = "Charity", userIdentityId = item.Id })" class="dropdown-item"><i class="flaticon-home-fill-1 mr-1"></i>خیّرین</a>
+                                        @*<a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>*@
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    <tfoot>
+                        <tr>
+                            <th style="width: 162px;">کد</th>
+                            <th style="width: 162px;">ثبت کننده</th>
+                            <th style="width: 162px;">مددکار/خیّر</th>
+                            <th style="width: 162px;">تاریخ ثبت</th>
+
+                            <th>عملیات</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <partial name="./Partial/_GetForemanAllClerkPaginationCountPartial" model="Tuple.Create(new PaginationInfo(Model.Item1),RouteValue(sortColumn))" />
+
+        </div>
+    </div>
+</div>

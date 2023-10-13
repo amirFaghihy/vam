@@ -1,0 +1,139 @@
+﻿@model CharityDeposit
+
+<div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
+    <div class="info">
+        <div class="r!importantw">
+            <div class="col-md-11 mx-auto">
+                <div class="row">
+
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        @*<partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("right")" />*@
+                        <div class="col-md-12" style="float: right !important; margin-bottom: 15px;">
+                            <div class="text-right">
+                                <button id="Savechanges" class="btn btn-success mb-2 pr-5 pl-5">ذخیره</button>
+                                <a class="btn btn-danger mb-2 btn-showloader" href="/Charity/CharityDeposit/Index">انصراف</a>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                    </div>
+
+
+
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="RegisterDate" />
+                    <input type="hidden" asp-for="UserIdentityId" />
+                    <input type="hidden" asp-for="IsDelete" />
+                    <input type="hidden" asp-for="IsDone" />
+                    <input type="hidden" asp-for="ConfirmType" />
+                    @Html.AntiForgeryToken()
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="HelperId"></label>
+                            <select id="HelperId" name="HelperId" class="form-control" asp-items="ViewBag.listCharityHelper">
+                            </select>
+
+                            <span asp-validation-for="HelperId" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="CharityAccountId"></label>
+                            <select asp-for="CharityAccountId" class="form-control" asp-items="@ViewBag.listCharityAccount"></select>
+                            <span asp-validation-for="CharityAccountId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="Amount"></label>
+                            <input asp-for="Amount" type="text" class="form-control" onkeyup="formatNumber(this.id, this.value)" value="@Model.Amount.ToString("N0")" onclick="select()" />
+                            <span asp-validation-for="Amount" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="IssueTracking"></label>
+                            <input asp-for="IssueTracking" type="text" class="form-control" />
+                            <span asp-validation-for="IssueTracking" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="DocumentRegisterDateTime"></label>
+                            @{
+                                var valueDate = (Model.DocumentRegisterDateTime != default ? Model.DocumentRegisterDateTime.ToConvertDateTimeToPersianDate() : DateTime.Now.ToConvertDateTimeToPersianDate());
+                            }
+                            <input asp-for="DocumentRegisterDateTime" name="DocumentRegisterDate" value="@valueDate" type="text" class="form-control PersianDatePicker" />
+                            <span asp-validation-for="DocumentRegisterDateTime" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label asp-for="DocumentRegisterDateTime">ساعت واریزی</label>
+                            @{
+                                var valueTime = (Model.DocumentRegisterDateTime != default ? Model.DocumentRegisterDateTime.ToString("HH:mm") : "00:00");
+                            }
+                            <input type="text" class="form-control clockPicker" id="DocumentRegisterTime" readonly="readonly" name="DocumentRegisterTime" value="@valueTime" />
+                            <span asp-validation-for="DocumentRegisterDateTime" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-1">
+                        <div class="form-group">
+                        </div>
+                    </div>
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label asp-for="IsConfirm"></label>
+                                <div class="form-group mt-30">
+                                    <label class="switch s-icons s-outline s-outline-primary mb-4 mr-2">
+                                        <input type="checkbox" asp-for="IsConfirm" readonly="@(User.IsInRole("Admin") ? "" : "readonly")">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <span asp-validation-for="IsConfirm" class="text-danger"></span>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="LastFourDigits"></label>
+                            <input asp-for="LastFourDigits" type="text" class="form-control" />
+                            <span asp-validation-for="LastFourDigits" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div role="form">
+                            <div class="form-group">
+                                <label asp-for="Description"></label>
+                                <textarea asp-for="Description" type="text" class="form-control"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*<partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("left")" />*@
+
+<script>
+    $(document).ready(function () {
+
+        var amoutnValue = $("#Amount").val();
+        if (amoutnValue == '0') {
+            $("#Amount").val('');
+        }
+
+    });
+</script>

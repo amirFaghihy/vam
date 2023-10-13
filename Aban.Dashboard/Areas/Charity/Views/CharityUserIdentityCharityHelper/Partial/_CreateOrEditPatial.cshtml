@@ -1,0 +1,34 @@
+﻿@model CharityUserIdentityCharityHelper
+
+<div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
+    <div class="info">
+        <div class="r!importantw">
+            <div class="col-md-11 mx-auto">
+                <div class="row">
+
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("right")" />
+                        <br />
+                        <br />
+                    </div>
+
+
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div role="form">
+                            <div class="form-group">
+                                <label asp-for="HelperId"></label>
+                                <select asp-for="HelperId" asp-items="ViewBag.listHelper" class="chosen-select form-control">
+                                    <option value="">انتخاب</option>
+                                </select>
+                                <span asp-validation-for="HelperId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("left")" />

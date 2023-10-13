@@ -1,0 +1,57 @@
+﻿@model Tuple<PaginationInfo,object>
+
+@{
+    int PageNumber = Model.Item1.PageNumber;
+    int PageCount = Model.Item1.PageCount;
+
+    int PageStrat = ((PageNumber - 1) * PageCount) + 1;
+
+    int PageEnd = PageCount * PageNumber;
+    PageCount = PageStrat + PageCount;
+
+    if (PageCount > Model.Item1.TotalItemCount)
+    {
+        PageCount = Model.Item1.TotalItemCount;
+    }
+}
+<br />
+<div class="row">
+    <div class="offset-md-5 col-md-4">
+        <div class="" id="">
+            @Html.PagedListPager((IPagedList)Model.Item1, x => Url.Action("Index", new
+            {
+            userIdentityId = ViewBag.userIdentityId,
+            userIdentityReciverId = ViewBag.userIdentityReciverId,
+            title = ViewBag.title,
+            amount = ViewBag.amount,
+            accountNumber = ViewBag.accountNumber,
+            description = ViewBag.description,
+            timeForActionFrom = ViewBag.timeForActionFrom,
+            timeForActionTo = ViewBag.timeForActionTo,
+            registerDateFrom = ViewBag.registerDateFrom,
+            registerDateTo = ViewBag.registerDateTo,
+
+
+            pageNumber = x,
+            pageSize = ViewBag.pageSize,
+            sortColumn = ViewBag.sortColumn,
+            //lastColumn = ViewBag.lastColumn,
+            isDesc = ViewBag.isDesc
+
+            }), new X.PagedList.Web.Common.PagedListRenderOptions
+            {
+            PageClasses = new string[] { "page-link" },
+            UlElementClasses = new string[] { "pagination" },
+            LiElementClasses = new string[] { "page-item" },
+            //DisplayItemSliceAndTotal = true,
+            //DisplayPageCountAndCurrentLocation=true,
+            MaximumPageNumbersToDisplay = 5,
+            DisplayLinkToFirstPage = X.PagedList.Web.Common.PagedListDisplayMode.Always,
+            DisplayLinkToLastPage = X.PagedList.Web.Common.PagedListDisplayMode.Always,
+            })
+        </div>
+    </div>
+    <div class="col-md-3">
+        نمایش رکوردهای @(Model.Item1.PageCount < Model.Item1.PageNumber ? 0 : PageStrat) الی @PageCount  از  @Model.Item1.TotalItemCount رکورد
+    </div>
+</div>

@@ -1,0 +1,134 @@
+﻿@model X.PagedList.IPagedList<CharityAccount>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.PageTitle = "حساب ها";
+    breadCrumb.Title = "حساب ها";
+
+    breadCrumb.Links = new List<string[]> {
+#pragma warning disable CS8601 // Possible null reference assignment.
+        new string[2] { Url.Action("Index","Home" , new {area="Charity" }), "خانه" }
+#pragma warning disable CS8601 // Possible null reference assignment.
+    };
+
+    string sortColumn = ViewBag.sortColumn;
+    object RouteValue(string sortColumn)
+        => new
+        {
+            userIdentityId = ViewBag.userIdentityId,
+            bankName = ViewBag.bankName,
+            registerDateFrom = ViewBag.registerDateFrom,
+            registerDateTo = ViewBag.registerDateTo,
+
+
+            pageNumber = ViewBag.pageNumber,
+            pageSize = ViewBag.pageSize,
+            sortColumn = sortColumn,
+            lastColumn = ViewBag.lastColumn,
+            isDesc = ViewBag.isDesc
+        };
+
+
+}
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
+
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+
+            <partial name="_FilterTablePartial" />
+
+            @await Html.PartialAsync("~/Views/Shared/Generic/_CreateButtonWithPageSize.cshtml", "حساب جدید")
+            <div class="table-responsive text-center">
+                <table class="table table-bordered table-hover mb-4">
+                    <thead>
+                        <tr>
+
+                            <th style="width: 162px;">@Html.ActionLink("کد", "Index", "CharityAccount", new {userIdentity = ViewBag.userIdentity , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , isvisible = ViewBag.isvisible , description = ViewBag.description , registerDate = ViewBag.registerDate ,  sortColumn = "Id", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Id" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("ثبت کننده", "Index", "CharityAccount", new {userIdentity = ViewBag.userIdentity , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , isvisible = ViewBag.isvisible , description = ViewBag.description , registerDate = ViewBag.registerDate ,  sortColumn = "UserIdentity", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "UserIdentity" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("نام بانک", "Index", "CharityAccount", new {userIdentity = ViewBag.userIdentity , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , isvisible = ViewBag.isvisible , description = ViewBag.description , registerDate = ViewBag.registerDate ,  sortColumn = "BankName", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "BankName" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("عنوان حساب", "Index", "CharityAccount", new {userIdentity = ViewBag.userIdentity , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , isvisible = ViewBag.isvisible , description = ViewBag.description , registerDate = ViewBag.registerDate ,  sortColumn = "Title", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Title" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("شماره حساب/کارت", "Index", "CharityAccount", new {userIdentity = ViewBag.userIdentity , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , isvisible = ViewBag.isvisible , description = ViewBag.description , registerDate = ViewBag.registerDate ,  sortColumn = "AccountNumber", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "AccountNumber" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("فعال ؟", "Index", "CharityAccount", new {userIdentity = ViewBag.userIdentity , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , isvisible = ViewBag.isvisible , description = ViewBag.description , registerDate = ViewBag.registerDate ,  sortColumn = "IsVisible", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "IsVisible" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("توضیحات", "Index", "CharityAccount", new {userIdentity = ViewBag.userIdentity , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , isvisible = ViewBag.isvisible , description = ViewBag.description , registerDate = ViewBag.registerDate ,  sortColumn = "Description", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Description" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "CharityAccount", new {userIdentity = ViewBag.userIdentity , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , isvisible = ViewBag.isvisible , description = ViewBag.description , registerDate = ViewBag.registerDate ,  sortColumn = "RegisterDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "RegisterDate" })</th>
+
+                            <th style="width: 162px;">عملیات</th>
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.UserIdentity.FirstName @item.UserIdentity.LastName</td>
+                            <td>@item.BankName.ToString().Replace("_", " ")</td>
+                            <td>@item.Title</td>
+                            <td>@item.AccountNumber </td>
+                            <td>
+                                <i class="fas fa-@(((bool)item.IsVisible) ? "check" : "times")"></i>
+                            </td>
+                            <td>@item.Description </td>
+                            <td>
+                                @Html.ConvertPersianDateTime(item.RegisterDate)
+                            </td>
+
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
+                                    <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
+                                        <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
+                                        <a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    <tfoot>
+                        <tr>
+                            <th style="width: 162px;">کد</th>
+                            <th style="width: 162px;">ثبت کننده</th>
+                            <th style="width: 162px;">نام بانک</th>
+                            <th style="width: 162px;">عنوان حساب</th>
+                            <th style="width: 162px;">شماره حساب/کارت</th>
+                            <th style="width: 162px;">فعال ؟</th>
+                            <th style="width: 162px;">توضیحات</th>
+                            <th style="width: 162px;">تاریخ ثبت</th>
+
+                            <th>عملیات</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <partial name="_PaginationCountPartial" model="Tuple.Create(new PaginationInfo(Model),RouteValue(sortColumn))" />
+
+        </div>
+    </div>
+</div>
+
+@section Styles{
+    <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+}
+
+    @section Scripts{
+    <script src="~/plugins/select2/select2.min.js"></script>
+    <script src="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+
+    <script>
+        // With postfix
+        $("input[name='PercentSalary']").TouchSpin({
+            postfix: '%',
+        });
+
+
+        $("#bankName").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class23');
+
+    </script>
+    }

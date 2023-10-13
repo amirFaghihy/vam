@@ -1,0 +1,142 @@
+﻿@model X.PagedList.IPagedList<CharityDeducation>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.PageTitle = "کسورات";
+    breadCrumb.Title = "کسورات";
+
+    breadCrumb.Links = new List<string[]> {
+#pragma warning disable CS8601 // Possible null reference assignment.
+        new string[2] { Url.Action("Index","Home" , new {area="Charity" }), "خانه" }
+#pragma warning disable CS8601 // Possible null reference assignment.
+    };
+
+    string sortColumn = ViewBag.sortColumn;
+    object RouteValue(string sortColumn)
+        => new
+        {
+            userIdentityId = ViewBag.userIdentityId,
+            userIdentityReciverId = ViewBag.userIdentityReciverId,
+            title = ViewBag.title,
+            amount = ViewBag.amount,
+            accountNumber = ViewBag.accountNumber,
+            description = ViewBag.description,
+            timeForActionFrom = ViewBag.timeForActionFrom,
+            timeForActionTo = ViewBag.timeForActionTo,
+            registerDateFrom = ViewBag.registerDateFrom,
+            registerDateTo = ViewBag.registerDateTo,
+
+
+            pageNumber = ViewBag.pageNumber,
+            pageSize = ViewBag.pageSize,
+            sortColumn = sortColumn,
+            lastColumn = ViewBag.lastColumn,
+            isDesc = ViewBag.isDesc
+        };
+
+}
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
+
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+
+            <partial name="./Partial/_FilterTablePartial" />
+
+            @await Html.PartialAsync("~/Views/Shared/Generic/_CreateButtonWithPageSize.cshtml", "")
+            <div class="table-responsive text-center">
+                <table class="table table-bordered table-hover mb-4">
+                    <thead>
+                        <tr>
+
+                            <th style="width: 162px;">@Html.ActionLink("کد", "Index", "CharityDeducation", new {userIdentity = ViewBag.userIdentity , userIdentityReciver = ViewBag.userIdentityReciver , title = ViewBag.title , amount = ViewBag.amount , accountNumber = ViewBag.accountNumber , timeForAction = ViewBag.timeForAction , registerDate = ViewBag.registerDate ,  sortColumn = "Id", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Id" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("ثبت کننده", "Index", "CharityDeducation", new {userIdentity = ViewBag.userIdentity , userIdentityReciver = ViewBag.userIdentityReciver , title = ViewBag.title , amount = ViewBag.amount , accountNumber = ViewBag.accountNumber , timeForAction = ViewBag.timeForAction , registerDate = ViewBag.registerDate ,  sortColumn = "UserIdentity", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "UserIdentity" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("دریافت کننده", "Index", "CharityDeducation", new {userIdentity = ViewBag.userIdentity , userIdentityReciver = ViewBag.userIdentityReciver , title = ViewBag.title , amount = ViewBag.amount , accountNumber = ViewBag.accountNumber , timeForAction = ViewBag.timeForAction , registerDate = ViewBag.registerDate ,  sortColumn = "UserIdentityReciver", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "UserIdentityReciver" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("عنوان", "Index", "CharityDeducation", new {userIdentity = ViewBag.userIdentity , userIdentityReciver = ViewBag.userIdentityReciver , title = ViewBag.title , amount = ViewBag.amount , accountNumber = ViewBag.accountNumber , timeForAction = ViewBag.timeForAction , registerDate = ViewBag.registerDate ,  sortColumn = "Title", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Title" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("مقدار", "Index", "CharityDeducation", new {userIdentity = ViewBag.userIdentity , userIdentityReciver = ViewBag.userIdentityReciver , title = ViewBag.title , amount = ViewBag.amount , accountNumber = ViewBag.accountNumber , timeForAction = ViewBag.timeForAction , registerDate = ViewBag.registerDate ,  sortColumn = "Amount", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Amount" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("شماره حساب/کارت", "Index", "CharityDeducation", new {userIdentity = ViewBag.userIdentity , userIdentityReciver = ViewBag.userIdentityReciver , title = ViewBag.title , amount = ViewBag.amount , accountNumber = ViewBag.accountNumber , timeForAction = ViewBag.timeForAction , registerDate = ViewBag.registerDate ,  sortColumn = "AccountNumber", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "AccountNumber" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تاریخ اعمال", "Index", "CharityDeducation", new {userIdentity = ViewBag.userIdentity , userIdentityReciver = ViewBag.userIdentityReciver , title = ViewBag.title , amount = ViewBag.amount , accountNumber = ViewBag.accountNumber , timeForAction = ViewBag.timeForAction , registerDate = ViewBag.registerDate ,  sortColumn = "TimeForAction", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "TimeForAction" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "CharityDeducation", new {userIdentity = ViewBag.userIdentity , userIdentityReciver = ViewBag.userIdentityReciver , title = ViewBag.title , amount = ViewBag.amount , accountNumber = ViewBag.accountNumber , timeForAction = ViewBag.timeForAction , registerDate = ViewBag.registerDate ,  sortColumn = "RegisterDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "RegisterDate" })</th>
+
+                            <th style="width: 162px;">عملیات</th>
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.UserIdentity.FirstName @item.UserIdentity.LastName</td>
+                            <td>@item.UserIdentityReciver.FirstName @item.UserIdentityReciver.LastName</td>
+                            <td>@item.Title </td>
+                            <td>@item.Amount.ToString("N0") </td>
+                            <td>@item.AccountNumber </td>
+                            <td>
+                                @Html.ConvertPersianDateTime(item.TimeForAction)
+                            </td>
+                            <td>
+                                @Html.ConvertPersianDateTime(item.RegisterDate)
+                            </td>
+
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
+                                    <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
+                                        <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
+                                        <a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    <tfoot>
+                        <tr>
+                            <th style="width: 162px;">کد</th>
+                            <th style="width: 162px;">ثبت کننده</th>
+                            <th style="width: 162px;">دریافت کننده</th>
+                            <th style="width: 162px;">عنوان</th>
+                            <th style="width: 162px;">مقدار</th>
+                            <th style="width: 162px;">شماره حساب/کارت</th>
+                            <th style="width: 162px;">تاریخ اعمال</th>
+                            <th style="width: 162px;">تاریخ ثبت</th>
+
+                            <th>عملیات</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <partial name="./Partial/_PaginationCountPartial" model="Tuple.Create(new PaginationInfo(Model),RouteValue(sortColumn))" />
+
+        </div>
+    </div>
+</div>
+
+@section Styles{
+    <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+}
+
+    @section Scripts{
+    <script src="~/plugins/select2/select2.min.js"></script>
+    <script src="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+
+    <script>
+        // With postfix
+        $("input[name='PercentSalary']").TouchSpin({
+            postfix: '%',
+        });
+
+        $("#userIdentityId").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class23');
+
+
+        $("#UserIdentityReciverId").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class58');
+    </script>
+    }

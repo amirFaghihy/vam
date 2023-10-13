@@ -1,0 +1,65 @@
+﻿@model string
+
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.Title = "وقایع";
+    breadCrumb.PageTitle = "وقایع";
+
+    breadCrumb.Links = new List<string[]>
+    {
+#pragma warning disable CS8601 // Possible null reference assignment.
+        new string[2]{Url.Action("Index","Home", new {area= "Charity" }),"خانه" },
+        new string[2]{Url.Action("Index","CharityBankRecord", new {area= "Charity" }),"سوابق بانکی" },
+
+#pragma warning disable CS8601 // Possible null reference assignment.
+    };
+    int ErrorCount = ViewBag.ErrorCount ?? 0;
+}
+
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+            <div class="row">
+                <div class="col-12" style="color:red">
+                    <ul>
+                        @if (ErrorCount == 0)
+                        {
+                            <li style="color:green">
+                                تمام رکورد ها با موفقیت ذخیره شد
+                            </li>
+                        }
+                        else
+                        {
+
+                            <li>
+                                @ErrorCount رکورد ذخیره نشد
+                            </li>
+                        }
+                        <li> از لینک زیر می توانید فایل لاگ سیستم و رکورد های ذخیره نشده را دریافت کنید</li>
+
+                    </ul>
+
+
+                    <a href="\@Model" class="button button-secondary" download>
+                        <i class="fa fa-download"></i>
+                        دانلود فایل لاگ
+                    </a>
+                </div>
+
+
+
+
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+</div>

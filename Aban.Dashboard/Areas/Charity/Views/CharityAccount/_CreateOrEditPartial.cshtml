@@ -1,0 +1,74 @@
+﻿@model CharityAccount
+
+<div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
+    <div class="info">
+        <div class="r!importantw">
+            <div class="col-md-11 mx-auto">
+                <div class="row">
+
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("right")" />
+                        <br />
+                        <br />
+                    </div>
+
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="RegisterDate" />
+                    <input type="hidden" asp-for="UserIdentityId" />
+                    <input type="hidden" asp-for="IsDelete" />
+                    @Html.AntiForgeryToken()
+
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div role="form">
+                            <div class="form-group">
+                                <label asp-for="Title"></label>
+                                <input asp-for="Title" type="text" class="form-control">
+                                <span asp-validation-for="Title" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div role="form">
+                            <div class="form-group">
+                                <label asp-for="AccountNumber"></label>
+                                <input asp-for="AccountNumber" type="text" class="form-control">
+                                <span asp-validation-for="AccountNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div role="form">
+                            <div class="form-group">
+                                <label asp-for="BankName"></label>
+                                <select asp-for="BankName" type="text" class="form-control" asp-items="@ViewBag.listBankName"></select>
+                                <span asp-validation-for="BankName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="IsVisible"></label>
+                            <div class="form-group mt-30">
+                                <label class="switch s-icons s-outline s-outline-primary mb-4 mr-2">
+                                    <input type="checkbox" asp-for="IsVisible">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div role="form">
+                            <div class="form-group">
+                                <label asp-for="Description"></label>
+                                <textarea asp-for="Description" type="text" class="form-control"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("left")" />

@@ -1,0 +1,185 @@
+﻿
+
+<div id="toggleAccordion">
+    <div class="card">
+        <a href="#filterPanel" role="menu" class="collapsed btn btn-success" style="margin-bottom:15px;" data-toggle="collapse" data-target="#defaultAccordionOne" aria-expanded="true" aria-controls="defaultAccordionOne">
+            فیلتر
+            <i style="margin-right:5px;" class="fa fa-chevron-left" id="Icon"></i>
+        </a>
+        <div id="defaultAccordionOne" class="collapse" aria-labelledby="..." data-parent="#toggleAccordion">
+            <div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
+                <form class="section contact" asp-action="Index" method="get">
+
+                    <div class="info">
+                        <div class="row">
+                            <div class="col-md-11 mx-auto">
+                                <div class="row">
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>نام کاربری</label>
+                                            <input class="form-control mb-4" name="UserName" value="@ViewBag.userName" />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>شماره موبایل</label>
+                                            <input class="form-control mb-4" name="PhoneNumber" value="@ViewBag.phoneNumber" />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>نام</label>
+                                            <input class="form-control mb-4" name="FirstName" value="@ViewBag.firstName" />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <lable>نام خانوادگی</lable>
+                                            <input class="form-control" name="LastName" value="@ViewBag.lastName" />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>نام پدر</label>
+                                            <input class="form-control mb-4" name="FatherName" value="@ViewBag.fatherName" />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>کد ملی</label>
+                                            <input class="form-control mb-4" name="NationalCode" value="@ViewBag.nationalCode" />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <lable>تاریخ تولد از</lable>
+                                            <input id="birthDateFrom" name="birthDateFrom" value="@(ViewBag.birthDateFrom != null ? $"{ViewBag.birthDateFrom}":"" )" class="form-control mb-4 PersianDatePicker" type="text" readonly />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <lable>تا</lable>
+                                            <input id="birthDateTo" name="birthDateTo" value="@(ViewBag.birthDateTo != null ? $"{ViewBag.birthDateTo}":"" )" class="form-control mb-4 PersianDatePicker" type="text" readonly />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <lable>تاریخ ثبت از </lable>
+                                            <input id="registerDateFrom" name="registerDateFrom" value="@(ViewBag.registerDateFrom != null ? $"{ViewBag.registerDateFrom}":"" )" class="form-control mb-4 PersianDatePicker" type="text" readonly />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <lable>تا</lable>
+                                            <input id="registerDateTo" name="registerDateTo" value="@(ViewBag.registerDateTo != null ? $"{ViewBag.registerDateTo}":"" )" class="form-control mb-4 PersianDatePicker" type="text" readonly />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>نقشهای کاربران</label>
+                                            <select name="roleNames" id="roleNames" asp-items="ViewBag.rolesList" class="form-control" multiple>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <lable>اندازه ی صفحه</lable>
+                                            <select class="form-control mb-4" name="pageSize">
+                                                <option value="10" id="10">10</option>
+                                                <option value="25" id="25">25</option>
+                                                <option value="50" id="50">50</option>
+                                                <option value="100" id="100">100</option>
+                                            </select>
+                                            <span class="text-danger"></span>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+
+                                                <div class="col-md-6">
+
+                                                    <lable></lable>
+                                                    <button class="btn btn-success mb-2 btn-showloader" style="width:100%" type="submit">اعمال فیلتر</button>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <lable></lable>
+                                                    <a class="btn btn-danger mb-2 btn-showloader" href="@Url.Action("Index")" style="width:100%" id="clear">پاک کردن</a>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="lastHeader" value="@ViewBag.lastColumn" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        var pageSize = `@ViewBag.pageSize`;
+        var filterBox = $("#filterBox");
+        var filterBtn = $("#filterBtn");
+        var Icon = $("#Icon");
+        $("#" + pageSize).attr("selected", "selected");
+
+        $(filterBtn).click(function () {
+            $(filterBox).toggle(500);
+            $(filterBox).toggleClass("boxHide");
+            if ($("#filterBox").hasClass('boxHide')) { //hide and must be show
+                $(Icon).removeClass("fa-chevron-right").addClass("fa-chevron-left");
+            } else { // show and must be hide
+                $(Icon).removeClass("fa-chevron-left").addClass("fa-chevron-right");
+            }
+        });
+        SortTitle(`@ViewBag.sortColumn`, `@ViewBag.isDesc`);
+    });
+    var arrowDown = '<span class="fa fa-lg fa-sort-amount-asc" style="margin-right:10px;color:green;"></span>';
+    var arrowUp = '<span class="fa fa-lg fa-sort-amount-desc" style="margin-right:10px;color:red;"></span>';
+    var arrow = '';
+    var headerId = '';
+
+    function SortTitle(headerSort, direction) {
+        if (direction == true || direction == 'True') {
+            arrow = arrowUp;
+        } else {
+            arrow = arrowDown;
+        }
+        headerId = "#" + headerSort + "";
+        $(headerId).append(arrow);
+    }
+</script>

@@ -1,0 +1,18 @@
+﻿@model string
+@{
+    string LeftOrRight = "";
+    if (!String.IsNullOrEmpty(Model))
+    {
+        LeftOrRight = Model.ToLower();
+    }
+    else
+    {
+        LeftOrRight = "right";
+    }
+}
+<div class="col-md-12" style="float: @LeftOrRight !important; margin-bottom: 15px;">
+    <div class="text-@LeftOrRight">
+        <button id="Savechanges" type="submit" class="btn btn-success mb-2 pr-5 pl-5 btn-savechanges">ذخیره</button>
+        @Html.ActionLink("انصراف", "Index", null, null, new { @class = "btn btn-danger mb-2 btn-showloader" })
+    </div>
+</div>

@@ -1,0 +1,207 @@
+﻿@model UserIdentityViewModel
+
+<div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
+    <div class="info">
+        <div class="r!importantw">
+            <div class="col-md-11 mx-auto">
+                <div class="row">
+
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("right")" />
+                        <br />
+                        <br />
+                    </div>
+
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="UserRegistrarId" />
+                    @if (User.IsInRole("Clerk"))
+                    {
+                        <div class="col-md-6" style="display: none;">
+                            <div class="form-group">
+                                <label asp-for="UserName"></label>
+                                <input asp-for="UserName" type="text" class="form-control" value="@Guid.NewGuid().ToString()">
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6" style="display: none;">
+                            <div class="form-group">
+                                <label asp-for="Password"></label>
+                                <input asp-for="Password" type="text" class="form-control" value="@Guid.NewGuid().ToString()">
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="UserName"></label>
+                                <input asp-for="UserName" type="text" class="form-control">
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Password"></label>
+                                <input asp-for="Password" type="text" class="form-control">
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="FirstName"></label>
+                            <input asp-for="FirstName" type="text" class="form-control">
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="LastName"></label>
+                            <input asp-for="LastName" type="text" class="form-control">
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="NationalCode"></label>
+                            <input asp-for="NationalCode" type="text" class="form-control">
+                            <span asp-validation-for="NationalCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="PhoneNumber"></label>
+                            <input asp-for="PhoneNumber" type="text" class="form-control">
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="FatherName"></label>
+                            <input asp-for="FatherName" type="text" class="form-control">
+                            <span asp-validation-for="FatherName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Email"></label>
+                            <input asp-for="Email" type="text" class="form-control">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    @*<div class="col-md-6">
+                    <div class="form-group">
+                    <label for="file1">عکس پروفایل</label>
+                    <input name="file1" type="file" class="form-control">
+                    </div>
+                    </div>*@
+
+
+                    <div class="col-md-6" style="@(User.IsInRole("Clerk") ? "display: none": "")">
+                        <div class="form-group">
+                            <label asp-for="FixedSalary"></label>
+                            <input asp-for="FixedSalary" type="text" class="form-control" onkeyup="formatNumber(this.id, this.value)" value="@Model.FixedSalary.ToString("N0")" onclick="select()">
+                            <span asp-validation-for="FixedSalary" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6" style="@(User.IsInRole("Clerk") ? "display: none": "")">
+                        <div class="form-group">
+                            <label asp-for="PercentSalary"></label>
+                            <input asp-for="PercentSalary" type="text" class="form-control" onclick="select()">
+                            <span asp-validation-for="PercentSalary" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>نقشهای کاربران</label>
+                            <select name="RoleNames" id="RoleNames" asp-items="ViewBag.rolesList" class="form-control" multiple="multiple">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="BirthDate"></label>
+                            @if (Model.BirthDate != null)
+                            {
+                                <input id="BirthDate" name="BirthDateString" type="text" class="form-control mb-4 PersianDatePicker" readonly value="@Html.ConvertToPersianDate(Model.BirthDate.Value)" autocomplete="off" />
+                            }
+                            else
+                            {
+                                <input id="BirthDate" name="BirthDateString" type="text" class="form-control mb-4 PersianDatePicker" readonly autocomplete="off" />
+                            }
+                            <span asp-validation-for="BirthDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group" style="@(User.IsInRole("Clerk") ? "display: none": "")">
+                            <label asp-for="StartActivityDateTime"></label>
+                            @if (Model.StartActivityDateTime != null)
+                            {
+                                <input id="StartActivityDateTime" name="StartActivityDateTimeString" type="text" class="form-control mb-4 PersianDatePicker" readonly value="@Html.ConvertToPersianDate(Model.StartActivityDateTime.Value)" autocomplete="off" />
+                            }
+                            else
+                            {
+                                <input id="StartActivityDateTime" name="StartActivityDateTimeString" type="text" class="form-control mb-4 PersianDatePicker" readonly autocomplete="off" />
+                            }
+                            <span asp-validation-for="StartActivityDateTime" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="CardNumber"></label>
+                            <input asp-for="CardNumber" type="text" class="form-control">
+                            <span asp-validation-for="CardNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="IsMale"></label>
+                            <div class="form-group mt-30">
+                                <label class="switch s-icons s-outline s-outline-primary mb-4 mr-2">
+                                    <input type="checkbox" asp-for="IsMale">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4" style="display: @(User.IsInRole("Admin") || User.IsInRole("Clerk") ? "block" : "none")">
+                        <div class="form-group">
+                            <label asp-for="IsLocked"></label>
+                            <div class="form-group mt-30">
+                                <label class="switch s-icons s-outline s-outline-danger mb-4 mr-2">
+                                    <input type="checkbox" asp-for="IsLocked">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4" style="display: @(User.IsInRole("Admin") || User.IsInRole("Clerk") ? "block" : "none")">
+                        <div class="form-group">
+                            <label asp-for="IsConfirm"></label>
+                            <div class="form-group mt-30">
+                                <label class="switch s-icons s-outline s-outline-success mb-4 mr-2">
+                                    <input type="checkbox" asp-for="IsConfirm">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("left")" />

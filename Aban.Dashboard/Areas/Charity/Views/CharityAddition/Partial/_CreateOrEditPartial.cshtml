@@ -1,0 +1,104 @@
+﻿@model CharityAddition
+
+<div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
+    <div class="info">
+        <div class="r!importantw">
+            <div class="col-md-11 mx-auto">
+                <div class="row">
+
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("right")" />
+                        <br />
+                        <br />
+                    </div>
+
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="RegisterDate" /><input type="hidden" asp-for="IsDelete" />
+                    @Html.AntiForgeryToken()
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="UserIdentityReciverId"></label>
+                            <select asp-for="UserIdentityReciverId" asp-items="ViewBag.listUserIdentityReciver" class="form-control basic"></select>
+                            <span asp-validation-for="UserIdentityReciverId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Title"></label>
+                            <input asp-for="Title" class="form-control" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Amount"></label>
+                            <input asp-for="Amount" type="text" class="form-control" onkeyup="formatNumber(this.id, this.value)" value="@Model.Amount.ToString("N0")" onclick="select()" />
+                            <span asp-validation-for="Amount" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="AccountNumber"></label>
+                            <input asp-for="AccountNumber" type="text" class="form-control" />
+                            <span asp-validation-for="AccountNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="DocumentRegisterDateTime"></label>
+                            @if (Model.DocumentRegisterDateTime != new DateTime())
+                            {
+                                <input id="DocumentRegisterDateTime" name="documentRegisterDateTimeString" type="text" class="form-control mb-4 PersianDatePicker" readonly value="@Html.ConvertToPersianDate(Model.DocumentRegisterDateTime)" autocomplete="off" />
+                            }
+                            else
+                            {
+                                <input id="DocumentRegisterDateTime" name="documentRegisterDateTimeString" type="text" class="form-control mb-4 PersianDatePicker" readonly value="@Html.ConvertToPersianDate(DateTime.Now)" autocomplete="off" />
+                            }
+                            <span asp-validation-for="DocumentRegisterDateTime" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class=""> ساعت </label>
+                            @if (Model.DocumentRegisterDateTime != new DateTime())
+                            {
+                                <input id="documentRegisterDateTimeTime" name="documentRegisterDateTimeTime" class="form-control flatpickr flatpickr-input" type="text" value="@Model.DocumentRegisterDateTime.ToString("HH:mm")" readonly="readonly">
+                            }
+                            else
+                            {
+                                <input id="documentRegisterDateTimeTime" name="documentRegisterDateTimeTime" class="form-control flatpickr flatpickr-input" type="text" value="@DateTime.Now.ToString("HH:mm")" readonly="readonly">
+                            }
+                            <span asp-validation-for="DocumentRegisterDateTime" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="IsDone"></label>
+                            <select asp-for="IsDone" class="form-control basic">
+                                <option value="">اعمال نشود</option>
+                                <option value="false">اعمال شود</option>
+                                <option value="true">اعمال شده</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label asp-for="Description"></label>
+                            <textarea asp-for="Description" type="text" class="form-control"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("left")" />

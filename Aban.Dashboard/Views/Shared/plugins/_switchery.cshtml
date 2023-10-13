@@ -1,0 +1,12 @@
+﻿<link href="~/css/plugins/switchery/switchery.css" rel="stylesheet" />
+<script src="~/js/plugins/switchery/switchery.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        var element = $(".js-switch");
+        element.each(function (i, htmlElement) {
+            new Switchery(htmlElement, { color: '#1AB394' });
+        });
+    });
+</script>
