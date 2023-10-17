@@ -24,7 +24,7 @@ namespace Aban.Domain.Entities
         /// </summary>
         [ForeignKey("GuaranteeUserId")]
         [Display(Name = "ضامن")]
-        public UserIdentity GuaranteeUser { get; set; }
+        public UserIdentity? GuaranteeUser { get; set; }
 
         #endregion
 

@@ -23,7 +23,7 @@ namespace Aban.Domain.Entities
         /// </summary>
         [ForeignKey("AccountOwnerId")]
         [Display(Name = "صاحب حساب")]
-        public UserIdentity AccountOwner { get; set; }
+        public UserIdentity? AccountOwner { get; set; }
 
         #endregion
 
@@ -45,12 +45,6 @@ namespace Aban.Domain.Entities
         /// </summary>
         [Display(Name = "شماره حساب/کارت")]
         public string? AccountNumber { get; set; }
-
-        /// <summary>
-        /// فعال ؟
-        /// </summary>
-        [Display(Name = "فعال ؟")]
-        public bool IsVisible { get; set; }
 
         /// <summary>
         /// توضیحات

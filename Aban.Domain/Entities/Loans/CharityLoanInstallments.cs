@@ -68,12 +68,5 @@ namespace Aban.Domain.Entities
         [Display(Name = "پرداخت شده است ؟")]
         public bool IsDone { get; set; }
 
-        /// <summary>
-        /// حذف شده است ؟
-        /// </summary>
-        [Display(Name = "حذف شده است ؟")]
-#pragma warning disable CS0108
-        public bool IsDelete { get; set; }
-#pragma warning restore CS0108
     }
 }

@@ -29,9 +29,4 @@
     <ProjectReference Include="..\Aban.Domain\Aban.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Interfaces\Loans\" />
-    <Folder Include="Repositories\Loans\" />
-  </ItemGroup>
-
 </Project>
