@@ -106,12 +106,8 @@ namespace Aban.Service.Services
                     Email = viewModel.Email,
                     RegisterDate = DateTime.Now,
                     ModifiedDate = DateTime.Now,
-                    FixedSalary = viewModel.FixedSalary,
-                    PercentSalary = viewModel.PercentSalary,
-                    UserRegistrarId = viewModel.UserRegistrarId,
                     FatherName = viewModel.FatherName,
-                    StartActivityDateTime = viewModel.StartActivityDateTime,
-                    CardNumber = viewModel.CardNumber
+                    HomeAddress = viewModel.HomeAddress
 
                 };
 #pragma warning restore CS8601 // Possible null reference assignment.
@@ -160,13 +156,9 @@ namespace Aban.Service.Services
                     IsLocked = model.IsLocked,
                     RegisterDate = model.RegisterDate,
                     BirthDate = model.BirthDate,
-                    FixedSalary = model.FixedSalary,
-                    PercentSalary = model.PercentSalary,
-                    UserRegistrarId = model.UserRegistrarId,
                     FatherName = model.FatherName,
-                    StartActivityDateTime = model.StartActivityDateTime,
-                    CardNumber = model.CardNumber,
-                    Email = model.Email
+                    Email = model.Email,
+                    HomeAddress = model.HomeAddress
                 };
 #pragma warning restore CS8601 // Possible null reference assignment.
 
@@ -219,10 +211,6 @@ namespace Aban.Service.Services
                     .Contains(userrole.RoleId)).Select(uId => uId.UserId);
 
                     query = query.Where(x => userIds.Contains(x.Id));
-                }
-                if (!userRegistrarId.IsNullOrEmpty())
-                {
-                    query = query.Where(x => x.UserRegistrarId == userRegistrarId);
                 }
 
                 List<SelectListItem> items = query.OrderBy(x => x.LastName).ToList().ConvertAll(x =>
@@ -395,14 +383,6 @@ namespace Aban.Service.Services
                 if (!string.IsNullOrEmpty(fatherName))
                 {
                     query = query.Where(x => x.FatherName == fatherName);
-                }
-                if (startActivityDateFrom != null)
-                {
-                    query = query.Where(x => x.StartActivityDateTime <= startActivityDateFrom.Value);
-                }
-                if (startActivityDateTo != null)
-                {
-                    query = query.Where(x => x.StartActivityDateTime <= startActivityDateTo.Value);
                 }
                 if (roleIds != null && roleIds.Count() != 0)
                 {
@@ -934,10 +914,7 @@ namespace Aban.Service.Services
                 userIdentity.UserName = model.UserName;
                 userIdentity.BirthDate = model.BirthDate;
                 userIdentity.FatherName = model.FatherName;
-                userIdentity.StartActivityDateTime = model.StartActivityDateTime;
-                userIdentity.CardNumber = model.CardNumber;
-                userIdentity.PercentSalary = model.PercentSalary;
-                userIdentity.FixedSalary = model.FixedSalary;
+                userIdentity.HomeAddress = model.HomeAddress;
 #pragma warning disable CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
 
 

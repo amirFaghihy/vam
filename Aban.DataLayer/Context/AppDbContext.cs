@@ -17,21 +17,13 @@ namespace Aban.DataLayer.Context
 
         }
 
-        #region Charity
+        #region Loans
 
-        public DbSet<CharityAccount> CharityAccount { get; set; }
-        public DbSet<CharityUserIdentityCharityHelper> CharityUserIdentityCharityHelper { get; set; }
-        public DbSet<CharityAddition> CharityAddition { get; set; }
-        public DbSet<CharityBankRecord> CharityBankRecord { get; set; }
-        public DbSet<CharityDeducation> CharityDeducation { get; set; }
-        public DbSet<CharityDeposit> CharityDeposit { get; set; }
         public DbSet<CharityLoan> CharityLoan { get; set; }
         public DbSet<CharityLoanInstallments> CharityLoanInstallments { get; set; }
-        public DbSet<CharityWage> CharityWage { get; set; }
-        public DbSet<CharityWageCharityAddition> CharityWageCharityAddition { get; set; }
-        public DbSet<CharityWageCharityDeduction> CharityWageCharityDeduction { get; set; }
-        public DbSet<CharityWageCharityDeposit> CharityWageCharityDeposit { get; set; }
-        public DbSet<CharityWageCharityLoanInstallment> CharityWageCharityLoanInstallment { get; set; }
+        public DbSet<Guarantee> Guarantee { get; set; }
+        public DbSet<UserAccount> UserAccount { get; set; }
+        public DbSet<UserAccountDepositWithdrawal> UserAccountDepositWithdrawal { get; set; }
 
         #endregion
 
@@ -56,16 +48,7 @@ namespace Aban.DataLayer.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
-            builder.Entity<UserIdentity>()
-               .HasOne(c => c.State)
-               .WithMany()
-               .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<UserIdentity>()
-               .HasOne(c => c.UserRegistrar)
-               .WithMany()
-               .OnDelete(DeleteBehavior.Restrict);
-
+            
             builder.Entity<BlogArticle>()
                .HasOne(c => c.Writer)
                .WithMany()
@@ -76,63 +59,7 @@ namespace Aban.DataLayer.Context
               .WithMany()
               .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<CharityDeposit>()
-              .HasOne(c => c.UserIdentity)
-              .WithMany()
-              .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<CharityDeposit>()
-             .HasOne(c => c.CharityAccount)
-             .WithMany()
-             .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<CharityWageCharityAddition>()
-             .HasOne(c => c.CharityAddition)
-             .WithMany()
-             .OnDelete(DeleteBehavior.Restrict);
-
-
-            builder.Entity<CharityWageCharityDeduction>()
-             .HasOne(c => c.CharityDeducation)
-             .WithMany()
-             .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<CharityAddition>()
-             .HasOne(c => c.UserIdentity)
-             .WithMany()
-             .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<CharityDeducation>()
-             .HasOne(c => c.UserIdentity)
-             .WithMany()
-             .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<CharityUserIdentityCharityHelper>()
-             .HasOne(c => c.UserIdentity)
-             .WithMany()
-             .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<CharityWage>()
-             .HasOne(c => c.UserIdentity)
-             .WithMany()
-             .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<CharityWage>()
-             .HasOne(c => c.WageReceiver)
-             .WithMany()
-             .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<CharityLoan>()
-             .HasOne(c => c.UserIdentity)
-             .WithMany()
-             .OnDelete(DeleteBehavior.Restrict);
-
-
             base.OnModelCreating(builder);
-
-
-            //builder.Seed(_databaseContext);
-            //builder.OnModelBuilder();
 
         }
 

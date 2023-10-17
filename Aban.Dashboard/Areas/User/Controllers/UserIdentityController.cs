@@ -25,7 +25,6 @@ namespace Aban.Dashboard.Areas.User.Controllers
         #region Constructor
 
         private readonly IUserIdentityService userIdentityService;
-        private readonly ICharityUserIdentityCharityHelperService charityUserIdentityCharityHelperService;
         private readonly IOptions<PathsConfiguration> pathsConfiguratin;
         private readonly IOptions<IdentityConfiguration> identityConfiguration;
 
@@ -37,13 +36,11 @@ namespace Aban.Dashboard.Areas.User.Controllers
 
         public UserIdentityController(
             IUserIdentityService userIdentityService,
-            ICharityUserIdentityCharityHelperService charityUserIdentityCharityHelperService,
             IOptions<PathsConfiguration> pathsConfiguratin,
             IOptions<IdentityConfiguration> identityConfiguration
             ) : base(pathsConfiguratin)
         {
             this.userIdentityService = userIdentityService;
-            this.charityUserIdentityCharityHelperService = charityUserIdentityCharityHelperService;
             this.pathsConfiguratin = pathsConfiguratin;
             this.identityConfiguration = identityConfiguration;
         }
@@ -199,7 +196,7 @@ namespace Aban.Dashboard.Areas.User.Controllers
         public IActionResult Create()
         {
             FillDropDown();
-            return View(new UserIdentityViewModel() { Id = Guid.NewGuid().ToString(), UserRegistrarId = Guid.NewGuid().ToString() });
+            return View(new UserIdentityViewModel() { Id = Guid.NewGuid().ToString()});
         }
 
 
@@ -212,8 +209,6 @@ namespace Aban.Dashboard.Areas.User.Controllers
             try
             {
                 //string filename1 = DateTime.Now.ToString("yyyy/MM/dd-HH:mm:ss:ffffff").Replace("/", "-").Replace(" ", "").Replace(":", "-") + "." + (file1 != null ? file1.FileName.Split(".").Last() : "");
-
-                viewModel.UserRegistrarId = GetUserId();
 
                 Tuple<UserIdentity, ResultStatusOperation> resultFillModel = await
                     userIdentityService.ConvertViewModelToModel(viewModel);
@@ -239,21 +234,6 @@ namespace Aban.Dashboard.Areas.User.Controllers
                 {
                     case MessageTypeResult.Success:
                         {
-
-                            #region CharityUserIdentityCharityHelper
-
-                            CharityUserIdentityCharityHelper charityUserIdentityCharityHelper = new CharityUserIdentityCharityHelper()
-                            {
-                                HelperId = resultRegister.Item1.Id,
-                                UserIdentityId = GetUserId(),
-                                RegisterDate = DateTime.Now,
-                                IsDelete = false
-                            };
-
-                            await charityUserIdentityCharityHelperService.Insert(fillControllerInfo(new List<string> { "UserIdentity", "Helper" }), charityUserIdentityCharityHelper);
-
-                            #endregion
-
 
                             IdentityResult removeRolesResult = await userIdentityService.RemoveAllRolesOfUser(resultRegister.Item1.Id);
 
@@ -359,8 +339,6 @@ namespace Aban.Dashboard.Areas.User.Controllers
         {
             try
             {
-
-                viewModel.UserRegistrarId = GetUserId();
 
                 if (!User.IsInRole("Admin"))
                 {
@@ -514,58 +492,6 @@ namespace Aban.Dashboard.Areas.User.Controllers
 
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public IActionResult GetUserRegistrarInfo(string userId)
-        {
-            if (!userId.IsNullOrEmpty())
-            {
-                UserIdentity userIdentity = userIdentityService.Find(userId).Result.Item1;
-                List<string> userIdentityRoleNames = new List<string>();
-                List<string> userRegistrarRoleNames = new List<string>();
-
-                if (userIdentity != null)
-                {
-                    #region UserIdentity
-
-                    string userIdentityFullname = $"{userIdentity.FirstName} {userIdentity.LastName}";
-                    if (!userIdentity.FatherName.IsNullOrEmpty())
-                        userIdentityFullname += $" | فرزند: {userIdentity.FatherName}";
-
-
-                    userIdentityRoleNames = userIdentityService.GetAllRoles(userIdentityService.GetAllRolesOfUser(userId).Result.ToList(), RoleName.Admin)
-                        .Where(x => x.Selected).Select(x => x.Text).ToList();
-                    #endregion
-
-
-                    #region UserRegistrar
-
-                    UserIdentity userRegistrar = userIdentityService.Find(userIdentity.UserRegistrarId).Result.Item1;
-                    userRegistrarRoleNames = userIdentityService.GetAllRoles(userIdentityService.GetAllRolesOfUser(userRegistrar.Id).Result.ToList(), RoleName.Admin)
-                        .Where(x => x.Selected).Select(x => x.Text).ToList();
-
-                    string userRegistrarFullName = $"{userRegistrar.FirstName} {userRegistrar.LastName}";
-                    if (!userRegistrar.FatherName.IsNullOrEmpty())
-                        userRegistrarFullName += $" | فرزند: {userRegistrar.FatherName}";
-                    #endregion
-
-                    return Json(new
-                    {
-                        isSuccess = true,
-
-                        userIdentityFullname = userIdentityFullname,
-                        userIdentityRoleNames = userIdentityRoleNames,
-
-                        userRegistrarFullName = userRegistrarFullName,
-                        userRegistrarRoleNames = userRegistrarRoleNames
-                    });
-
-                }
-            }
-            return Json(new { isSuccess = false, result = "مشخصات کاربر موردنظر یافت نشد" });
-        }
-
-
         public IActionResult EditProfile()
         {
             return RedirectToAction(nameof(Edit), new { Id = GetUserId() });
@@ -581,60 +507,6 @@ namespace Aban.Dashboard.Areas.User.Controllers
 
             return View();
         }
-
-
-        [Authorize(Roles = "Admin")]
-        [ValidateAntiForgeryToken]
-        [HttpPost]
-        public IActionResult SetUserForUser(string userId1, string userId2)
-        {
-            try
-            {
-                if (!userId1.IsNullOrEmpty() && !userId2.IsNullOrEmpty())
-                {
-                    UserIdentity user1 = userIdentityService.Find(userId1).Result.Item1;
-                    if (user1 != null)
-                    {
-                        UserIdentity user2 = userIdentityService.Find(userId2).Result.Item1;
-                        if (user2 != null)
-                        {
-                            user2.UserRegistrarId = user1.Id;
-
-                            if (string.IsNullOrEmpty(user2.Email))
-                                user2.Email = user2.UserName + "@email.com";
-
-                            Tuple<UserIdentity, ResultStatusOperation> resultEdit =
-                                userIdentityService.UpdateUser(fillControllerInfo(new List<string> { "UserRegistrar" }), user2, user2.Password).Result;
-
-
-                            SetMessage(resultEdit.Item2);
-                            switch (resultEdit.Item2.Type)
-                            {
-                                case MessageTypeResult.Success:
-                                    return Redirect("/");
-
-                                case MessageTypeResult.Danger:
-                                case MessageTypeResult.Warning:
-                                    return RedirectToAction(nameof(SetUserForUser));
-
-                                default:
-                                    return Redirect("/");
-                            }
-                        }
-
-                    }
-                }
-
-                return RedirectToAction(nameof(SetUserForUser));
-
-            }
-            catch (Exception exception)
-            {
-                SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), Enumeration.MessageTypeActionMethod.Index);
-                return RedirectToAction("ShowException", "Error");
-            }
-        }
-
 
         public IActionResult Register()
         {

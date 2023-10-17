@@ -17,4 +17,9 @@
     <ProjectReference Include="..\ViewModels\ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\Loans\" />
+    <Folder Include="Services\Loans\" />
+  </ItemGroup>
+
 </Project>

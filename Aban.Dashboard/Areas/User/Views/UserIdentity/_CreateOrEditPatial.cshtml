@@ -13,41 +13,21 @@
                     </div>
 
                     <input type="hidden" asp-for="Id" />
-                    <input type="hidden" asp-for="UserRegistrarId" />
-                    @if (User.IsInRole("Clerk"))
-                    {
-                        <div class="col-md-6" style="display: none;">
-                            <div class="form-group">
-                                <label asp-for="UserName"></label>
-                                <input asp-for="UserName" type="text" class="form-control" value="@Guid.NewGuid().ToString()">
-                                <span asp-validation-for="UserName" class="text-danger"></span>
-                            </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="UserName"></label>
+                            <input asp-for="UserName" type="text" class="form-control">
+                            <span asp-validation-for="UserName" class="text-danger"></span>
                         </div>
-                        <div class="col-md-6" style="display: none;">
-                            <div class="form-group">
-                                <label asp-for="Password"></label>
-                                <input asp-for="Password" type="text" class="form-control" value="@Guid.NewGuid().ToString()">
-                                <span asp-validation-for="Password" class="text-danger"></span>
-                            </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Password"></label>
+                            <input asp-for="Password" type="text" class="form-control">
+                            <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
-                    }
-                    else
-                    {
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label asp-for="UserName"></label>
-                                <input asp-for="UserName" type="text" class="form-control">
-                                <span asp-validation-for="UserName" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label asp-for="Password"></label>
-                                <input asp-for="Password" type="text" class="form-control">
-                                <span asp-validation-for="Password" class="text-danger"></span>
-                            </div>
-                        </div>
-                    }
+                    </div>
 
                     <div class="col-md-6">
                         <div class="form-group">
@@ -100,22 +80,6 @@
                     </div>*@
 
 
-                    <div class="col-md-6" style="@(User.IsInRole("Clerk") ? "display: none": "")">
-                        <div class="form-group">
-                            <label asp-for="FixedSalary"></label>
-                            <input asp-for="FixedSalary" type="text" class="form-control" onkeyup="formatNumber(this.id, this.value)" value="@Model.FixedSalary.ToString("N0")" onclick="select()">
-                            <span asp-validation-for="FixedSalary" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6" style="@(User.IsInRole("Clerk") ? "display: none": "")">
-                        <div class="form-group">
-                            <label asp-for="PercentSalary"></label>
-                            <input asp-for="PercentSalary" type="text" class="form-control" onclick="select()">
-                            <span asp-validation-for="PercentSalary" class="text-danger"></span>
-                        </div>
-                    </div>
-
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>نقشهای کاربران</label>
@@ -139,28 +103,6 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6">
-                        <div class="form-group" style="@(User.IsInRole("Clerk") ? "display: none": "")">
-                            <label asp-for="StartActivityDateTime"></label>
-                            @if (Model.StartActivityDateTime != null)
-                            {
-                                <input id="StartActivityDateTime" name="StartActivityDateTimeString" type="text" class="form-control mb-4 PersianDatePicker" readonly value="@Html.ConvertToPersianDate(Model.StartActivityDateTime.Value)" autocomplete="off" />
-                            }
-                            else
-                            {
-                                <input id="StartActivityDateTime" name="StartActivityDateTimeString" type="text" class="form-control mb-4 PersianDatePicker" readonly autocomplete="off" />
-                            }
-                            <span asp-validation-for="StartActivityDateTime" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label asp-for="CardNumber"></label>
-                            <input asp-for="CardNumber" type="text" class="form-control">
-                            <span asp-validation-for="CardNumber" class="text-danger"></span>
-                        </div>
-                    </div>
 
                     <div class="col-md-4">
                         <div class="form-group">

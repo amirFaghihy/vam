@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using static Aban.Domain.Enumerations.Enumeration;
 
 namespace Aban.Domain.Entities
 {
@@ -25,7 +26,6 @@ namespace Aban.Domain.Entities
         [Display(Name = "شناسه وام")]
         public CharityLoan? CharityLoan { get; set; }
 
-
         #endregion
 
 
@@ -44,18 +44,23 @@ namespace Aban.Domain.Entities
         [Display(Name = "موعد پرداخت")]
         public DateTime PaymentDue { get; set; }
 
+        /// <summary>
+        /// تاریخ پرداخت
+        /// </summary>
+        [Display(Name = "تاریخ پرداخت")]
+        public DateTime? PaymentDate { get; set; }
+
+        /// <summary>
+        /// روش پرداخت قسط
+        /// </summary>
+        [Display(Name = "روش پرداخت قسط")]
+        public TransactionMethod PaymentMethod { get; set; }
 
         /// <summary>
         /// تاریخ ثبت
         /// </summary>
         [Display(Name = "تاریخ ثبت")]
         public DateTime RegisterDate { get; set; }
-
-        /// <summary>
-        /// تاریخ پرداخت
-        /// </summary>
-        [Display(Name = "تاریخ پرداخت")]
-        public DateTime? PaymentDate { get; set; }
 
         /// <summary>
         /// پرداخت شده است ؟

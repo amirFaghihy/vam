@@ -74,22 +74,22 @@ namespace Aban.Domain.Enumerations
         /// </summary>
         public enum RoleName
         {
-            [Display(Name ="کاربر معمولی")]
+            [Display(Name = "کاربر معمولی")]
             User_Register,
 
-            [Display(Name ="مدیر سایت")]
+            [Display(Name = "مدیر سایت")]
             Admin,
 
-            [Display(Name ="مدیر اصلی سایت")]
+            [Display(Name = "مدیر اصلی سایت")]
             SuperAdmin,
 
-            [Display(Name ="سرکاربر")]
+            [Display(Name = "سرکاربر")]
             Foreman,
-            
-            [Display(Name ="منشی")]
+
+            [Display(Name = "منشی")]
             Clerk,
-            
-            [Display(Name ="خیّر")]
+
+            [Display(Name = "خیّر")]
             Helper
         }
 
@@ -144,5 +144,64 @@ namespace Aban.Domain.Enumerations
             semi
         }
 
+        /// <summary>
+        /// نام تمامی بانکهای ایران
+        /// </summary>
+        public enum BankName : byte
+        {
+            بانک_ملی_ایران,
+            بانک_سپه,
+            بانک_صنعت_و_معدن,
+            بانک_کشاورزی,
+            بانک_مسکن,
+            بانک_توسعه_صادرات_ایران,
+            بانک_توسعه_تعاون,
+            پست_بانک_ایران,
+            بانک_اقتصاد_نوین,
+            بانک_پارسیان,
+            بانک_کارآفرین,
+            بانک_سامان,
+            بانک_سینا,
+            بانک_خاورمیانه,
+            بانک_شهر,
+            بانک_دی,
+            بانک_صادرات,
+            بانک_ملت,
+            بانک_تجارت,
+            بانک_رفاه,
+            بانک_حکمت_ایرانیان,
+            بانک_گردشگردی,
+            بانک_ایران_زمین,
+            بانک_قوامین,
+            بانک_انصار,
+            بانک_سرمایه,
+            بانک_پاسارگاد,
+            بانک_قرض_الحسنه_مهر_ایران,
+            بانک_قرض_الحسنه_مهر_رسالت,
+
+        }
+
+        /// <summary>
+        /// نوع تراکنش
+        /// </summary>
+        public enum TransactionType : byte
+        {
+            واریز,
+            برداشت,
+            پرداخت_قسط,
+        }
+
+        /// <summary>
+        /// روش تراکنش
+        /// </summary>
+        public enum TransactionMethod : byte
+        {
+            نقدی,
+            کارت_به_کارت,
+            واریز_به_حساب,
+            کارتخوان_مؤسسه,
+            کسر_از_حقوق,
+            پرداخت_از_طریق_خود_مؤسسه,
+        }
     }
 }

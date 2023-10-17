@@ -7,13 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Charity\**" />
+    <Content Remove="Areas\Charity\**" />
+    <EmbeddedResource Remove="Areas\Charity\**" />
+    <None Remove="Areas\Charity\**" />
+  </ItemGroup>
+
+  <ItemGroup>
 
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.15">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
 
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.14" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
 
     <PackageReference Include="X.PagedList" Version="8.4.7" />
 
@@ -33,6 +40,10 @@
   <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="wwwroot\aban.charity\upload\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Areas\Loans\Views\Home\Index.cshtml" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties configuration_1json__JsonSchema="https://beaujs.com/schema.json" /></VisualStudio></ProjectExtensions>

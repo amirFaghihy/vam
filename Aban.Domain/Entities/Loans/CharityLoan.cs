@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using static Aban.Domain.Enumerations.Enumeration;
 
 namespace Aban.Domain.Entities
 {
@@ -11,25 +12,25 @@ namespace Aban.Domain.Entities
         #region ForeignKeys
 
         /// <summary>
-        /// ثبت کننده
+        /// ضامن و مورد ضمانت
         /// </summary>
-        [Display(Name = "ثبت کننده")]
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public string UserIdentityId { get; set; }
+        [Display(Name = "ضامن و مورد ضمانت")]
+#pragma warning disable CS8618
+        public int GuaranteeId { get; set; }
 
         /// <summary>
-        /// ثبت کننده
+        /// ضامن و مورد ضمانت
         /// </summary>
-        [ForeignKey("UserIdentityId")]
-        [Display(Name = "ثبت کننده")]
-        public UserIdentity? UserIdentity { get; set; }
+        [ForeignKey(nameof(GuaranteeId))]
+        [Display(Name = "ضامن و مورد ضمانت")]
+        public Guarantee? Guarantee { get; set; }
 
         /// <summary>
         /// وام گیرنده
         /// </summary>
         [Display(Name = "وام گیرنده")]
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        [Required(ErrorMessage ="{0} را انتخاب کنید")]
+#pragma warning disable CS8618
+        [Required(ErrorMessage = "{0} را انتخاب کنید")]
         public string LoanReceiverId { get; set; }
 
         /// <summary>
@@ -65,12 +66,17 @@ namespace Aban.Domain.Entities
         [Display(Name = "شماره حساب/کارت واریزی")]
         public string? AccountNumber { get; set; }
 
+        /// <summary>
+        /// روش اعطای وام
+        /// </summary>
+        [Display(Name = "روش اعطای وام")]
+        public TransactionMethod GivingLoanMethod { get; set; }
 
         /// <summary>
-        /// شرح سند
+        /// توضیحات
         /// </summary>
-        [Display(Name = "شرح سند")]
-        [Required(ErrorMessage ="{0} را وارد کنید")]
+        [Display(Name = "توضیحات")]
+        [Required(ErrorMessage = "{0} را وارد کنید")]
         public string Description { get; set; }
 
 
@@ -105,12 +111,5 @@ namespace Aban.Domain.Entities
         [Display(Name = "پرداخت شده است ؟")]
         public bool IsDone { get; set; }
 
-        /// <summary>
-        /// حذف شده است ؟
-        /// </summary>
-        [Display(Name = "حذف شده است ؟")]
-#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
-        public bool IsDelete { get; set; }
-#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
     }
 }

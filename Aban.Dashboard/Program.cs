@@ -41,17 +41,9 @@ builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 
 
-#region Charity
+#region Loan
 
-builder.Services.AddScoped<ICharityAccountService, CharityAccountService>();
-builder.Services.AddScoped<ICharityDepositService, CharityDepositService>();
-builder.Services.AddScoped<ICharityDeducationService, CharityDeducationService>();
-builder.Services.AddScoped<ICharityAdditionService, CharityAdditionService>();
-builder.Services.AddScoped<ICharityWageService, CharityWageService>();
-builder.Services.AddScoped<ICharityBankRecordService, CharityBankRecordService>();
-builder.Services.AddScoped<ICharityUserIdentityCharityHelperService, CharityUserIdentityCharityHelperService>();
-builder.Services.AddScoped<ICharityLoanService, CharityLoanService>();
-builder.Services.AddScoped<ICharityLoanInstallmentsService, CharityLoanInstallmentsService>();
+//builder.Services.AddScoped<ICharityAccountService, CharityAccountService>();
 
 #endregion
 
@@ -212,9 +204,9 @@ app.MapRazorPages();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapAreaControllerRoute(
-        name: "Charity",
-        areaName: "Charity",
-        pattern: "Charity/{controller=Home}/{action}/{id?}");
+        name: "Loans",
+        areaName: "Loans",
+        pattern: "Loans/{controller=Home}/{action}/{id?}");
     endpoints.MapRazorPages();
 
     endpoints.MapAreaControllerRoute(

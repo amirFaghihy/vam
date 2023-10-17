@@ -88,19 +88,6 @@ namespace Aban.Domain.Entities
 
 
         /// <summary>
-        /// استان
-        /// </summary>
-        [Display(Name = "استان")]
-        public int? StateId { get; set; }
-        /// <summary>
-        /// استان
-        /// </summary>
-        [Display(Name = "استان")]
-        [ForeignKey("StateId")]
-        public State State { get; set; }
-
-
-        /// <summary>
         /// شهر
         /// </summary>
         [Display(Name = "شهر")]
@@ -112,6 +99,11 @@ namespace Aban.Domain.Entities
         [ForeignKey("CityId")]
         public City City { get; set; }
 
+        /// <summary>
+        /// آدرس محل سکونت
+        /// </summary>
+        [Display(Name = "آدرس محل سکونت")]
+        public string? HomeAddress { get; set; }
 
         /// <summary>
         /// مسدود شده؟
@@ -124,8 +116,7 @@ namespace Aban.Domain.Entities
         /// تایید شده؟
         /// </summary>
         [Display(Name = "تایید شده؟")]
-        [DefaultValue(false)]
-        public bool IsConfirm { get; set; }
+        public bool IsConfirm { get; set; } = true;
 
         /// <summary>
         /// نام پدر
@@ -153,46 +144,5 @@ namespace Aban.Domain.Entities
         [Display(Name = "تاریخ ویرایش")]
         public DateTime? ModifiedDate { get; set; }
 
-        /// <summary>
-        /// حقوق ثابت ماهانه
-        /// </summary>
-        [Display(Name = "حقوق ثابت ماهانه")]
-        [RegularExpression(@"^\d(.*\d)?$", ErrorMessage = "{0} فقط میتواند عدد باشد")]
-        public float FixedSalary { get; set; } = 0;
-
-
-        /// <summary>
-        /// درصد
-        /// </summary>
-        [Display(Name = "درصد")]
-        public byte PercentSalary { get; set; } = 0;
-
-        /// <summary>
-        /// ثبت کننده
-        /// </summary>
-        [Display(Name = "ثبت کننده")]
-        [Required(ErrorMessage = "{0} را وارد نمایید")]
-        public string UserRegistrarId { get; set; }
-
-        /// <summary>
-        /// شناسه ثبت کننده
-        /// </summary>
-        [ForeignKey("UserRegistrarId")]
-        [Display(Name = "شناسه ثبت کننده")]
-        public UserIdentity UserRegistrar { get; set; }
-
-
-        /// <summary>
-        /// تاریخ شروع فعالیت
-        /// </summary>
-        [Display(Name = "تاریخ شروع فعالیت")]
-        public DateTime? StartActivityDateTime { get; set; }
-
-
-        /// <summary>
-        /// شماره کارت/حساب
-        /// </summary>
-        [Display(Name = "شماره کارت/حساب")]
-        public string? CardNumber { get; set; }
     }
 }

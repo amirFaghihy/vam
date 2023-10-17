@@ -113,39 +113,6 @@ namespace Aban.ViewModels
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 
-
-        /// <summary>
-        /// حقوق ثابت ماهانه
-        /// </summary>
-        [Display(Name = "حقوق ثابت ماهانه")]
-        public float FixedSalary { get; set; } = 0;
-
-
-        /// <summary>
-        /// درصد
-        /// </summary>
-        [Display(Name = "درصد")]
-        public byte PercentSalary { get; set; } = 0;
-
-        /// <summary>
-        /// ثبت کننده
-        /// </summary>
-        [Display(Name = "ثبت کننده")]
-        [Required(ErrorMessage = "{0} را وارد نمایید")]
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public string UserRegistrarId { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
-        /// <summary>
-        /// شناسه ثبت کننده
-        /// </summary>
-        [ForeignKey("UserRegistrarId")]
-        [Display(Name = "شناسه ثبت کننده")]
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public UserIdentity UserRegistrar { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
-
         /// <summary>
         /// نام پدر
         /// </summary>
@@ -153,17 +120,10 @@ namespace Aban.ViewModels
         [MaxLength(100, ErrorMessage = "نام پدر نمی تواند بیشتر از {0} کاراکتر باشد")]
         public string? FatherName { get; set; } = null;
 
-
         /// <summary>
-        /// تاریخ شروع فعالیت
+        /// آدرس محل سکونت
         /// </summary>
-        [Display(Name = "تاریخ شروع فعالیت")]
-        public DateTime? StartActivityDateTime { get; set; }
-
-        /// <summary>
-        /// شماره کارت/حساب
-        /// </summary>
-        [Display(Name = "شماره کارت/حساب")]
-        public string? CardNumber { get; set; }
+        [Display(Name = "آدرس محل سکونت")]
+        public string? HomeAddress { get; set; }
     }
 }
