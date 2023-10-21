@@ -1,0 +1,95 @@
+﻿@model Guarantee
+<div class="ibox">
+    <div class="ibox-content">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("left")" />
+                <br />
+                <br />
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label asp-for="GuaranteeId"></label>
+<select asp-for="GuaranteeId" asp-items="ViewBag.listGuaranteeId" class="chosen-select form-control">
+<option value="">انتخاب</option>
+</select>
+<span asp-validation-for="GuaranteeId" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label asp-for="GuaranteeUser"></label>
+<span asp-validation-for="GuaranteeUser" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label asp-for="ChequeNumber"></label>
+<input asp-for="ChequeNumber" type="text" class="form-control">
+<span asp-validation-for="ChequeNumber" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label asp-for="BankName"></label>
+<span asp-validation-for="BankName" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label asp-for="ChequePrice"></label>
+<span asp-validation-for="ChequePrice" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label asp-for="BankDraftNumber"></label>
+<input asp-for="BankDraftNumber" type="text" class="form-control">
+<span asp-validation-for="BankDraftNumber" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label asp-for="BankDraftPrice"></label>
+<span asp-validation-for="BankDraftPrice" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label asp-for="GoldGuarantee"></label>
+<input asp-for="GoldGuarantee" type="text" class="form-control">
+<span asp-validation-for="GoldGuarantee" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label asp-for="PaySlip"></label>
+<input asp-for="PaySlip" type="text" class="form-control">
+<span asp-validation-for="PaySlip" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+<div role="form">
+<div class="form-group">
+<label asp-for="Description"></label>
+<textarea @*class="CKEditor"*@ class="form-control" asp-for="Description" name="Description" ></textarea><span asp-validation-for="Description" class="text-danger"></span></div>
+</div>
+</div>
+
+
+        </div>
+        <partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("right")" />
+    </div>
+</div>

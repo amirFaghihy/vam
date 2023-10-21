@@ -36,10 +36,11 @@ namespace Aban.Service.Services
         {
             ResultStatusOperation resultStatusOperation = new ResultStatusOperation();
             resultStatusOperation.IsSuccessed = true;
-            resultStatusOperation.Type = Enumeration.MessageTypeResult.Success;
+            resultStatusOperation.Type = MessageTypeResult.Success;
             try
             {
-                IQueryable<CharityLoan> query = charityLoanRepository.GetAll();
+                IQueryable<CharityLoan> query = charityLoanRepository.GetAll()
+                    .Where(x => !x.IsDelete);
 
                 if (guaranteeId != 0)
                 {
@@ -93,7 +94,7 @@ namespace Aban.Service.Services
             {
                 resultStatusOperation.IsSuccessed = false;
                 resultStatusOperation.Message = "خطایی رخ داده است";
-                resultStatusOperation.Type = Enumeration.MessageTypeResult.Danger;
+                resultStatusOperation.Type = MessageTypeResult.Danger;
                 resultStatusOperation.ErrorException = exception;
                 throw new Exception("", exception);
             }
@@ -103,7 +104,7 @@ namespace Aban.Service.Services
         {
             ResultStatusOperation resultStatusOperation = new ResultStatusOperation();
             resultStatusOperation.IsSuccessed = true;
-            resultStatusOperation.Type = Enumeration.MessageTypeResult.Success;
+            resultStatusOperation.Type = MessageTypeResult.Success;
             try
             {
                 charityLoan.IsDelete = false;
@@ -115,7 +116,7 @@ namespace Aban.Service.Services
             {
                 resultStatusOperation.IsSuccessed = false;
                 resultStatusOperation.Message = "خطایی رخ داده است";
-                resultStatusOperation.Type = Enumeration.MessageTypeResult.Danger;
+                resultStatusOperation.Type = MessageTypeResult.Danger;
                 resultStatusOperation.ErrorException = exception;
                 throw new Exception("", exception);
             }
@@ -127,11 +128,12 @@ namespace Aban.Service.Services
             {
                 ResultStatusOperation resultStatusOperation = new ResultStatusOperation();
                 resultStatusOperation.IsSuccessed = true;
-                resultStatusOperation.Type = Enumeration.MessageTypeResult.Success;
+                resultStatusOperation.Type = MessageTypeResult.Success;
 
                 try
                 {
                     var query = charityLoanRepository.GetAll()
+                        .Where(x => !x.IsDelete)
                         .Include(x => x.LoanReceiver)
                         .OrderBy(x => x.Id).ToList();
 
@@ -156,7 +158,7 @@ namespace Aban.Service.Services
                 {
                     resultStatusOperation.IsSuccessed = false;
                     resultStatusOperation.Message = "خطایی رخ داده است";
-                    resultStatusOperation.Type = Enumeration.MessageTypeResult.Danger;
+                    resultStatusOperation.Type = MessageTypeResult.Danger;
                     resultStatusOperation.ErrorException = exception;
                     throw new Exception("", exception);
                 }

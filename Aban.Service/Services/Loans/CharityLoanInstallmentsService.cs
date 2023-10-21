@@ -33,10 +33,11 @@ namespace Aban.Service.Services
         {
             ResultStatusOperation resultStatusOperation = new ResultStatusOperation();
             resultStatusOperation.IsSuccessed = true;
-            resultStatusOperation.Type = Enumeration.MessageTypeResult.Success;
+            resultStatusOperation.Type = MessageTypeResult.Success;
             try
             {
-                IQueryable<CharityLoanInstallments> query = charityLoanInstallmentsRepository.GetAll();
+                IQueryable<CharityLoanInstallments> query = charityLoanInstallmentsRepository.GetAll()
+                    .Where(x => !x.IsDelete);
 
                 if (charityLoanId != null)
                 {
@@ -78,17 +79,46 @@ namespace Aban.Service.Services
             {
                 resultStatusOperation.IsSuccessed = false;
                 resultStatusOperation.Message = "خطایی رخ داده است";
-                resultStatusOperation.Type = Enumeration.MessageTypeResult.Danger;
+                resultStatusOperation.Type = MessageTypeResult.Danger;
                 resultStatusOperation.ErrorException = exception;
                 throw new Exception("", exception);
             }
         }
 
+        /// <summary>
+        /// بر اساس اطلاعات اولیه وام یک لیست از مدل اقساط وام میسازد
+        /// </summary>
+        /// <param name="charityLoan"></param>
+        /// <returns></returns>
+        public List<CharityLoanInstallments> CreateListOfModel(CharityLoan charityLoan)
+        {
+            List<CharityLoanInstallments> charityLoanInstallments = new List<CharityLoanInstallments>();
+
+            // مبلغ هر قسط
+            double installmentAmount = (((charityLoan.LoanAmount * charityLoan.PercentSalary) / 100) + charityLoan.LoanAmount) / charityLoan.NumberOfInstallments;
+
+
+            for (int i = 0; i < charityLoan.NumberOfInstallments; i++)
+            {
+                charityLoanInstallments.Add(new CharityLoanInstallments()
+                {
+                    CharityLoanId = charityLoan.Id,
+                    InstallmentAmount = installmentAmount,
+                    IsDelete = false,
+                    IsDone = false,
+                    PaymentDue = charityLoan.PaymentStartDate.AddMonths(i),
+                    RegisterDate = DateTime.Now
+                });
+            }
+            return charityLoanInstallments;
+        }
+
+
         public Tuple<CharityLoanInstallments, ResultStatusOperation> FillModel(CharityLoanInstallments charityLoanInstallments)
         {
             ResultStatusOperation resultStatusOperation = new ResultStatusOperation();
             resultStatusOperation.IsSuccessed = true;
-            resultStatusOperation.Type = Enumeration.MessageTypeResult.Success;
+            resultStatusOperation.Type = MessageTypeResult.Success;
             try
             {
                 charityLoanInstallments.IsDelete = false;
@@ -100,7 +130,7 @@ namespace Aban.Service.Services
             {
                 resultStatusOperation.IsSuccessed = false;
                 resultStatusOperation.Message = "خطایی رخ داده است";
-                resultStatusOperation.Type = Enumeration.MessageTypeResult.Danger;
+                resultStatusOperation.Type = MessageTypeResult.Danger;
                 resultStatusOperation.ErrorException = exception;
                 throw new Exception("", exception);
             }
@@ -112,11 +142,12 @@ namespace Aban.Service.Services
             {
                 ResultStatusOperation resultStatusOperation = new ResultStatusOperation();
                 resultStatusOperation.IsSuccessed = true;
-                resultStatusOperation.Type = Enumeration.MessageTypeResult.Success;
+                resultStatusOperation.Type = MessageTypeResult.Success;
 
                 try
                 {
-                    var query = charityLoanInstallmentsRepository.GetAll()
+                    List<CharityLoanInstallments> query = charityLoanInstallmentsRepository.GetAll()
+                        .Where(x => !x.IsDelete)
                         .Include(x => x.CharityLoan!.LoanReceiver)
                         .OrderBy(x => x.Id).ToList();
 
@@ -141,7 +172,7 @@ namespace Aban.Service.Services
                 {
                     resultStatusOperation.IsSuccessed = false;
                     resultStatusOperation.Message = "خطایی رخ داده است";
-                    resultStatusOperation.Type = Enumeration.MessageTypeResult.Danger;
+                    resultStatusOperation.Type = MessageTypeResult.Danger;
                     resultStatusOperation.ErrorException = exception;
                     throw new Exception("", exception);
                 }

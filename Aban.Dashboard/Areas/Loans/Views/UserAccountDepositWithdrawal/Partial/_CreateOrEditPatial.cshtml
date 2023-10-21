@@ -1,0 +1,84 @@
+﻿@model UserAccountDepositWithdrawal
+<div class="ibox">
+    <div class="ibox-content">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("left")" />
+                <br />
+                <br />
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label asp-for="UserAccountId"></label>
+<select asp-for="UserAccountId" asp-items="ViewBag.listUserAccountId" class="chosen-select form-control">
+<option value="">انتخاب</option>
+</select>
+<span asp-validation-for="UserAccountId" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label asp-for="Price"></label>
+<span asp-validation-for="Price" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label asp-for="TotalPriceAfterTransaction"></label>
+<span asp-validation-for="TotalPriceAfterTransaction" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label asp-for="AccountTransactionType"></label>
+<span asp-validation-for="AccountTransactionType" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label asp-for="AccountTransactionMethod"></label>
+<span asp-validation-for="AccountTransactionMethod" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label asp-for="TransactionDateTime"></label>
+<input id="TransactionDateTime" name="TransactionDateTimeString" type="text" class="form-control PersianDatePicker" readonly value="تاریخ" />
+<span asp-validation-for="TransactionDateTime" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label class="" > ساعت </label>
+<div class="input-group clockpicker" data-autoclose="true">
+<input name="TransactionDateTimeTime" type="text" class="form-control" value ="@Model.TransactionDateTime.ToString("HH:mm")" readonly>
+<button type="button" class="input-group-addon btn-primary">
+<i class="fa fa-clock-o"></i>
+</button>
+</div>
+<span asp-validation-for="TransactionDateTime" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+<div role="form">
+<div class="form-group">
+<label asp-for="Description"></label>
+<textarea @*class="CKEditor"*@ class="form-control" asp-for="Description" name="Description" ></textarea><span asp-validation-for="Description" class="text-danger"></span></div>
+</div>
+</div>
+
+
+        </div>
+        <partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("right")" />
+    </div>
+</div>

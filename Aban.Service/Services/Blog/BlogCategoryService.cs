@@ -36,7 +36,8 @@ namespace Aban.Service.Services
             resultStatusOperation.Type = Enumeration.MessageTypeResult.Success;
             try
             {
-                IQueryable<BlogCategory> query = blogCategoryRepository.GetAll();
+                IQueryable<BlogCategory> query = blogCategoryRepository.GetAll()
+                    .Where(x => !x.IsDelete);
 
                 if (!string.IsNullOrEmpty(userIdentityId))
                 {
@@ -105,7 +106,8 @@ namespace Aban.Service.Services
 
                 try
                 {
-                    var query = blogCategoryRepository.GetAll().OrderBy(x => x.Id).ToList();
+                    var query = blogCategoryRepository.GetAll()
+                    .Where(x => !x.IsDelete).OrderBy(x => x.Id).ToList();
 
                     List<SelectListItem> item = query.ConvertAll(x =>
                     {
@@ -141,7 +143,8 @@ namespace Aban.Service.Services
 
                 try
                 {
-                    var query = blogCategoryRepository.GetAll().OrderBy(x => x.Id).ToList();
+                    var query = blogCategoryRepository.GetAll()
+                    .Where(x => !x.IsDelete).OrderBy(x => x.Id).ToList();
 
                     List<SelectListItem> item = query.ConvertAll(x =>
                     {

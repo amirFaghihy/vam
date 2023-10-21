@@ -43,7 +43,11 @@ builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 
 #region Loan
 
-//builder.Services.AddScoped<ICharityAccountService, CharityAccountService>();
+builder.Services.AddScoped<ICharityLoanInstallmentsService, CharityLoanInstallmentsService>();
+builder.Services.AddScoped<ICharityLoanService, CharityLoanService>();
+builder.Services.AddScoped<IGuaranteeService, GuaranteeService>();
+builder.Services.AddScoped<IUserAccountDepositWithdrawalService, UserAccountDepositWithdrawalService>();
+builder.Services.AddScoped<IUserAccountService, UserAccountService>();
 
 #endregion
 

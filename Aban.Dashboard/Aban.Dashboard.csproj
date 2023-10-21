@@ -43,7 +43,37 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Areas\Loans\Views\CharityLoanInstallments\Create.cshtml" />
+    <None Include="Areas\Loans\Views\CharityLoanInstallments\Edit.cshtml" />
+    <None Include="Areas\Loans\Views\CharityLoanInstallments\Index.cshtml" />
+    <None Include="Areas\Loans\Views\CharityLoanInstallments\Partial\_CreateOrEditPatial.cshtml" />
+    <None Include="Areas\Loans\Views\CharityLoanInstallments\Partial\_FilterTablePartial.cshtml" />
+    <None Include="Areas\Loans\Views\CharityLoanInstallments\Partial\_PaginationCount.cshtml" />
+    <None Include="Areas\Loans\Views\CharityLoan\Create.cshtml" />
+    <None Include="Areas\Loans\Views\CharityLoan\Edit.cshtml" />
+    <None Include="Areas\Loans\Views\CharityLoan\Index.cshtml" />
+    <None Include="Areas\Loans\Views\CharityLoan\Partial\_CreateOrEditPatial.cshtml" />
+    <None Include="Areas\Loans\Views\CharityLoan\Partial\_FilterTablePartial.cshtml" />
+    <None Include="Areas\Loans\Views\CharityLoan\Partial\_PaginationCount.cshtml" />
+    <None Include="Areas\Loans\Views\Guarantee\Create.cshtml" />
+    <None Include="Areas\Loans\Views\Guarantee\Edit.cshtml" />
+    <None Include="Areas\Loans\Views\Guarantee\Index.cshtml" />
+    <None Include="Areas\Loans\Views\Guarantee\Partial\_CreateOrEditPatial.cshtml" />
+    <None Include="Areas\Loans\Views\Guarantee\Partial\_FilterTablePartial.cshtml" />
+    <None Include="Areas\Loans\Views\Guarantee\Partial\_PaginationCount.cshtml" />
     <None Include="Areas\Loans\Views\Home\Index.cshtml" />
+    <None Include="Areas\Loans\Views\UserAccountDepositWithdrawal\Create.cshtml" />
+    <None Include="Areas\Loans\Views\UserAccountDepositWithdrawal\Edit.cshtml" />
+    <None Include="Areas\Loans\Views\UserAccountDepositWithdrawal\Index.cshtml" />
+    <None Include="Areas\Loans\Views\UserAccountDepositWithdrawal\Partial\_CreateOrEditPatial.cshtml" />
+    <None Include="Areas\Loans\Views\UserAccountDepositWithdrawal\Partial\_FilterTablePartial.cshtml" />
+    <None Include="Areas\Loans\Views\UserAccountDepositWithdrawal\Partial\_PaginationCount.cshtml" />
+    <None Include="Areas\Loans\Views\UserAccount\Create.cshtml" />
+    <None Include="Areas\Loans\Views\UserAccount\Edit.cshtml" />
+    <None Include="Areas\Loans\Views\UserAccount\Index.cshtml" />
+    <None Include="Areas\Loans\Views\UserAccount\Partial\_CreateOrEditPatial.cshtml" />
+    <None Include="Areas\Loans\Views\UserAccount\Partial\_FilterTablePartial.cshtml" />
+    <None Include="Areas\Loans\Views\UserAccount\Partial\_PaginationCount.cshtml" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties configuration_1json__JsonSchema="https://beaujs.com/schema.json" /></VisualStudio></ProjectExtensions>

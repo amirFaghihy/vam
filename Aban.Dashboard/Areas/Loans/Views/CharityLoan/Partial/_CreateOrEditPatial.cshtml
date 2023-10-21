@@ -1,0 +1,106 @@
+﻿@model CharityLoan
+<div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
+    <div class="info">
+        <div class="r!importantw">
+            <div class="col-md-11 mx-auto">
+                <div class="row">
+
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("right")" />
+                        <br />
+                        <br />
+                    </div>
+
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="IsDelete" />
+
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="LoanReceiverId"></label>
+                            <select asp-for="LoanReceiverId" asp-items="ViewBag.listLoanReceiver" class="form-control">
+                                <option value="">-- انتخاب --</option>
+                            </select>
+                            <span asp-validation-for="LoanReceiverId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="LoanAmount"></label>
+                            <input asp-for="LoanAmount" type="text" class="form-control" onkeyup="formatNumber(this.id, this.value)" value="@Model.LoanAmount.ToString("N0")" onclick="select()">
+                            <span asp-validation-for="LoanAmount" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="PercentSalary"></label>
+                            <input asp-for="PercentSalary" type="text" class="form-control">
+                            <span asp-validation-for="PercentSalary" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="AccountNumber"></label>
+                            <input asp-for="AccountNumber" type="text" class="form-control">
+                            <span asp-validation-for="AccountNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="form-group">
+                            <label asp-for="Description"></label>
+                            <textarea @*class="CKEditor"*@ class="form-control" asp-for="Description" name="Description"></textarea><span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="PaymentStartDate"></label>
+                            @if (Model.PaymentStartDate != new DateTime())
+                            {
+                                <input id="paymentStartDateString" name="paymentStartDateString" type="text" class="form-control mb-4 PersianDatePicker" readonly value="@Html.ConvertToPersianDate(Model.PaymentStartDate)" autocomplete="off" />
+                            }
+                            else
+                            {
+                                <input id="paymentStartDateString" name="paymentStartDateString" type="text" class="form-control mb-4 PersianDatePicker" readonly value="@Html.ConvertToPersianDate(DateTime.Now)" autocomplete="off" />
+                            }
+                            <span asp-validation-for="PaymentStartDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                    @*<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label class=""> ساعت </label>
+                            @if (Model.PaymentStartDate != new DateTime())
+                            {
+                                <input id="PaymentStartDateTime" name="PaymentStartDateTime" class="form-control flatpickr flatpickr-input" type="text" value="@Model.PaymentStartDate.ToString("HH:mm")" readonly="readonly">
+                            }
+                            else
+                            {
+                                <input id="PaymentStartDateTime" name="documentRegisterDateTimeTime" class="form-control flatpickr flatpickr-input" type="text" value="@DateTime.Now.ToString("HH:mm")" readonly="readonly">
+                            }
+                            <span asp-validation-for="PaymentStartDate" class="text-danger"></span>
+                        </div>
+                    </div>*@
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label asp-for="NumberOfInstallments"></label>
+                            <input asp-for="NumberOfInstallments" type="text" class="form-control" onclick="select()">
+                            <span asp-validation-for="NumberOfInstallments" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label asp-for="IsDone"></label>
+                            <div class="form-group mt-30">
+                                <label class="switch s-icons s-outline s-outline-primary mb-4 mr-2">
+                                    <input type="checkbox" asp-for="IsDone">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("left")" />

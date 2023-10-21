@@ -79,6 +79,11 @@ namespace Aban.Service.Interfaces
         void LogoutAsync();
 
         List<SelectListItem> ReadAll(string selectedValue = "", bool? isConfirm = null, bool? isLocked = null, List<RoleName>? roleNames = null, string userRegistrarId = "");
-        List<SelectListItem> ReadAllWithFatherName(string selectedValue = "", bool? isConfirm = null, bool? isLocked = null, List<RoleName>? roleNames = null);
+        List<SelectListItem> ReadAllWithFatherName(
+            string selectedValue = "",
+            bool? isConfirm = null,
+            bool? isLocked = null
+            //List<RoleName>? roleNames = null
+            );
     }
 }

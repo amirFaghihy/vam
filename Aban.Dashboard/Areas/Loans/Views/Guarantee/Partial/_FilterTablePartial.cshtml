@@ -1,0 +1,251 @@
+﻿<div class="form-horizontal ibox float-e-margins ibox-content">
+    <div class="col-md-12">
+        <button id="filterBtn" style="margin-bottom:15px;" class="btn btn-success" data-toggle="collapse" href="#filterPanel" role="button" type="button" aria-expanded="false" aria-controls="ARDA0002">
+            فیلتر
+            @*<i class="fa fa-chevron-down"></i>
+            <i class="fa fa-chevron-up"></i>*@
+            @*<i class="fa fa-chevron-left" ></i>*@
+            <i style="margin-right:5px;" class="fa fa-chevron-left" id="Icon"></i>
+        </button>
+        <div id="filterBox" style="display:none" class="boxHide">
+
+            <div class="col-sm-6">
+                <div class="row">
+                    <label class="col-sm-3 col-md-3 control-label">GuaranteeId</label>
+                    <div class="col-sm-6">
+                        <input class="form-control" name="GuaranteeId" value="@ViewBag.guaranteeId" />
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <label class="col-sm-3 col-md-3 control-label">ChequeNumber</label>
+                                <div class="col-sm-6">
+                                    <select class="chosen-select" id="chequeNumber" multiple asp-items="ViewBag.listChequeNumber" name="chequeNumber"><option value="">--همه--</option></select>
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><div class="col-sm-6">
+                <div class="row">
+                    <label class="col-sm-3 col-md-3 control-label">BankName</label>
+                    <div class="col-sm-6">
+                        <select class="chosen-select" id="bankName" multiple asp-items="ViewBag.listBankName" name="bankName"><option value="">--همه--</option></select>
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <label class="col-sm-3 col-md-3 control-label">ChequePrice</label>
+                                <div class="col-sm-6">
+                                    <select class="chosen-select" id="chequePrice" multiple asp-items="ViewBag.listChequePrice" name="chequePrice"><option value="">--همه--</option></select>
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><div class="col-sm-6">
+                <div class="row">
+                    <label class="col-sm-3 col-md-3 control-label">BankDraftNumber</label>
+                    <div class="col-sm-6">
+                        <select class="chosen-select" id="bankDraftNumber" multiple asp-items="ViewBag.listBankDraftNumber" name="bankDraftNumber"><option value="">--همه--</option></select>
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <label class="col-sm-3 col-md-3 control-label">BankDraftPrice</label>
+                                <div class="col-sm-6">
+                                    <select class="chosen-select" id="bankDraftPrice" multiple asp-items="ViewBag.listBankDraftPrice" name="bankDraftPrice"><option value="">--همه--</option></select>
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><div class="col-sm-6">
+                <div class="row">
+                    <label class="col-sm-3 col-md-3 control-label">GoldGuarantee</label>
+                    <div class="col-sm-6">
+                        <select class="chosen-select" id="goldGuarantee" multiple asp-items="ViewBag.listGoldGuarantee" name="goldGuarantee"><option value="">--همه--</option></select>
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <label class="col-sm-3 col-md-3 control-label">PaySlip</label>
+                                <div class="col-sm-6">
+                                    <select class="chosen-select" id="paySlip" multiple asp-items="ViewBag.listPaySlip" name="paySlip"><option value="">--همه--</option></select>
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><div class="col-sm-6">
+                <div class="row">
+                    <label class="col-sm-3 col-md-3 control-label">تا</label>
+                    <div class="col-sm-6">
+                        <div class="input-group persian-date-group">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input name="registerDateFrom" value="@(ViewBag.registerDateFrom != null ? $"{ViewBag.registerDateFrom}":"" )" class="form-control PersianDatePicker" type="text" readonly />
+                        </div>
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="row">
+                    <label class="col-sm-3 col-md-3 control-label">از</label>
+                    <div class="col-sm-6">
+                        <div class="input-group persian-date-group">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input name="registerDateTo" value="@(ViewBag.registerDateTo != null ? $"{ViewBag.registerDateTo}":"" )" class="form-control PersianDatePicker" type="text" readonly />
+                        </div>
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="row">
+                        @*<div class="col-sm-6 ">
+                        <div class="row">
+                        <label class="col-sm-3 col-md-3 control-label">زمان ثبت درخواست</label>
+                        <div class="col-sm-6">
+                        <div class="input-group persian-date-group">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="RequestDateFrom" id="RequestDateFrom" value="@(ViewBag.RequestDateFrom != null ? $"{ViewBag.RequestDateFrom}":"" )" class="form-control PersianDatePicker" type="text" readonly />
+                        </div>
+                        </div>
+
+                        </div>
+                        </div>*@
+                        <div class="col-sm-6 ">
+                            <div class="row">
+                                <label class="col-sm-3 col-md-3 control-label">اندازه ی صفحه</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" name="pageSize">
+                                        <option value="10" id="10">10</option>
+                                        <option value="25" id="25">25</option>
+                                        <option value="50" id="50">50</option>
+                                        <option value="100" id="100">100</option>
+                                    </select>
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-6 ">
+                            <div class="row">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 ">
+                            <div class="row">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-6 ">
+                            <div class="row">
+                                <label class="col-sm-3 col-md-3 control-label"></label>
+                                <div class="col-sm-6">
+                                    <button class="btn btn-primary" style="width:100%" type="submit">اعمال فیلتر</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <label class="col-sm-3 col-md-3 control-label"></label>
+                                <div class="col-sm-6">
+                                    <a class="btn btn-danger" href="@Url.Action("Index")" style="width:100%" id="clear">پاک کردن</a>
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="lastHeader" value="@ViewBag.lastColumn" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        var pageSize = `@ViewBag.pageSize`;
+        var filterBox = $("#filterBox");
+        var filterBtn = $("#filterBtn");
+        var Icon = $("#Icon");
+        $("#" + pageSize).attr("selected", "selected");
+
+        $(filterBtn).click(function () {
+            $(filterBox).toggle(500);
+            $(filterBox).toggleClass("boxHide");
+            if ($("#filterBox").hasClass('boxHide')) { //hide and must be show
+                $(Icon).removeClass("fa-chevron-right").addClass("fa-chevron-left");
+            } else { // show and must be hide
+                $(Icon).removeClass("fa-chevron-left").addClass("fa-chevron-right");
+            }
+        });
+        SortTitle(`@ViewBag.sortColumn`, `@ViewBag.isDesc`);
+    });
+    var arrowDown = '<span class="fa fa-lg fa-sort-amount-asc" style="margin-right:10px;color:green;"></span>';
+    var arrowUp = '<span class="fa fa-lg fa-sort-amount-desc" style="margin-right:10px;color:red;"></span>';
+    var arrow = '';
+    var headerId = '';
+
+    function SortTitle(headerSort, direction) {
+        if (direction == true || direction == 'True') {
+            arrow = arrowUp;
+        } else {
+            arrow = arrowDown;
+        }
+        headerId = "#" + headerSort + "";
+        $(headerId).append(arrow);
+    }
+
+
+
+</script>

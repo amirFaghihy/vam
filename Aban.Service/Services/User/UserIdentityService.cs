@@ -238,8 +238,7 @@ namespace Aban.Service.Services
         public List<SelectListItem> ReadAllWithFatherName(
             string selectedValue = "",
             bool? isConfirm = null,
-            bool? isLocked = null,
-            List<RoleName>? roleNames = null)
+            bool? isLocked = null)
         {
             ResultStatusOperation resultStatusOperation = new ResultStatusOperation
             {
@@ -260,17 +259,17 @@ namespace Aban.Service.Services
                 {
                     query = query.Where(x => x.IsLocked != isLocked);
                 }
-                if (roleNames != null && roleNames.Count() != 0)
-                {
-                    List<string> userIds = userRoleRepository.GetAll().Where(userrole =>
-                    roleRepository.GetAll().Where(role =>
-                    roleNames.Select(rname => rname.ToString().Replace("_", " "))
-                    .Contains(role.Name)).Select(x => x.Id)
-                    .Contains(userrole.RoleId)).Select(uId => uId.UserId).ToList();
+                //if (roleNames != null && roleNames.Count() != 0)
+                //{
+                //    List<string> userIds = userRoleRepository.GetAll().Where(userrole =>
+                //    roleRepository.GetAll().Where(role =>
+                //    roleNames.Select(rname => rname.ToString().Replace("_", " "))
+                //    .Contains(role.Name)).Select(x => x.Id)
+                //    .Contains(userrole.RoleId)).Select(uId => uId.UserId).ToList();
 
-                    query = SpecificationGetData(userIds).Result.Item1;
-                    //query = query.Where(x => userIds.Contains(x.Id));
-                }
+                //    query = SpecificationGetData(userIds).Result.Item1;
+                //    //query = query.Where(x => userIds.Contains(x.Id));
+                //}
 
                 List<SelectListItem> items = query.OrderBy(x => x.LastName).ToList().ConvertAll(x =>
                 {

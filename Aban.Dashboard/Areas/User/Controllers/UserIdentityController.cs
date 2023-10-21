@@ -16,9 +16,7 @@ using Aban.Service.Services;
 namespace Aban.Dashboard.Areas.User.Controllers
 {
     [Area("User")]
-
-    //TODO: چرا فقط ادمین می تواند وارد این کنترلر شود؟ مگر منشی یا سرکاربر نباید مددکارهای خود را ثبت کنند
-    [Authorize(Roles = "Admin,Foreman,Clerk")]
+    [Authorize(Roles = "Admin")]
     public class UserIdentityController : GenericController
     {
 
@@ -497,17 +495,6 @@ namespace Aban.Dashboard.Areas.User.Controllers
             return RedirectToAction(nameof(Edit), new { Id = GetUserId() });
         }
 
-
-        [Authorize(Roles = "Admin")]
-        [HttpGet]
-        public IActionResult SetUserForUser()
-        {
-            ViewBag.userIdentityList1 = userIdentityService.ReadAllWithFatherName("", true, false, new List<RoleName>() { RoleName.Foreman, RoleName.Clerk });
-            ViewBag.userIdentityList2 = userIdentityService.ReadAllWithFatherName("", true, false, new List<RoleName>() { RoleName.Clerk, RoleName.Helper });
-
-            return View();
-        }
-
         public IActionResult Register()
         {
             return View();
@@ -530,7 +517,6 @@ namespace Aban.Dashboard.Areas.User.Controllers
                 ViewBag.userIdentityList = userIdentityService.ReadAll(userId);
                 RoleName roleName = RoleName.Admin;
 
-                //TODO: رل ها با آیدی هایشان نشان داده می شوند در صفحه ی Create
                 if (User.IsInRole("Clerk"))
                 {
                     roleName = RoleName.Clerk;

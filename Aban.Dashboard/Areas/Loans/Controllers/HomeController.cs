@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Aban.Dashboard.Areas.Loans.Controllers
 {
-    [Area("Charity")]
+    [Area("Loans")]
     [Authorize]
     public class HomeController : GenericController
     {

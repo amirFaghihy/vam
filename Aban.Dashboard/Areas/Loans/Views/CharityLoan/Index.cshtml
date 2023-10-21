@@ -1,0 +1,138 @@
+﻿@model X.PagedList.IPagedList<CharityLoan>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.PageTitle = "وام";
+    breadCrumb.Title = "وام";
+
+    breadCrumb.Links = new List<string[]> { new string[2] { Url.Action("Index"), breadCrumb.PageTitle } };
+
+    string sortColumn = ViewBag.sortColumn;
+    object RouteValue(string sortColumn)
+        => new
+        {
+            userIdentityId = ViewBag.userIdentityId,
+            loanReceiverId= ViewBag.loanReceiverId,
+            loanAmount = ViewBag.loanAmount,
+            percentSalary = ViewBag.percentSalary,
+            accountNumber= ViewBag.accountNumber,
+            paymentStartDateFrom = ViewBag.paymentStartDateFrom,
+            paymentStartDateTo= ViewBag.paymentStartDateTo,
+            numberOfInstallments= ViewBag.numberOfInstallments,
+            registerDateFrom = ViewBag.registerDateFrom,
+            registerDateTo = ViewBag.registerDateTo,
+            isdone= ViewBag.isdone,
+
+
+            pageNumber = ViewBag.pageNumber,
+            pageSize = ViewBag.pageSize,
+            sortColumn = sortColumn,
+            lastColumn = ViewBag.lastColumn,
+            isDesc = ViewBag.isDesc
+        };
+}
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
+
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+
+            <partial name="./Partial/_FilterTablePartial" />
+
+            @await Html.PartialAsync("~/Views/Shared/Generic/_CreateButtonWithPageSize.cshtml", "وام جدید")
+            <div class="table-responsive text-center">
+                <table class="table table-bordered table-hover mb-4">
+                    <thead>
+                        <tr>
+
+                            <th style="width: 162px;">@Html.ActionLink("کد", "Index", "CharityLoan", new {userIdentity = ViewBag.userIdentity , loanReceiver = ViewBag.loanReceiver , loanAmount = ViewBag.loanAmount , paymentStartDate = ViewBag.paymentStartDate , numberOfInstallments = ViewBag.numberOfInstallments , registerDate = ViewBag.registerDate , isdone = ViewBag.isdone ,  sortColumn = "Id", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Id" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("وام گیرنده", "Index", "CharityLoan", new {userIdentity = ViewBag.userIdentity , loanReceiver = ViewBag.loanReceiver , loanAmount = ViewBag.loanAmount , paymentStartDate = ViewBag.paymentStartDate , numberOfInstallments = ViewBag.numberOfInstallments , registerDate = ViewBag.registerDate , isdone = ViewBag.isdone ,  sortColumn = "LoanReceiver", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "LoanReceiver" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("مبلغ وام", "Index", "CharityLoan", new {userIdentity = ViewBag.userIdentity , loanReceiver = ViewBag.loanReceiver , loanAmount = ViewBag.loanAmount , paymentStartDate = ViewBag.paymentStartDate , numberOfInstallments = ViewBag.numberOfInstallments , registerDate = ViewBag.registerDate , isdone = ViewBag.isdone ,  sortColumn = "LoanAmount", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "LoanAmount" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تاریخ شروع پرداخت", "Index", "CharityLoan", new {userIdentity = ViewBag.userIdentity , loanReceiver = ViewBag.loanReceiver , loanAmount = ViewBag.loanAmount , paymentStartDate = ViewBag.paymentStartDate , numberOfInstallments = ViewBag.numberOfInstallments , registerDate = ViewBag.registerDate , isdone = ViewBag.isdone ,  sortColumn = "PaymentStartDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "PaymentStartDate" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تعداد اقساط", "Index", "CharityLoan", new {userIdentity = ViewBag.userIdentity , loanReceiver = ViewBag.loanReceiver , loanAmount = ViewBag.loanAmount , paymentStartDate = ViewBag.paymentStartDate , numberOfInstallments = ViewBag.numberOfInstallments , registerDate = ViewBag.registerDate , isdone = ViewBag.isdone ,  sortColumn = "NumberOfInstallments", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "NumberOfInstallments" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "CharityLoan", new {userIdentity = ViewBag.userIdentity , loanReceiver = ViewBag.loanReceiver , loanAmount = ViewBag.loanAmount , paymentStartDate = ViewBag.paymentStartDate , numberOfInstallments = ViewBag.numberOfInstallments , registerDate = ViewBag.registerDate , isdone = ViewBag.isdone ,  sortColumn = "RegisterDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "RegisterDate" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("پرداخت شده است ؟", "Index", "CharityLoan", new {userIdentity = ViewBag.userIdentity , loanReceiver = ViewBag.loanReceiver , loanAmount = ViewBag.loanAmount , paymentStartDate = ViewBag.paymentStartDate , numberOfInstallments = ViewBag.numberOfInstallments , registerDate = ViewBag.registerDate , isdone = ViewBag.isdone ,  sortColumn = "IsDone", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "IsDone" })</th>
+
+                            <th style="width: 162px;">عملیات</th>
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.LoanReceiverId</td>
+                            <td>@item.LoanAmount.ToString("N0") </td>
+                            <td>
+                                @Html.ConvertPersianDateTime(item.PaymentStartDate)
+                            </td>
+                            <td>@item.NumberOfInstallments </td>
+                            <td>
+                                @Html.ConvertPersianDateTime(item.RegisterDate)
+                            </td>
+                            <td>
+                                <i class="fa fa-@(((bool)item.IsDone) ? "check isVisible" : "times isHidden")"></i>
+                            </td>
+
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
+                                    <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
+                                        <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
+                                        <a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    <tfoot>
+                        <tr>
+                            <th style="width: 162px;">کد</th>
+                            <th style="width: 162px;">وام گیرنده</th>
+                            <th style="width: 162px;">مبلغ وام</th>
+                            <th style="width: 162px;">تاریخ شروع پرداخت</th>
+                            <th style="width: 162px;">تعداد اقساط</th>
+                            <th style="width: 162px;">تاریخ ثبت</th>
+                            <th style="width: 162px;">پرداخت شده است ؟</th>
+
+                            <th>عملیات</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <partial name="./Partial/_PaginationCount" model="Tuple.Create(new PaginationInfo(Model),RouteValue(sortColumn))" />
+
+        </div>
+    </div>
+</div>
+
+@section Styles{
+    <link href="~/assets/css/forms/switches.css" rel="stylesheet" />
+    <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+}
+
+    @section Scripts{
+    <script src="~/plugins/select2/select2.min.js"></script>
+    <script src="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+
+    <script>
+        // With postfix
+        $("input[name='percentSalary']").TouchSpin({
+            postfix: '%',
+        });
+
+        $("#userIdentityId").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class23');
+
+
+        $("#loanReceiverId").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class58');
+    </script>
+    }

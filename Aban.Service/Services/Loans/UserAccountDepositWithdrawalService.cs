@@ -4,7 +4,6 @@ using Aban.DataLayer.Context;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Aban.Service.Services.Generic;
 using Aban.DataLayer.Interfaces;
-using Aban.Domain.Enumerations;
 using static Aban.Domain.Enumerations.Enumeration;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,7 +35,8 @@ namespace Aban.Service.Services
             resultStatusOperation.Type = MessageTypeResult.Success;
             try
             {
-                IQueryable<UserAccountDepositWithdrawal> query = userAccountDepositWithdrawalRepository.GetAll();
+                IQueryable<UserAccountDepositWithdrawal> query = userAccountDepositWithdrawalRepository.GetAll()
+                    .Where(x => !x.IsDelete);
 
                 if (userAccountId != null)
                 {
@@ -116,7 +116,8 @@ namespace Aban.Service.Services
                 try
                 {
                     var query = userAccountDepositWithdrawalRepository.GetAll()
-                        .Include(x=>x.UserAccount!.AccountOwner)
+                        .Where(x => !x.IsDelete)
+                        .Include(x => x.UserAccount!.AccountOwner)
                         .OrderBy(x => x.Id).ToList();
 
                     List<SelectListItem> item = query.ConvertAll(x =>

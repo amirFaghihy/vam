@@ -1,0 +1,89 @@
+﻿@model X.PagedList.IPagedList<Guarantee>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.PageTitle = "-------";
+    breadCrumb.Title = "-------";
+
+    breadCrumb.Links = new List<string[]> { new string[2] { Url.Action("Index"), breadCrumb.PageTitle } };
+
+}
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                @using (Html.BeginForm("Index", "Guarantee", FormMethod.Get, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+                    {
+                        <partial name="_FilterTablePartial" />
+                    }
+            </div>
+            <div class="ibox-content">
+                @await Html.PartialAsync("~/Views/Shared/Generic/_CreateButtonWithPageSize.cshtml")
+                <div class="table-responsive text-center">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+
+                                <th style="width: 162px;">@Html.ActionLink("کد", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "Id", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Id" })</th>
+<th style="width: 162px;">@Html.ActionLink("ضامن", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "GuaranteeId", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "GuaranteeId" })</th>
+<th style="width: 162px;">@Html.ActionLink("شماره چک", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "ChequeNumber", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "ChequeNumber" })</th>
+<th style="width: 162px;">@Html.ActionLink("نام بانک", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "BankName", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "BankName" })</th>
+<th style="width: 162px;">@Html.ActionLink("مبلغ چک ضمانت", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "ChequePrice", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "ChequePrice" })</th>
+<th style="width: 162px;">@Html.ActionLink("شماره سفته", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "BankDraftNumber", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "BankDraftNumber" })</th>
+<th style="width: 162px;">@Html.ActionLink("مبلغ سفته", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "BankDraftPrice", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "BankDraftPrice" })</th>
+<th style="width: 162px;">@Html.ActionLink("وزن و مشخصات طلای ضمانتی", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "GoldGuarantee", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "GoldGuarantee" })</th>
+<th style="width: 162px;">@Html.ActionLink("مشخصات فیش حقوقی ضمانتی", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "PaySlip", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "PaySlip" })</th>
+<th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "RegisterDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "RegisterDate" })</th>
+
+                                <th style="width: 162px;">عملیات</th>
+                            </tr>
+                        </thead>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.GuaranteeId </td><td>@item.ChequeNumber </td><td>@item.BankName </td><td>@item.ChequePrice </td><td>@item.BankDraftNumber </td><td>@item.BankDraftPrice </td><td>@item.GoldGuarantee </td><td>@item.PaySlip </td><td>
+ @Html.ConvertPersianDateTime(item.RegisterDate)
+ </td>
+
+                                <td>
+                                    <div class="input-group-append button-center">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false">عملیات </button>
+                                        <ul class="dropdown-menu float-right" x-placement="bottom-start" style="text-align:right;position: absolute; top: 35px; left: 1243px; will-change: top, left;">
+                                            <li><a href="@Url.Action("Edit", new { id = item.Id })"><span class="fa fa-edit"></span> ویرایش</a></li>
+                                            @*<li><a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');"><span class="fa fa-remove"></span> حذف</a></li>*@
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        <tfoot>
+                            <tr>
+                                <th style="width: 162px;">کد</th>
+                                <th style="width: 162px;">ضامن</th>
+<th style="width: 162px;">شماره چک</th>
+<th style="width: 162px;">نام بانک</th>
+<th style="width: 162px;">مبلغ چک ضمانت</th>
+<th style="width: 162px;">شماره سفته</th>
+<th style="width: 162px;">مبلغ سفته</th>
+<th style="width: 162px;">وزن و مشخصات طلای ضمانتی</th>
+<th style="width: 162px;">مشخصات فیش حقوقی ضمانتی</th>
+<th style="width: 162px;">تاریخ ثبت</th>
+
+                                <th>عملیات</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <partial name="_PaginationCount" model="new PaginationInfo(Model)" />
+            </div>
+        </div>
+    </div>
+</div>

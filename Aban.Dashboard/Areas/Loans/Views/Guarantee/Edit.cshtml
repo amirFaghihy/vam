@@ -1,0 +1,45 @@
+﻿@model Guarantee
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.Title = "ویرایش";
+    breadCrumb.PageTitle = "ویرایش";
+
+    breadCrumb.Links = new List<string[]>
+{
+new string[2]{Url.Action("Index"),"صفحه اصلی" }
+};
+}
+
+
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <form asp-area="XXXX" asp-controller="Guarantee" asp-action="Edit" enctype="multipart/form-data" method="post" class="form-horizontal">
+                @Html.ValidationSummary(true)
+                <div asp-validation-summary="All"></div>
+                <div asp-validation-summary="ModelOnly"></div>
+                <fieldset>
+                    @Html.HiddenFor(X => X.Id)
+                    <partial name="~/Areas/XXXX/Views/Guarantee/_CreateOrEditPatial.cshtml" model="Model" />
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+}

@@ -1,0 +1,61 @@
+﻿@model UserAccount
+<div class="ibox">
+    <div class="ibox-content">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("left")" />
+                <br />
+                <br />
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label asp-for="AccountOwnerId"></label>
+<select asp-for="AccountOwnerId" asp-items="ViewBag.listAccountOwnerId" class="chosen-select form-control">
+<option value="">انتخاب</option>
+</select>
+<span asp-validation-for="AccountOwnerId" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label asp-for="BankName"></label>
+<select asp-for="BankName" asp-items="ViewBag.listBankName" class="chosen-select form-control">
+<option value="">انتخاب</option>
+</select>
+<span asp-validation-for="BankName" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label asp-for="Title"></label>
+<input asp-for="Title" type="text" class="form-control">
+<span asp-validation-for="Title" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+<div role="form">
+<div class="form-group">
+<label asp-for="AccountNumber"></label>
+<input asp-for="AccountNumber" type="text" class="form-control">
+<span asp-validation-for="AccountNumber" class="text-danger"></span></div>
+</div>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+<div role="form">
+<div class="form-group">
+<label asp-for="Description"></label>
+<textarea @*class="CKEditor"*@ class="form-control" asp-for="Description" name="Description" ></textarea><span asp-validation-for="Description" class="text-danger"></span></div>
+</div>
+</div>
+
+
+        </div>
+        <partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("right")" />
+    </div>
+</div>

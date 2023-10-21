@@ -1,0 +1,81 @@
+﻿@model X.PagedList.IPagedList<UserAccount>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.PageTitle = "-------";
+    breadCrumb.Title = "-------";
+
+    breadCrumb.Links = new List<string[]> { new string[2] { Url.Action("Index"), breadCrumb.PageTitle } };
+
+}
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                @using (Html.BeginForm("Index", "UserAccount", FormMethod.Get, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+                    {
+                        <partial name="_FilterTablePartial" />
+                    }
+            </div>
+            <div class="ibox-content">
+                @await Html.PartialAsync("~/Views/Shared/Generic/_CreateButtonWithPageSize.cshtml")
+                <div class="table-responsive text-center">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+
+                                <th style="width: 162px;">@Html.ActionLink("کد", "Index", "UserAccount", new {accountOwnerId = ViewBag.accountOwnerId , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , registerDate = ViewBag.registerDate ,  sortColumn = "Id", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Id" })</th>
+<th style="width: 162px;">@Html.ActionLink("صاحب حساب", "Index", "UserAccount", new {accountOwnerId = ViewBag.accountOwnerId , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , registerDate = ViewBag.registerDate ,  sortColumn = "AccountOwnerId", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "AccountOwnerId" })</th>
+<th style="width: 162px;">@Html.ActionLink("نام بانک", "Index", "UserAccount", new {accountOwnerId = ViewBag.accountOwnerId , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , registerDate = ViewBag.registerDate ,  sortColumn = "BankName", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "BankName" })</th>
+<th style="width: 162px;">@Html.ActionLink("عنوان حساب", "Index", "UserAccount", new {accountOwnerId = ViewBag.accountOwnerId , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , registerDate = ViewBag.registerDate ,  sortColumn = "Title", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Title" })</th>
+<th style="width: 162px;">@Html.ActionLink("شماره حساب/کارت", "Index", "UserAccount", new {accountOwnerId = ViewBag.accountOwnerId , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , registerDate = ViewBag.registerDate ,  sortColumn = "AccountNumber", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "AccountNumber" })</th>
+<th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "UserAccount", new {accountOwnerId = ViewBag.accountOwnerId , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , registerDate = ViewBag.registerDate ,  sortColumn = "RegisterDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "RegisterDate" })</th>
+
+                                <th style="width: 162px;">عملیات</th>
+                            </tr>
+                        </thead>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.AccountOwnerId </td><td>@item.BankName </td><td>@item.Title </td><td>@item.AccountNumber </td><td>
+ @Html.ConvertPersianDateTime(item.RegisterDate)
+ </td>
+
+                                <td>
+                                    <div class="input-group-append button-center">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false">عملیات </button>
+                                        <ul class="dropdown-menu float-right" x-placement="bottom-start" style="text-align:right;position: absolute; top: 35px; left: 1243px; will-change: top, left;">
+                                            <li><a href="@Url.Action("Edit", new { id = item.Id })"><span class="fa fa-edit"></span> ویرایش</a></li>
+                                            @*<li><a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');"><span class="fa fa-remove"></span> حذف</a></li>*@
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        <tfoot>
+                            <tr>
+                                <th style="width: 162px;">کد</th>
+                                <th style="width: 162px;">صاحب حساب</th>
+<th style="width: 162px;">نام بانک</th>
+<th style="width: 162px;">عنوان حساب</th>
+<th style="width: 162px;">شماره حساب/کارت</th>
+<th style="width: 162px;">تاریخ ثبت</th>
+
+                                <th>عملیات</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <partial name="_PaginationCount" model="new PaginationInfo(Model)" />
+            </div>
+        </div>
+    </div>
+</div>

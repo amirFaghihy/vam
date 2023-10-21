@@ -4,7 +4,6 @@ using Aban.DataLayer.Context;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Aban.Service.Services.Generic;
 using Aban.DataLayer.Interfaces;
-using Aban.Domain.Enumerations;
 using static Aban.Domain.Enumerations.Enumeration;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,10 +33,11 @@ namespace Aban.Service.Services
         {
             ResultStatusOperation resultStatusOperation = new ResultStatusOperation();
             resultStatusOperation.IsSuccessed = true;
-            resultStatusOperation.Type = Enumeration.MessageTypeResult.Success;
+            resultStatusOperation.Type = MessageTypeResult.Success;
             try
             {
-                IQueryable<Guarantee> query = guaranteeRepository.GetAll();
+                IQueryable<Guarantee> query = guaranteeRepository.GetAll()
+                    .Where(x => !x.IsDelete);
 
                 if (!string.IsNullOrEmpty(guaranteeId))
                 {
@@ -84,7 +84,7 @@ namespace Aban.Service.Services
             {
                 resultStatusOperation.IsSuccessed = false;
                 resultStatusOperation.Message = "خطایی رخ داده است";
-                resultStatusOperation.Type = Enumeration.MessageTypeResult.Danger;
+                resultStatusOperation.Type = MessageTypeResult.Danger;
                 resultStatusOperation.ErrorException = exception;
                 throw new Exception("", exception);
             }
@@ -94,7 +94,7 @@ namespace Aban.Service.Services
         {
             ResultStatusOperation resultStatusOperation = new ResultStatusOperation();
             resultStatusOperation.IsSuccessed = true;
-            resultStatusOperation.Type = Enumeration.MessageTypeResult.Success;
+            resultStatusOperation.Type = MessageTypeResult.Success;
             try
             {
                 guarantee.IsDelete = false;
@@ -106,7 +106,7 @@ namespace Aban.Service.Services
             {
                 resultStatusOperation.IsSuccessed = false;
                 resultStatusOperation.Message = "خطایی رخ داده است";
-                resultStatusOperation.Type = Enumeration.MessageTypeResult.Danger;
+                resultStatusOperation.Type = MessageTypeResult.Danger;
                 resultStatusOperation.ErrorException = exception;
                 throw new Exception("", exception);
             }
@@ -118,12 +118,13 @@ namespace Aban.Service.Services
             {
                 ResultStatusOperation resultStatusOperation = new ResultStatusOperation();
                 resultStatusOperation.IsSuccessed = true;
-                resultStatusOperation.Type = Enumeration.MessageTypeResult.Success;
+                resultStatusOperation.Type = MessageTypeResult.Success;
 
                 try
                 {
                     var query = guaranteeRepository.GetAll()
-                        .Include(x=>x.GuaranteeUser)
+                        .Where(x => !x.IsDelete)
+                        .Include(x => x.GuaranteeUser)
                         .OrderBy(x => x.Id).ToList();
 
                     List<SelectListItem> item = query.ConvertAll(x =>
@@ -147,7 +148,7 @@ namespace Aban.Service.Services
                 {
                     resultStatusOperation.IsSuccessed = false;
                     resultStatusOperation.Message = "خطایی رخ داده است";
-                    resultStatusOperation.Type = Enumeration.MessageTypeResult.Danger;
+                    resultStatusOperation.Type = MessageTypeResult.Danger;
                     resultStatusOperation.ErrorException = exception;
                     throw new Exception("", exception);
                 }
