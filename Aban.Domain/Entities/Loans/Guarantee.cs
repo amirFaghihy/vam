@@ -16,8 +16,7 @@ namespace Aban.Domain.Entities
         /// ضامن
         /// </summary>
         [Display(Name = "ضامن")]
-#pragma warning disable CS8618
-        public string GuaranteeId { get; set; }
+        public string? GuaranteeUserId { get; set; }
 
         /// <summary>
         /// ضامن

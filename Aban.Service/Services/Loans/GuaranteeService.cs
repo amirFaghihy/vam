@@ -41,7 +41,7 @@ namespace Aban.Service.Services
 
                 if (!string.IsNullOrEmpty(guaranteeId))
                 {
-                    query = query.Where(x => x.GuaranteeId.Contains(guaranteeId));
+                    query = query.Where(x => x.GuaranteeUserId!.Contains(guaranteeId));
                 }
                 if (chequeNumber != null)
                 {

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aban.DataLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231020165047_Create_Db")]
+    [Migration("20231024081648_Create_Db")]
     partial class Create_Db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -291,10 +291,6 @@ namespace Aban.DataLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GoldGuarantee")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GuaranteeId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GuaranteeUserId")

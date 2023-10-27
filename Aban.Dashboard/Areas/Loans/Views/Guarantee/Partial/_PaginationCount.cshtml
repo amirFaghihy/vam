@@ -1,6 +1,7 @@
 ﻿@model PaginationInfo
 
-@{ int PageNumber = Model.PageNumber;
+@{
+    int PageNumber = Model.PageNumber;
     int PageCount = Model.PageCount;
 
     int PageStrat = ((PageNumber - 1) * PageCount) + 1;
@@ -18,30 +19,35 @@
     <div class="offset-md-5 col-md-4">
         <div class="" id="">
             @Html.PagedListPager((IPagedList)Model, x => Url.Action("Index", new
-       {
-           pageNumber = x,
-           pageSize = ViewBag.pageSize,
+            {
+            guaranteeUserId = ViewBag.guaranteeUserId,
+            chequeNumber = ViewBag.chequeNumber,
+            bankName = ViewBag.bankName,
+            chequePrice = ViewBag.chequePrice,
+            bankDraftNumber = ViewBag.bankDraftNumber,
+            bankDraftPrice = ViewBag.bankDraftPrice,
+            goldGuarantee = ViewBag.goldGuarantee,
+            paySlip = ViewBag.paySlip,
+            registerDateFrom = ViewBag.registerDateFrom,
+            registerDateTo = ViewBag.registerDateTo,
 
-           userIdentityId = ViewBag.userIdentityId,
-           parentId = ViewBag.parentId,
-           title = ViewBag.title,
-           isvisible = ViewBag.isvisible,
-           blogCategoryURL = ViewBag.blogCategoryURL,
 
-
-           sortColumn = ViewBag.sortColumn,
-           isDesc = ViewBag.isDesc
-       }), new X.PagedList.Web.Common.PagedListRenderOptions
-       {
-           PageClasses = new string[] { "page-link" },
-           UlElementClasses = new string[] { "pagination" },
-           LiElementClasses = new string[] { "page-item" },
-           //DisplayItemSliceAndTotal = true,
-           //DisplayPageCountAndCurrentLocation=true,
-           MaximumPageNumbersToDisplay = 5,
-           DisplayLinkToFirstPage = X.PagedList.Web.Common.PagedListDisplayMode.Always,
-           DisplayLinkToLastPage = X.PagedList.Web.Common.PagedListDisplayMode.Always,
-       })
+            pageNumber = x,
+            pageSize = ViewBag.pageSize,
+            sortColumn = ViewBag.sortColumn,
+            //lastColumn = ViewBag.lastColumn,
+            isDesc = ViewBag.isDesc
+            }), new X.PagedList.Web.Common.PagedListRenderOptions
+            {
+            PageClasses = new string[] { "page-link" },
+            UlElementClasses = new string[] { "pagination" },
+            LiElementClasses = new string[] { "page-item" },
+            //DisplayItemSliceAndTotal = true,
+            //DisplayPageCountAndCurrentLocation=true,
+            MaximumPageNumbersToDisplay = 5,
+            DisplayLinkToFirstPage = X.PagedList.Web.Common.PagedListDisplayMode.Always,
+            DisplayLinkToLastPage = X.PagedList.Web.Common.PagedListDisplayMode.Always,
+            })
         </div>
     </div>
     <div class="col-md-3">

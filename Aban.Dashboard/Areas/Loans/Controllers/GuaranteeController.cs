@@ -1,4 +1,5 @@
 ﻿using Aban.Common;
+using Aban.Common.Utility;
 using Aban.Domain.Entities;
 using Aban.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -14,18 +15,22 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         #region constructor
 
         private readonly IGuaranteeService guaranteeService;
+        private readonly IUserIdentityService userIdentityService;
 
 
-        public GuaranteeController(IGuaranteeService guaranteeService)
+        public GuaranteeController(
+            IGuaranteeService guaranteeService,
+            IUserIdentityService userIdentityService)
         {
             this.guaranteeService = guaranteeService;
+            this.userIdentityService = userIdentityService;
         }
 
         #endregion
 
         [HttpGet]
-        public async Task<IActionResult> Index(
-            string guaranteeId = "",
+        public IActionResult Index(
+            string guaranteeUserId = "",
             string? chequeNumber = null,
             BankName? bankName = null,
             double? chequePrice = null,
@@ -37,7 +42,6 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             DateTime? registerDateTo = null,
             int pageNumber = 1,
             int pageSize = 10,
-            string search = "",
             string sortColumn = "RegisterDate",
             string lastColumn = "",
             bool isDesc = true)
@@ -50,11 +54,10 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
 
                 ViewBag.pageNumber = pageNumber;
                 ViewBag.pageSize = pageSize;
-                ViewBag.search = search;
                 ViewBag.sortColumn = sortColumn;
                 ViewBag.lastColumn = lastColumn;
                 ViewBag.isDesc = isDesc;
-                ViewBag.guaranteeId = guaranteeId;
+                ViewBag.guaranteeUserId = guaranteeUserId;
                 ViewBag.chequeNumber = chequeNumber;
                 ViewBag.bankName = bankName;
                 ViewBag.chequePrice = chequePrice;
@@ -65,12 +68,6 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 ViewBag.registerDateFrom = registerDateFrom;
                 ViewBag.registerDateTo = registerDateTo;
 
-
-                //ViewBag.BrandId = brandId;
-
-                //ViewBag.headerSort = headerSort;  ViewBag.sortColumn 
-                //ViewBag.lastHeader = lastHeader;  ViewBag.lastColumn
-                //ViewBag.isDesc = isDesc;          ViewBag.isDesc 
                 if (ViewBag.lastColumn == ViewBag.sortColumn)
                 {
                     ViewBag.isDesc = isDesc == true ? false : true;
@@ -85,9 +82,8 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 FillDropDown();
                 #endregion
 
-                Tuple<IQueryable<Guarantee>, ResultStatusOperation> result = guaranteeService.SpecificationGetData(guaranteeId, chequeNumber, bankName, chequePrice, bankDraftNumber, bankDraftPrice, goldGuarantee, paySlip, registerDateFrom, registerDateTo);
+                Tuple<IQueryable<Guarantee>, ResultStatusOperation> result = guaranteeService.SpecificationGetData(guaranteeUserId, chequeNumber, bankName, chequePrice, bankDraftNumber, bankDraftPrice, goldGuarantee, paySlip, registerDateFrom, registerDateTo);
                 return View(guaranteeService.Pagination(result.Item1, true, pageNumber, pageSize, isDesc, sortColumn));
-                //return View(result.Item1.ToPagedList(pageNumber, pageSize));
             }
             catch (Exception exception)
             {
@@ -252,12 +248,13 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         //    }
         //}
 
-        private void FillDropDown()
+        private void FillDropDown(string guaranteeUserId = "", BankName? bankName = null)
         {
             try
             {
-
-
+                ViewBag.listGuaranteeUser = userIdentityService.ReadAllWithFatherName(guaranteeUserId); ;
+#pragma warning disable CS8604
+                ViewBag.listBankName = GenericEnumList.GetSelectValueEnum<BankName>(bankName != null ? bankName.ToString() : "");
             }
             catch (Exception exception)
             {

@@ -5,85 +5,138 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
-    breadCrumb.PageTitle = "-------";
-    breadCrumb.Title = "-------";
+    breadCrumb.PageTitle = "ضمانت ها";
+    breadCrumb.Title = "ضمانت ها";
 
     breadCrumb.Links = new List<string[]> { new string[2] { Url.Action("Index"), breadCrumb.PageTitle } };
+    string sortColumn = ViewBag.sortColumn;
+    object RouteValue(string sortColumn)
+        => new
+        {
+            guaranteeUserId = ViewBag.guaranteeUserId,
+            chequeNumber = ViewBag.chequeNumber,
+            bankName = ViewBag.bankName,
+            chequePrice = ViewBag.chequePrice,
+            bankDraftNumber = ViewBag.bankDraftNumber,
+            bankDraftPrice = ViewBag.bankDraftPrice,
+            goldGuarantee = ViewBag.goldGuarantee,
+            paySlip = ViewBag.paySlip,
+            registerDateFrom = ViewBag.registerDateFrom,
+            registerDateTo = ViewBag.registerDateTo,
+
+
+            pageNumber = ViewBag.pageNumber,
+            pageSize = ViewBag.pageSize,
+            sortColumn = sortColumn,
+            lastColumn = ViewBag.lastColumn,
+            isDesc = ViewBag.isDesc
+        };
 
 }
 @await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
 
 
 
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox">
-                @using (Html.BeginForm("Index", "Guarantee", FormMethod.Get, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+
+            <partial name="./Partial/_FilterTablePartial" />
+
+            @await Html.PartialAsync("~/Views/Shared/Generic/_CreateButtonWithPageSize.cshtml", "ضمانت جدید")
+            <div class="table-responsive text-center">
+                <table class="table table-bordered table-hover mb-4">
+                    <thead>
+                        <tr>
+
+                            <th style="width: 162px;">@Html.ActionLink("کد", "Index", "Guarantee", RouteValue("Id"), new { @id = "Id" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("ضامن", "Index", "Guarantee", RouteValue("guaranteeUserId"), new { @id = "" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("شماره چک", "Index", "Guarantee", RouteValue("ChequeNumber"), new { @id = "ChequeNumber" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("نام بانک", "Index", "Guarantee", RouteValue("BankName"), new { @id = "BankName" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("مبلغ چک ضمانت", "Index", "Guarantee", RouteValue("ChequePrice"), new { @id = "ChequePrice" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("شماره سفته", "Index", "Guarantee", RouteValue("BankDraftNumber"), new { @id = "BankDraftNumber" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("مبلغ سفته", "Index", "Guarantee", RouteValue("BankDraftPrice"), new { @id = "BankDraftPrice" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("وزن و مشخصات طلای ضمانتی", "Index", "Guarantee", RouteValue("GoldGuarantee"), new { @id = "GoldGuarantee" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("مشخصات فیش حقوقی ضمانتی", "Index", "Guarantee", RouteValue("PaySlip"), new { @id = "PaySlip" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "Guarantee", RouteValue("RegisterDate"), new { @id = "RegisterDate" })</th>
+
+                            <th style="width: 162px;">عملیات</th>
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model)
                     {
-                        <partial name="_FilterTablePartial" />
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.GuaranteeUserId </td>
+                            <td>@item.ChequeNumber </td>
+                            <td>@item.BankName </td>
+                            <td>@item.ChequePrice </td>
+                            <td>@item.BankDraftNumber </td>
+                            <td>@item.BankDraftPrice </td>
+                            <td>@item.GoldGuarantee </td>
+                            <td>@item.PaySlip </td>
+                            <td>
+                                @Html.ConvertPersianDateTime(item.RegisterDate)
+                            </td>
+
+                            <td>
+                                <div class="input-group-append button-center">
+                                    <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false">عملیات </button>
+                                    <ul class="dropdown-menu float-right" x-placement="bottom-start" style="text-align:right;position: absolute; top: 35px; left: 1243px; will-change: top, left;">
+                                        <li><a href="@Url.Action("Edit", new { id = item.Id })"><span class="fa fa-edit"></span> ویرایش</a></li>
+                                        @*<li><a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');"><span class="fa fa-remove"></span> حذف</a></li>*@
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
                     }
+                    <tfoot>
+                        <tr>
+                            <th style="width: 162px;">کد</th>
+                            <th style="width: 162px;">ضامن</th>
+                            <th style="width: 162px;">شماره چک</th>
+                            <th style="width: 162px;">نام بانک</th>
+                            <th style="width: 162px;">مبلغ چک ضمانت</th>
+                            <th style="width: 162px;">شماره سفته</th>
+                            <th style="width: 162px;">مبلغ سفته</th>
+                            <th style="width: 162px;">وزن و مشخصات طلای ضمانتی</th>
+                            <th style="width: 162px;">مشخصات فیش حقوقی ضمانتی</th>
+                            <th style="width: 162px;">تاریخ ثبت</th>
+
+                            <th>عملیات</th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
-            <div class="ibox-content">
-                @await Html.PartialAsync("~/Views/Shared/Generic/_CreateButtonWithPageSize.cshtml")
-                <div class="table-responsive text-center">
-                    <table class="table table-striped table-bordered table-hover">
-                        <thead>
-                            <tr>
+            <partial name="./Partial/_PaginationCount" model="new PaginationInfo(Model)" />
 
-                                <th style="width: 162px;">@Html.ActionLink("کد", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "Id", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Id" })</th>
-<th style="width: 162px;">@Html.ActionLink("ضامن", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "GuaranteeId", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "GuaranteeId" })</th>
-<th style="width: 162px;">@Html.ActionLink("شماره چک", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "ChequeNumber", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "ChequeNumber" })</th>
-<th style="width: 162px;">@Html.ActionLink("نام بانک", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "BankName", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "BankName" })</th>
-<th style="width: 162px;">@Html.ActionLink("مبلغ چک ضمانت", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "ChequePrice", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "ChequePrice" })</th>
-<th style="width: 162px;">@Html.ActionLink("شماره سفته", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "BankDraftNumber", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "BankDraftNumber" })</th>
-<th style="width: 162px;">@Html.ActionLink("مبلغ سفته", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "BankDraftPrice", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "BankDraftPrice" })</th>
-<th style="width: 162px;">@Html.ActionLink("وزن و مشخصات طلای ضمانتی", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "GoldGuarantee", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "GoldGuarantee" })</th>
-<th style="width: 162px;">@Html.ActionLink("مشخصات فیش حقوقی ضمانتی", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "PaySlip", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "PaySlip" })</th>
-<th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "Guarantee", new {guaranteeId = ViewBag.guaranteeId , chequeNumber = ViewBag.chequeNumber , bankName = ViewBag.bankName , chequePrice = ViewBag.chequePrice , bankDraftNumber = ViewBag.bankDraftNumber , bankDraftPrice = ViewBag.bankDraftPrice , goldGuarantee = ViewBag.goldGuarantee , paySlip = ViewBag.paySlip , registerDate = ViewBag.registerDate ,  sortColumn = "RegisterDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "RegisterDate" })</th>
-
-                                <th style="width: 162px;">عملیات</th>
-                            </tr>
-                        </thead>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>@item.Id</td>
-                                <td>@item.GuaranteeId </td><td>@item.ChequeNumber </td><td>@item.BankName </td><td>@item.ChequePrice </td><td>@item.BankDraftNumber </td><td>@item.BankDraftPrice </td><td>@item.GoldGuarantee </td><td>@item.PaySlip </td><td>
- @Html.ConvertPersianDateTime(item.RegisterDate)
- </td>
-
-                                <td>
-                                    <div class="input-group-append button-center">
-                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false">عملیات </button>
-                                        <ul class="dropdown-menu float-right" x-placement="bottom-start" style="text-align:right;position: absolute; top: 35px; left: 1243px; will-change: top, left;">
-                                            <li><a href="@Url.Action("Edit", new { id = item.Id })"><span class="fa fa-edit"></span> ویرایش</a></li>
-                                            @*<li><a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');"><span class="fa fa-remove"></span> حذف</a></li>*@
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                        <tfoot>
-                            <tr>
-                                <th style="width: 162px;">کد</th>
-                                <th style="width: 162px;">ضامن</th>
-<th style="width: 162px;">شماره چک</th>
-<th style="width: 162px;">نام بانک</th>
-<th style="width: 162px;">مبلغ چک ضمانت</th>
-<th style="width: 162px;">شماره سفته</th>
-<th style="width: 162px;">مبلغ سفته</th>
-<th style="width: 162px;">وزن و مشخصات طلای ضمانتی</th>
-<th style="width: 162px;">مشخصات فیش حقوقی ضمانتی</th>
-<th style="width: 162px;">تاریخ ثبت</th>
-
-                                <th>عملیات</th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-                <partial name="_PaginationCount" model="new PaginationInfo(Model)" />
-            </div>
         </div>
     </div>
 </div>
+
+@section Styles{
+    <link href="~/assets/css/forms/switches.css" rel="stylesheet" />
+    <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+}
+
+    @section Scripts{
+    <script src="~/plugins/select2/select2.min.js"></script>
+    <script src="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+
+    <script>
+        // With postfix
+        $("input[name='percentSalary']").TouchSpin({
+            postfix: '%',
+        });
+
+        $("#userIdentityId").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class23');
+
+
+        $("#bankName").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class58');
+    </script>
+    }

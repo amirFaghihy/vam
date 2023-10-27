@@ -291,10 +291,6 @@ namespace Aban.DataLayer.Migrations
                     b.Property<string>("GoldGuarantee")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("GuaranteeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("GuaranteeUserId")
                         .HasColumnType("nvarchar(450)");
 

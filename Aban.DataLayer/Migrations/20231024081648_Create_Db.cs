@@ -280,7 +280,6 @@ namespace Aban.DataLayer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    GuaranteeId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GuaranteeUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ChequeNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BankName = table.Column<byte>(type: "tinyint", nullable: true),
