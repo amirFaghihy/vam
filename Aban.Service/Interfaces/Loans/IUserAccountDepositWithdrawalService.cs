@@ -9,7 +9,7 @@ namespace Aban.Service.Interfaces
     {
         Tuple<UserAccountDepositWithdrawal, ResultStatusOperation> FillModel(UserAccountDepositWithdrawal userAccountDepositWithdrawal);
         Tuple<IQueryable<UserAccountDepositWithdrawal>, ResultStatusOperation> SpecificationGetData(
-            int? userAccountId = 0,
+            int userAccountId = 0,
             double? price = null,
             double? totalPriceAfterTransaction = null,
             TransactionType? accountTransactionType = null,

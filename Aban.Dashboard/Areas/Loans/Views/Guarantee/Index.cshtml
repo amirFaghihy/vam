@@ -115,22 +115,15 @@
 </div>
 
 @section Styles{
-    <link href="~/assets/css/forms/switches.css" rel="stylesheet" />
     <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
-    <link href="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
 }
 
     @section Scripts{
     <script src="~/plugins/select2/select2.min.js"></script>
-    <script src="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
 
     <script>
-        // With postfix
-        $("input[name='percentSalary']").TouchSpin({
-            postfix: '%',
-        });
 
-        $("#userIdentityId").select2({
+        $("#guaranteeUserId").select2({
             tags: true,
         }).data('select2').$dropdown.addClass('class23');
 

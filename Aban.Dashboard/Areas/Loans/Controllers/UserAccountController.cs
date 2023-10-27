@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Aban.Common;
+﻿using Aban.Common;
 using Aban.Common.Utility;
-using Aban.Domain;
 using Aban.Domain.Entities;
 using Aban.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Aban.Domain.Enumerations;
 using static Aban.Domain.Enumerations.Enumeration;
 
 namespace Aban.Dashboard.Areas.Loans.Controllers
@@ -21,17 +15,21 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         #region constructor
 
         private readonly IUserAccountService userAccountService;
+        private readonly IUserIdentityService userIdentityService;
 
 
-        public UserAccountController(IUserAccountService userAccountService)
+        public UserAccountController(
+            IUserAccountService userAccountService,
+            IUserIdentityService userIdentityService)
         {
             this.userAccountService = userAccountService;
+            this.userIdentityService = userIdentityService;
         }
 
         #endregion
 
         [HttpGet]
-        public async Task<IActionResult> Index(
+        public IActionResult Index(
             string accountOwnerId = "",
             BankName? bankName = null,
             string title = "",
@@ -40,7 +38,6 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             DateTime? registerDateTo = null,
             int pageNumber = 1,
             int pageSize = 10,
-            string search = "",
             string sortColumn = "RegisterDate",
             string lastColumn = "",
             bool isDesc = true)
@@ -52,7 +49,6 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
 
                 ViewBag.pageNumber = pageNumber;
                 ViewBag.pageSize = pageSize;
-                ViewBag.search = search;
                 ViewBag.sortColumn = sortColumn;
                 ViewBag.lastColumn = lastColumn;
                 ViewBag.isDesc = isDesc;
@@ -64,11 +60,6 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 ViewBag.registerDateTo = registerDateTo;
 
 
-                //ViewBag.BrandId = brandId;
-
-                //ViewBag.headerSort = headerSort;  ViewBag.sortColumn 
-                //ViewBag.lastHeader = lastHeader;  ViewBag.lastColumn
-                //ViewBag.isDesc = isDesc;          ViewBag.isDesc 
                 if (ViewBag.lastColumn == ViewBag.sortColumn)
                 {
                     ViewBag.isDesc = isDesc == true ? false : true;
@@ -80,7 +71,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 }
                 ViewBag.lastColumn = ViewBag.sortColumn;
 
-                FillDropDown();
+                FillDropDown(bankName);
                 #endregion
 
                 Tuple<IQueryable<UserAccount>, ResultStatusOperation> result = userAccountService.SpecificationGetData(accountOwnerId, bankName, title, accountNumber, registerDateFrom, registerDateTo);
@@ -165,7 +156,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                     case MessageTypeResult.Success:
                         {
                             //Pass Parameter like ViewBag.cityId = resultFindModel.Item1.CityId;
-                            FillDropDown();
+                            FillDropDown(resultFindModel.Item1.BankName);
                             SetMessage(resultFindModel.Item2);
                             return View(resultFindModel.Item1);
                         }
@@ -203,7 +194,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                     case MessageTypeResult.Success:
                         {
                             SetMessage(resultEdit.Item2);
-                            return RedirectToAction("Edit", new { id = resultEdit.Item1.Id });
+                            return RedirectToAction(nameof(Index));
                         }
                     case MessageTypeResult.Danger:
                         {
@@ -251,14 +242,13 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         //    }
         //}
 
-        private void FillDropDown()
+        private void FillDropDown(BankName? bankName = null, string accountOwnerId = "")
         {
             try
             {
-                BankName bankName = ViewBag.bankName;
-
-                ViewBag.listBankName = GenericEnumList.GetSelectValueEnum<BankName>(bankName.ToString());
-
+#pragma warning disable CS8604
+                ViewBag.listBankName = GenericEnumList.GetSelectValueEnum<BankName>(bankName != null ? bankName.ToString() : "");
+                ViewBag.listAccountOwner = userIdentityService.ReadAllWithFatherName(accountOwnerId);
             }
             catch (Exception exception)
             {

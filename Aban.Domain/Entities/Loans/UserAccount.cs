@@ -41,9 +41,9 @@ namespace Aban.Domain.Entities
         public string Title { get; set; }
 
         /// <summary>
-        /// شماره حساب/کارت
+        /// شماره حساب
         /// </summary>
-        [Display(Name = "شماره حساب/کارت")]
+        [Display(Name = "شماره حساب")]
         public string? AccountNumber { get; set; }
 
         /// <summary>

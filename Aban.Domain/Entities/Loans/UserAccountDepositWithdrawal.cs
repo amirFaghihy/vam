@@ -11,9 +11,15 @@ namespace Aban.Domain.Entities
     {
         #region ForeignKeys
 
+        /// <summary>
+        /// حساب
+        /// </summary>
         [Display(Name = "حساب")]
         public int UserAccountId { get; set; }
 
+        /// <summary>
+        /// حساب
+        /// </summary>
         [Display(Name = "حساب")]
         [ForeignKey(nameof(UserAccountId))]
         public UserAccount? UserAccount { get; set; }
@@ -26,6 +32,8 @@ namespace Aban.Domain.Entities
         /// </summary>
         [Display(Name = "مبلغ واریز/برداشت")]
         [Required(ErrorMessage = ("{0} را وارد کنید"))]
+        [RegularExpression(@"^[-,0-9]+$", ErrorMessage = "فقط مقدار عددی وارد کنید")]
+        //[RegularExpression(@"^[0-9]*$", ErrorMessage = "فقط مقدار عددی وارد کنید")]
         public double Price { get; set; } = 0;
 
         /// <summary>

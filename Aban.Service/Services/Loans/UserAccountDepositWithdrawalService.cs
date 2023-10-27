@@ -20,7 +20,7 @@ namespace Aban.Service.Services
 
 
         public Tuple<IQueryable<UserAccountDepositWithdrawal>, ResultStatusOperation> SpecificationGetData(
-            int? userAccountId = 0,
+            int userAccountId = 0,
             double? price = null,
             double? totalPriceAfterTransaction = null,
             TransactionType? accountTransactionType = null,
@@ -38,7 +38,7 @@ namespace Aban.Service.Services
                 IQueryable<UserAccountDepositWithdrawal> query = userAccountDepositWithdrawalRepository.GetAll()
                     .Where(x => !x.IsDelete);
 
-                if (userAccountId != null)
+                if (userAccountId != 0)
                 {
                     query = query.Where(x => x.UserAccountId == userAccountId);
                 }

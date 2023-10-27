@@ -21,21 +21,24 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         #region constructor
 
         private readonly IUserAccountDepositWithdrawalService userAccountDepositWithdrawalService;
-        
+        private readonly IUserAccountService userAccountService;
+
 
         public UserAccountDepositWithdrawalController(
-            IUserAccountDepositWithdrawalService userAccountDepositWithdrawalService
+            IUserAccountDepositWithdrawalService userAccountDepositWithdrawalService,
+            IUserAccountService userAccountService
             )
         {
-            
+
             this.userAccountDepositWithdrawalService = userAccountDepositWithdrawalService;
+            this.userAccountService = userAccountService;
         }
 
         #endregion
 
         [HttpGet]
-        public async Task<IActionResult> Index(
-            int? userAccountId = null,
+        public IActionResult Index(
+            int userAccountId = 0,
             double? price = null,
             double? totalPriceAfterTransaction = null,
             TransactionType? accountTransactionType = null,
@@ -46,7 +49,6 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             DateTime? registerDateTo = null,
             int pageNumber = 1,
             int pageSize = 10,
-            string search = "",
             string sortColumn = "RegisterDate",
             string lastColumn = "",
             bool isDesc = true)
@@ -59,19 +61,18 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
 
                 ViewBag.pageNumber = pageNumber;
                 ViewBag.pageSize = pageSize;
-                ViewBag.search = search;
                 ViewBag.sortColumn = sortColumn;
                 ViewBag.lastColumn = lastColumn;
                 ViewBag.isDesc = isDesc;
                 ViewBag.userAccountId = userAccountId;
-ViewBag.price = price;
-ViewBag.totalPriceAfterTransaction = totalPriceAfterTransaction;
-ViewBag.accountTransactionType = accountTransactionType;
-ViewBag.accountTransactionMethod = accountTransactionMethod;
-ViewBag.transactionDateTimeFrom = transactionDateTimeFrom;
-ViewBag.transactionDateTimeTo = transactionDateTimeTo;
-ViewBag.registerDateFrom = registerDateFrom;
-ViewBag.registerDateTo = registerDateTo;
+                ViewBag.price = price;
+                ViewBag.totalPriceAfterTransaction = totalPriceAfterTransaction;
+                ViewBag.accountTransactionType = accountTransactionType;
+                ViewBag.accountTransactionMethod = accountTransactionMethod;
+                ViewBag.transactionDateTimeFrom = transactionDateTimeFrom;
+                ViewBag.transactionDateTimeTo = transactionDateTimeTo;
+                ViewBag.registerDateFrom = registerDateFrom;
+                ViewBag.registerDateTo = registerDateTo;
 
 
                 //ViewBag.BrandId = brandId;
@@ -90,10 +91,10 @@ ViewBag.registerDateTo = registerDateTo;
                 }
                 ViewBag.lastColumn = ViewBag.sortColumn;
 
-                FillDropDown();
+                FillDropDown(accountTransactionType, accountTransactionMethod, userAccountId);
                 #endregion
 
-                Tuple<IQueryable<UserAccountDepositWithdrawal>, ResultStatusOperation> result = userAccountDepositWithdrawalService.SpecificationGetData(userAccountId , price , totalPriceAfterTransaction , accountTransactionType , accountTransactionMethod , transactionDateTimeFrom , transactionDateTimeTo , registerDateFrom , registerDateTo );
+                Tuple<IQueryable<UserAccountDepositWithdrawal>, ResultStatusOperation> result = userAccountDepositWithdrawalService.SpecificationGetData(userAccountId, price, totalPriceAfterTransaction, accountTransactionType, accountTransactionMethod, transactionDateTimeFrom, transactionDateTimeTo, registerDateFrom, registerDateTo);
                 return View(userAccountDepositWithdrawalService.Pagination(result.Item1, true, pageNumber, pageSize, isDesc, sortColumn));
                 //return View(result.Item1.ToPagedList(pageNumber, pageSize));
             }
@@ -122,17 +123,17 @@ ViewBag.registerDateTo = registerDateTo;
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(UserAccountDepositWithdrawal model , string transactionDateTimeString, string transactionDateTimeTime)
+        public async Task<IActionResult> Create(UserAccountDepositWithdrawal model, string transactionDateTimeString, string transactionDateTimeTime)
         {
             try
             {
                 #region DateTime Convertor
 
-DateTime _transactionDateTime = transactionDateTimeString.ToConvertPersianDateToDateTime(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
-TimeSpan _transactionDateTimeTime = transactionDateTimeTime.ToConvertStringToTime();
-model.TransactionDateTime = _transactionDateTime.MergeDateAndTime(_transactionDateTimeTime); 
+                DateTime _transactionDateTime = transactionDateTimeString.ToConvertPersianDateToDateTime(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
+                TimeSpan _transactionDateTimeTime = transactionDateTimeTime.ToConvertStringToTime();
+                model.TransactionDateTime = _transactionDateTime.MergeDateAndTime(_transactionDateTimeTime);
 
-#endregion
+                #endregion
 
                 Tuple<UserAccountDepositWithdrawal, ResultStatusOperation> resultFillModel = userAccountDepositWithdrawalService.FillModel(model);
                 resultFillModel = await userAccountDepositWithdrawalService.Insert(fillControllerInfo(), resultFillModel.Item1);
@@ -209,17 +210,17 @@ model.TransactionDateTime = _transactionDateTime.MergeDateAndTime(_transactionDa
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(UserAccountDepositWithdrawal model , string transactionDateTimeString, string transactionDateTimeTime)
+        public async Task<IActionResult> Edit(UserAccountDepositWithdrawal model, string transactionDateTimeString, string transactionDateTimeTime)
         {
             try
             {
                 #region DateTime Convertor
 
-DateTime _transactionDateTime = transactionDateTimeString.ToConvertPersianDateToDateTime(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
-TimeSpan _transactionDateTimeTime = transactionDateTimeTime.ToConvertStringToTime();
-model.TransactionDateTime = _transactionDateTime.MergeDateAndTime(_transactionDateTimeTime); 
+                DateTime _transactionDateTime = transactionDateTimeString.ToConvertPersianDateToDateTime(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
+                TimeSpan _transactionDateTimeTime = transactionDateTimeTime.ToConvertStringToTime();
+                model.TransactionDateTime = _transactionDateTime.MergeDateAndTime(_transactionDateTimeTime);
 
-#endregion
+                #endregion
 
                 Tuple<UserAccountDepositWithdrawal, ResultStatusOperation> resultEdit = await userAccountDepositWithdrawalService.Update(fillControllerInfo(), model);
                 switch (resultEdit.Item2.Type)
@@ -276,13 +277,14 @@ model.TransactionDateTime = _transactionDateTime.MergeDateAndTime(_transactionDa
         //    }
         //}
 
-        private void FillDropDown()
+        private void FillDropDown(TransactionType? accountTransactionType = null, TransactionMethod? accountTransactionMethod = null, int userAccountId = 0)
         {
             try
             {
-                
-
-
+#pragma warning disable CS8604
+                ViewBag.listAccountTransactionType = GenericEnumList.GetSelectValueEnum<TransactionType>(accountTransactionType != null ? accountTransactionType.ToString() : "");
+                ViewBag.listAccountTransactionMethod = GenericEnumList.GetSelectValueEnum<TransactionMethod>(accountTransactionMethod != null ? accountTransactionMethod.ToString() : "");
+                ViewBag.listUserAccount = userAccountService.ReadAll(userAccountId);
             }
             catch (Exception exception)
             {

@@ -252,7 +252,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         {
             try
             {
-                ViewBag.listGuaranteeUser = userIdentityService.ReadAllWithFatherName(guaranteeUserId); ;
+                ViewBag.listGuaranteeUser = userIdentityService.ReadAllWithFatherName(guaranteeUserId);
 #pragma warning disable CS8604
                 ViewBag.listBankName = GenericEnumList.GetSelectValueEnum<BankName>(bankName != null ? bankName.ToString() : "");
             }
