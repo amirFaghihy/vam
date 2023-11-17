@@ -47,7 +47,7 @@
                         <div role="form">
                             <div class="form-group">
                                 <label asp-for="ChequePrice"></label>
-                                <input asp-for="ChequePrice" class="form-control mb-4" onkeyup="formatNumber(this.id, this.value)" onclick="select()" />
+                                <input asp-for="ChequePrice" class="form-control mb-4" value="@Model.ChequePrice?.ToString("N0")" onkeyup="formatNumber(this.id, this.value)" onclick="select()" />
                                 <span asp-validation-for="ChequePrice" class="text-danger"></span>
                             </div>
                         </div>
@@ -65,7 +65,7 @@
                         <div role="form">
                             <div class="form-group">
                                 <label asp-for="BankDraftPrice"></label>
-                                <input asp-for="BankDraftPrice" class="form-control mb-4" onkeyup="formatNumber(this.id, this.value)" onclick="select()" />
+                                <input asp-for="BankDraftPrice" class="form-control mb-4" value="@Model.BankDraftPrice?.ToString("N0")" onkeyup="formatNumber(this.id, this.value)" onclick="select()" />
                                 <span asp-validation-for="BankDraftPrice" class="text-danger"></span>
                             </div>
                         </div>

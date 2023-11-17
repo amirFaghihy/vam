@@ -30,6 +30,14 @@
     </div>
 </div>
 
+<div id="custom_load_screen" style="display: none;">
+    <div class="loader">
+        <div class="loader-content">
+            <div class="spinner-grow align-self-center"></div>
+        </div>
+    </div>
+</div>
+
 @section Styles{
     <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
 }
@@ -48,6 +56,29 @@
         $("#BankName").select2({
             tags: true,
         }).data('select2').$dropdown.addClass('class58');
+
+        $(function () {
+            $.ajax(
+                {
+                    method: "GET",
+                    url: "/Loans/UserAccount/GetLatestAccountNumber",
+                    success: function (data) {
+
+                        if (data.isSuccess == true) {
+                            $('#latestAccountNumber').text('آخرین شماره حساب: ' + data.latestAccountNumber);
+                        }
+                        else {
+                            alert('خطایی رخ داده است، صفحه را دوباره رفرش کنید !');
+
+                        }
+                    },
+                    error: function () {
+                        alert('خطایی رخ داده است، صفحه را دوباره رفرش کنید !');
+                    }
+                }
+            );
+
+        });
 
     </script>
 }

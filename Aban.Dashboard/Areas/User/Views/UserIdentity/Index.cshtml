@@ -14,12 +14,6 @@
 #pragma warning disable CS8601 // Possible null reference assignment.
     };
 
-    bool isUserAdmin = false;
-    if (User.IsInRole("Admin"))
-    {
-        isUserAdmin = true;
-    }
-
     string sortColumn = ViewBag.sortColumn;
     object RouteValue(string sortColumn)
 
@@ -122,12 +116,6 @@
                                         <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
                                         <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
                                             <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
-
-                                            @if (isUserAdmin)
-                                            {
-                                                <a data-userid="@item.Id" class="dropdown-item show-user-info" style="cursor:pointer;"><i class="flaticon-home-fill-1 mr-1"></i>ثبت کننده</a>
-                                            }
-                                            @*<a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>*@
                                         </div>
                                     </div>
 
@@ -209,69 +197,6 @@
         $("#roleNames").select2({
             tags: true,
         }).data('select2').$dropdown.addClass('class23');
-
-
-
-        $('.show-user-info').click(function () {
-
-            const userId = $(this).data("userid");
-
-
-            loadScrean();
-
-            $.ajax(
-                {
-                    method: "POST",
-                    url: "/User/UserIdentity/GetUserRegistrarInfo",
-                    data: { userId: userId },
-                    success: function (data) {
-
-                        if (data.isSuccess == true) {
-                            $('#modal-title').text(`${data.userIdentityFullname}`);
-                            $('#modal-title').append(` | نقش: ${data.userIdentityRoleNames[0]}`);
-                            if (data.userIdentityRoleNames.length > 0) {
-                                for (var i = 1; i < data.userIdentityRoleNames.length; i++) {
-                                    $('#modal-title').append(` - ${data.userIdentityRoleNames[i]}`);
-                                }
-                            }
-
-
-
-                            $('#modal-text').html(`<h6> کاربر ثبت کننده: </h6>`);
-                            $('#modal-text').append(`<p>${data.userRegistrarFullName}</p>`);
-                            var userRegistrarRoleNames = data.userRegistrarRoleNames[0];
-                            if (data.userRegistrarRoleNames.length > 0) {
-                                for (var i = 1; i < data.userRegistrarRoleNames.length; i++) {
-                                    userRegistrarRoleNames += ` - ${data.userRegistrarRoleNames[i]}`;
-                                }
-                            }
-                            $('#modal-text').append(`<p>نقش: ${userRegistrarRoleNames}</p>`);
-                        }
-                        else {
-                            $('#modal-title').text(`موردی یافت نشد`);
-                            $('#modal-text').html(`<p> موردی یافت نشد </p>`);
-
-                        }
-
-                        hideScrean();
-                        $('#userModal').modal('show');
-                    },
-                    error: function () {
-                        hideScrean();
-                        alert('خطایی رخ داده است، دوباره تلاش کنید !');
-                    }
-                }
-            );
-        });
-
-
-        function loadScrean() {
-            $('#custom_load_screen').css('display', 'block');
-        }
-
-        function hideScrean() {
-            $('#custom_load_screen').css('display', 'none');
-        }
 
     </script>
 }

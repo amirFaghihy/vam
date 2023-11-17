@@ -43,8 +43,8 @@
                         <tr>
                             <td>@item.Id</td>
                             <td>@item.UserAccountId </td>
-                            <td>@item.Price </td>
-                            <td>@item.TotalPriceAfterTransaction </td>
+                            <td>@item.Price.ToString("N0")</td>
+                            <td>@item.TotalPriceAfterTransaction.ToString("N0")</td>
                             <td>@item.AccountTransactionType </td>
                             <td>
                                 @Html.ConvertPersianDateTime(item.TransactionDateTime)
@@ -54,12 +54,12 @@
                             </td>
 
                             <td>
-                                <div class="input-group-append button-center">
-                                    <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false">عملیات </button>
-                                    <ul class="dropdown-menu float-right" x-placement="bottom-start" style="text-align:right;position: absolute; top: 35px; left: 1243px; will-change: top, left;">
-                                        <li><a href="@Url.Action("Edit", new { id = item.Id })"><span class="fa fa-edit"></span> ویرایش</a></li>
-                                        @*<li><a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');"><span class="fa fa-remove"></span> حذف</a></li>*@
-                                    </ul>
+                                <div class="btn-group" role="group">
+                                    <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
+                                    <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
+                                        <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
+                                        <a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>
+                                    </div>
                                 </div>
                             </td>
                         </tr>

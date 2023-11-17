@@ -7,7 +7,6 @@ namespace Aban.Service.Interfaces
 {
     public interface IUserAccountDepositWithdrawalService : IGenericService<UserAccountDepositWithdrawal>
     {
-        Tuple<UserAccountDepositWithdrawal, ResultStatusOperation> FillModel(UserAccountDepositWithdrawal userAccountDepositWithdrawal);
         Tuple<IQueryable<UserAccountDepositWithdrawal>, ResultStatusOperation> SpecificationGetData(
             int userAccountId = 0,
             double? price = null,
@@ -18,6 +17,16 @@ namespace Aban.Service.Interfaces
             DateTime? transactionDateTimeTo = null,
             DateTime? registerDateFrom = null,
             DateTime? registerDateTo = null);
+
+        Tuple<UserAccountDepositWithdrawal, ResultStatusOperation> FillModel(UserAccountDepositWithdrawal userAccountDepositWithdrawal);
+
+        /// <summary>
+        /// آخرین باقیمانده حساب کاربر را باز میگرداند
+        /// </summary>
+        /// <param name="userAccountId"></param>
+        /// <returns></returns>
+        double GetLatestTotalPriceAfterTransaction(int userAccountId);
+
         List<SelectListItem> ReadAll(int selectedValue);
     }
 }

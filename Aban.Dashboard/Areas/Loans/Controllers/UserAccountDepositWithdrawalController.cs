@@ -123,26 +123,54 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(UserAccountDepositWithdrawal model, string transactionDateTimeString, string transactionDateTimeTime)
+        public async Task<IActionResult> Create(
+            UserAccountDepositWithdrawal model,
+            string transactionDateTimeString,
+            string transactionTimeString)
         {
             try
             {
                 #region DateTime Convertor
 
                 DateTime _transactionDateTime = transactionDateTimeString.ToConvertPersianDateToDateTime(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
-                TimeSpan _transactionDateTimeTime = transactionDateTimeTime.ToConvertStringToTime();
+                TimeSpan _transactionDateTimeTime = transactionTimeString.ToConvertStringToTime();
                 model.TransactionDateTime = _transactionDateTime.MergeDateAndTime(_transactionDateTimeTime);
 
                 #endregion
 
+
+                double latestTotalPrice = userAccountDepositWithdrawalService.GetLatestTotalPriceAfterTransaction(model.UserAccountId);
+                if (model.UserAccountId != 0)
+                {
+                    switch (model.AccountTransactionType)
+                    {
+                        case TransactionType.واریز:
+                            model.TotalPriceAfterTransaction = latestTotalPrice + model.Price;
+                            break;
+                        case TransactionType.برداشت:
+                            model.TotalPriceAfterTransaction = latestTotalPrice - model.Price;
+                            break;
+                        case TransactionType.پرداخت_قسط:
+                            break;
+                        default:
+                            FillDropDown();
+                            return View(model);
+                    }
+                }
+                else
+                {
+                    FillDropDown();
+                    return View(model);
+                }
+
                 Tuple<UserAccountDepositWithdrawal, ResultStatusOperation> resultFillModel = userAccountDepositWithdrawalService.FillModel(model);
-                resultFillModel = await userAccountDepositWithdrawalService.Insert(fillControllerInfo(), resultFillModel.Item1);
+                resultFillModel = await userAccountDepositWithdrawalService.Insert(fillControllerInfo(new List<string>() { "transactionDateTimeTime", "transactionDateTimeString" }), resultFillModel.Item1);
                 switch (resultFillModel.Item2.Type)
                 {
                     case MessageTypeResult.Success:
                         {
                             SetMessage(resultFillModel.Item2);
-                            return RedirectToAction("Index");
+                            return RedirectToAction(nameof(Index));
                         }
                     case MessageTypeResult.Danger:
                         {
@@ -276,6 +304,53 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         //        return RedirectToAction("ShowException", "Error");
         //    }
         //}
+
+        /// <summary>
+        /// آخرین باقیمانده حساب را باز میگرداند
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult SetDepositWithdrawal(
+            int accountNumber,
+            double price,
+            TransactionType accountTransactionType)
+        {
+            bool isSuccess = false;
+
+            double totalPriceAfterTransaction =
+                userAccountDepositWithdrawalService.GetLatestTotalPriceAfterTransaction(accountNumber);
+
+            if (totalPriceAfterTransaction != 0)
+            {
+                isSuccess = true;
+
+                switch (accountTransactionType)
+                {
+                    case TransactionType.واریز:
+                        totalPriceAfterTransaction += price;
+                        break;
+                    case TransactionType.برداشت:
+                        totalPriceAfterTransaction -= price;
+                        break;
+                    case TransactionType.پرداخت_قسط:
+                        break;
+                    default:
+                        break;
+                }
+
+                return Json(new
+                {
+                    isSuccess = isSuccess,
+                    latestDepositWithdrawal = totalPriceAfterTransaction
+                });
+            }
+            else
+                return Json(new
+                {
+                    isSuccess = isSuccess,
+                    latestDepositWithdrawal = 0
+                });
+        }
 
         private void FillDropDown(TransactionType? accountTransactionType = null, TransactionMethod? accountTransactionMethod = null, int userAccountId = 0)
         {

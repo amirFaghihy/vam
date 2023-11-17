@@ -242,6 +242,22 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         //    }
         //}
 
+        [HttpGet]
+        public JsonResult GetLatestAccountNumber()
+        {
+            bool isSuccess = false;
+            UserAccount? userAccount =
+                userAccountService.GetAll().OrderByDescending(x => x.Id).FirstOrDefault();
+
+            if (userAccount != null)
+            {
+                isSuccess = true;
+                return Json(new { isSuccess = isSuccess, latestAccountNumber = userAccount.AccountNumber });
+            }
+            else
+                return Json(new { isSuccess = isSuccess });
+        }
+
         private void FillDropDown(BankName? bankName = null, string accountOwnerId = "")
         {
             try

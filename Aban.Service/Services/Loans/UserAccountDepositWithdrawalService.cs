@@ -86,6 +86,7 @@ namespace Aban.Service.Services
         public Tuple<UserAccountDepositWithdrawal, ResultStatusOperation> FillModel(UserAccountDepositWithdrawal userAccountDepositWithdrawal)
         {
             ResultStatusOperation resultStatusOperation = new ResultStatusOperation();
+            resultStatusOperation.Message = "عملیات با موفقیت انجام شد.";
             resultStatusOperation.IsSuccessed = true;
             resultStatusOperation.Type = MessageTypeResult.Success;
             try
@@ -103,6 +104,19 @@ namespace Aban.Service.Services
                 resultStatusOperation.ErrorException = exception;
                 throw new Exception("", exception);
             }
+        }
+
+        public double GetLatestTotalPriceAfterTransaction(int userAccountId)
+        {
+            UserAccountDepositWithdrawal? userAccountDepositWithdrawal = userAccountDepositWithdrawalRepository.GetAll().Where(x => !x.IsDelete &&
+            x.UserAccountId == userAccountId).OrderByDescending(x => x.Id).FirstOrDefault();
+
+            if (userAccountDepositWithdrawal == null)
+            {
+                return 0;
+            }
+
+            return userAccountDepositWithdrawal.TotalPriceAfterTransaction;
         }
 
         public List<SelectListItem> ReadAll(int selectedValue)
