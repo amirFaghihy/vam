@@ -64,11 +64,9 @@
                             <th style="width: 162px;">@Html.ActionLink("شماره موبایل", "Index", "UserIdentity", RouteValue("PhoneNumber"), new { @id = "PhoneNumber" })</th>
                             <th style="width: 162px;">@Html.ActionLink("نام", "Index", "UserIdentity", RouteValue("FirstName"), new { @id = "FirstName" })</th>
                             <th style="width: 162px;">@Html.ActionLink("نام خانوادگی", "Index", "UserIdentity", RouteValue("LastName"), new { @id = "LastName" })</th>
-                                @*<th style="width: 162px;">@Html.ActionLink("کد ملی", "Index", "UserIdentity", RouteValue("NationalCode"), new { @id = "NationalCode" })</th>*@
                             <th style="width: 162px;">@Html.ActionLink("جنسیت", "Index", "UserIdentity", RouteValue("IsMale"), new { @id = "IsMale" })</th>
                             <th style="width: 162px;">@Html.ActionLink("مسدود؟", "Index", "UserIdentity", RouteValue("IsLocked"), new { @id = "IsLocked" })</th>
                             <th style="width: 162px;">@Html.ActionLink("تأیید شده؟", "Index", "UserIdentity", RouteValue("IsConfirm"), new { @id = "IsConfirm" })</th>
-                                @*<th style="width: 162px;">@Html.ActionLink("تاریخ تولد", "Index", "UserIdentity", RouteValue("BirthDate"), new { @id = "BirthDate" })</th>*@
                             <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "UserIdentity", RouteValue("RegisterDate"), new { @id = "RegisterDate" })</th>
                             <th style="width: 162px;">@Html.ActionLink("تاریخ تغییر", "Index", "UserIdentity", RouteValue("ModifiedDate"), new { @id = "ModifiedDate" })</th>
 
@@ -79,7 +77,7 @@
                     {
                         foreach (var item in Model)
                         {
-                            <tr>
+                            <tr style="@(item.IsLocked?"background-color:#fd041b;":"")">
                                 <td>@item.Id.Split("-").FirstOrDefault()</td>
                                 <td>@item.UserName </td>
                                 <td>@item.PhoneNumber </td>
@@ -115,7 +113,15 @@
                                     <div class="btn-group" role="group">
                                         <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
                                         <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
-                                            <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
+                                            <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item btn btn-info mb-2"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
+                                            @if (item.IsLocked)
+                                            {
+                                                <a href="@Url.Action("EditIsLocked", new { id = item.Id, isLocked = false })" class="dropdown-item btn btn-success mb-2 btn-showloader"><i class="flaticon-home-fill-1 mr-1"></i>رفع مسدودی</a>
+                                            }
+                                            else
+                                            {
+                                                <a href="@Url.Action("EditIsLocked", new { id = item.Id, isLocked = true })" class="dropdown-item btn btn-danger mb-2 btn-showloader"><i class="flaticon-home-fill-1 mr-1"></i>مسدود کردن</a>
+                                            }
                                         </div>
                                     </div>
 
@@ -137,11 +143,9 @@
                             <th style="width: 162px;">شماره موبایل</th>
                             <th style="width: 162px;">نام</th>
                             <th style="width: 162px;">نام خانوادگی</th>
-                            @*<th style="width: 162px;">کد ملی</th>*@
                             <th style="width: 162px;">جنسیت</th>
                             <th style="width: 162px;">مسدود؟</th>
                             <th style="width: 162px;">تأیید شده ؟</th>
-                            @*<th style="width: 162px;">تاریخ تولد</th>*@
                             <th style="width: 162px;">تاریخ ثبت</th>
                             <th style="width: 162px;">تاریخ تغییر</th>
 

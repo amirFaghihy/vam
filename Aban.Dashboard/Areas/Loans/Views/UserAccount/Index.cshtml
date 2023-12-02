@@ -1,4 +1,5 @@
-﻿@model X.PagedList.IPagedList<UserAccount>
+﻿@using static Aban.Domain.Enumerations.Enumeration
+@model X.PagedList.IPagedList<UserAccount>
 
 
 @{
@@ -27,12 +28,12 @@
                     <thead>
                         <tr>
 
-                            <th style="width: 162px;">@Html.ActionLink("کد", "Index", "UserAccount", new {accountOwnerId = ViewBag.accountOwnerId , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , registerDate = ViewBag.registerDate ,  sortColumn = "Id", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Id" })</th>
-                            <th style="width: 162px;">@Html.ActionLink("صاحب حساب", "Index", "UserAccount", new {accountOwnerId = ViewBag.accountOwnerId , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , registerDate = ViewBag.registerDate ,  sortColumn = "AccountOwnerId", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "AccountOwnerId" })</th>
-                            <th style="width: 162px;">@Html.ActionLink("نام بانک", "Index", "UserAccount", new {accountOwnerId = ViewBag.accountOwnerId , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , registerDate = ViewBag.registerDate ,  sortColumn = "BankName", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "BankName" })</th>
-                            <th style="width: 162px;">@Html.ActionLink("عنوان حساب", "Index", "UserAccount", new {accountOwnerId = ViewBag.accountOwnerId , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , registerDate = ViewBag.registerDate ,  sortColumn = "Title", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Title" })</th>
-                            <th style="width: 162px;">@Html.ActionLink("شماره حساب/کارت", "Index", "UserAccount", new {accountOwnerId = ViewBag.accountOwnerId , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , registerDate = ViewBag.registerDate ,  sortColumn = "AccountNumber", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "AccountNumber" })</th>
-                            <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "UserAccount", new {accountOwnerId = ViewBag.accountOwnerId , bankName = ViewBag.bankName , title = ViewBag.title , accountNumber = ViewBag.accountNumber , registerDate = ViewBag.registerDate ,  sortColumn = "RegisterDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "RegisterDate" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("کد", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "Id", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Id" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("صاحب حساب", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "AccountOwnerId", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "AccountOwnerId" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("نام بانک", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "BankName", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "BankName" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("عنوان حساب", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "Title", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Title" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("شماره حساب/کارت", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "AccountNumber", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "AccountNumber" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "RegisterDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "RegisterDate" })</th>
 
                             <th style="width: 162px;">عملیات</th>
                         </tr>
@@ -41,7 +42,9 @@
                     {
                         <tr>
                             <td>@item.Id</td>
-                            <td>@item.AccountOwnerId </td>
+                            <td>
+                                <span id="@item.AccountOwnerId" data-userId="@item.AccountOwnerId" class="get-user-data"></span>
+                            </td>
                             <td>@item.BankName </td>
                             <td>@item.Title </td>
                             <td>@item.AccountNumber </td>
@@ -53,8 +56,10 @@
                                 <div class="btn-group" role="group">
                                     <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
                                     <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
-                                        <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
-                                        <a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>
+                                        <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item btn btn-info mb-2"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
+                                        <a href="@Url.Action("Create", "UserAccountDepositWithdrawal", new {area="Loans", userAccountId = item.Id, accountTransactionType=TransactionType.واریز })" class="dropdown-item btn btn-success mb-2" target="_blank"><i class="flaticon-home-fill-1 mr-1"></i>واریز</a>
+                                        <a href="@Url.Action("Create", "UserAccountDepositWithdrawal", new {area="Loans", userAccountId = item.Id, accountTransactionType=TransactionType.برداشت })" class="dropdown-item btn btn-danger mb-2" target="_blank"><i class="flaticon-home-fill-1 mr-1"></i>برداشت</a>
+                                        @*<a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>*@
                                     </div>
                                 </div>
                             </td>
@@ -80,22 +85,108 @@
     </div>
 </div>
 
-@section Styles{
+@section Styles {
     <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
 }
 
-    @section Scripts{
+    @section Scripts {
     <script src="~/plugins/select2/select2.min.js"></script>
 
     <script>
 
-        $("#accountOwnerId").select2({
-            tags: true,
-        }).data('select2').$dropdown.addClass('class23');
+        function select2dropdowns() {
+            $("#accountOwnerId").select2({
+                tags: true,
+            }).data('select2').$dropdown.addClass('class23');
 
 
-        $("#bankName").select2({
-            tags: true,
-        }).data('select2').$dropdown.addClass('class58');
+            $("#bankName").select2({
+                tags: true,
+            }).data('select2').$dropdown.addClass('class58');
+        }
+
+
+        function getFillDropDown() {
+            $.ajax({
+                url: '/filldropdownajax',
+                method: 'POST',
+                data: { accountOwnerId: ""},
+                success: function (data) {
+                    var listAccountOwner = data.listAccountOwner;
+
+                    $.each(listAccountOwner, function (index, item) {
+                        $('#accountOwnerId').append($('<option/>', {
+                            value: item.value,
+                            text: item.text,
+                            selected: item.selected
+                        }));
+                    });
+
+                },
+                error: function () {
+                    //alert('خطایی رخ داده است !!!');
+                }
+            });
+
+        }
+
+
+        function GetUsersData() {
+
+            // تعریف یک آرایه برای ذخیره آی‌دی‌ها
+            var arrUsersIds = [];
+            // گرفتن تمام عناصر span با کلاس "get-user-data"
+            $("span.get-user-data").each(function () {
+                // افزودن آی‌دی هر عنصر به آرایه
+                arrUsersIds.push($(this).attr('id'));
+            });
+
+            var usersIds = JSON.stringify(arrUsersIds);
+
+            $.ajax({
+                url: '/find-user-data',
+                type: 'POST',
+                dataType: 'json', // نوع داده دریافتی از بک‌اند
+                data: { stringUserIds: usersIds },
+                success: function (result) {
+
+                    if (result == null) {
+                        alert('خطایی رخ داده است، برای بارگزاری اطلاعات صفحه را رفرش کنید.')
+                    }
+                    else {
+
+                        var usersDataResult = result.data;
+
+                        for (var i = 0; i < usersDataResult.length; i++) {
+                            // انتخاب تمام تگ‌هایی که ویژگی data-userId
+                            var elementsWithSameUserId = $('[data-userId="' + usersDataResult[i].id + '"]');
+
+                            // تنظیم مقدار جدید به تمام تگ‌های انتخاب شده
+                            elementsWithSameUserId.each(function () {
+                                if (usersDataResult[i].fatherName == "" || usersDataResult[i].fatherName == null) {
+                                    $(this).html(usersDataResult[i].firstName + " " + usersDataResult[i].lastName);
+                                }
+                                else {
+                                    $(this).html(usersDataResult[i].firstName + " " + usersDataResult[i].lastName + " | " + usersDataResult[i].fatherName);
+                                }
+                            });
+
+                            //$("#" + usersDataResult[i].id).html(usersDataResult[i].firstName + usersDataResult[i].lastName);
+                        }
+                    }
+
+                },
+                error: function (xhr, status, error) {
+                    // Request failed, handle the error here
+                    console.error('Error: ' + error);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            GetUsersData();
+            getFillDropDown();
+            select2dropdowns();
+        });
     </script>
-    }
+}

@@ -35,7 +35,7 @@
                             <th style="width: 162px;">@Html.ActionLink("تاریخ تراکنش", "Index", "UserAccountDepositWithdrawal", new {userAccountId = ViewBag.userAccountId , price = ViewBag.price , totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction , accountTransactionType = ViewBag.accountTransactionType , transactionDateTime = ViewBag.transactionDateTime , registerDate = ViewBag.registerDate ,  sortColumn = "TransactionDateTime", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "TransactionDateTime" })</th>
                             <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "UserAccountDepositWithdrawal", new {userAccountId = ViewBag.userAccountId , price = ViewBag.price , totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction , accountTransactionType = ViewBag.accountTransactionType , transactionDateTime = ViewBag.transactionDateTime , registerDate = ViewBag.registerDate ,  sortColumn = "RegisterDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "RegisterDate" })</th>
 
-                            <th style="width: 162px;">عملیات</th>
+                            @*<th style="width: 162px;">عملیات</th>*@
                         </tr>
                     </thead>
                     @foreach (var item in Model)
@@ -53,7 +53,7 @@
                                 @Html.ConvertPersianDateTime(item.RegisterDate)
                             </td>
 
-                            <td>
+                            @*<td>
                                 <div class="btn-group" role="group">
                                     <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
                                     <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
@@ -61,7 +61,7 @@
                                         <a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>
                                     </div>
                                 </div>
-                            </td>
+                            </td>*@
                         </tr>
                     }
                     <tfoot>
@@ -74,7 +74,7 @@
                             <th style="width: 162px;">تاریخ تراکنش</th>
                             <th style="width: 162px;">تاریخ ثبت</th>
 
-                            <th>عملیات</th>
+                            @*<th>عملیات</th>*@
                         </tr>
                     </tfoot>
                 </table>

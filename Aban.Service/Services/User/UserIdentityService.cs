@@ -84,7 +84,7 @@ namespace Aban.Service.Services
             ResultStatusOperation resultStatusOperation = new ResultStatusOperation
             {
                 IsSuccessed = true,
-                Type = Enumeration.MessageTypeResult.Success,
+                Type = MessageTypeResult.Success,
                 Message = "عملیات با موفقیت انجام شد"
             };
             try
@@ -914,7 +914,6 @@ namespace Aban.Service.Services
                 userIdentity.BirthDate = model.BirthDate;
                 userIdentity.FatherName = model.FatherName;
                 userIdentity.HomeAddress = model.HomeAddress;
-#pragma warning disable CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
 
 
                 if (string.IsNullOrWhiteSpace(model.UserName))

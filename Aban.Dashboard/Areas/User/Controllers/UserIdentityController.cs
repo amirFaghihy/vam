@@ -11,7 +11,6 @@ using Microsoft.Extensions.Options;
 using Aban.ViewModels;
 using static Aban.Domain.Enumerations.Enumeration;
 using DateTimeFormat = Aban.Domain.Enumerations.Enumeration.DateTimeFormat;
-using Aban.Service.Services;
 
 namespace Aban.Dashboard.Areas.User.Controllers
 {
@@ -44,9 +43,9 @@ namespace Aban.Dashboard.Areas.User.Controllers
         }
 
         string ViewAddress = "~/User/UserIdentity";
-#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
+#pragma warning disable CS0108
         string View = "";
-#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
+#pragma warning restore CS0108
 
         #endregion
 
@@ -186,7 +185,7 @@ namespace Aban.Dashboard.Areas.User.Controllers
             }
             catch (Exception exception)
             {
-                SetMessageException(new ResultStatusOperation("", "", Enumeration.MessageTypeResult.Danger, false, exception), Enumeration.MessageTypeActionMethod.Index);
+                SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), Enumeration.MessageTypeActionMethod.Index);
                 return RedirectToAction("ShowException", "Error", new { area = "" });
             }
         }
@@ -194,7 +193,7 @@ namespace Aban.Dashboard.Areas.User.Controllers
         public IActionResult Create()
         {
             FillDropDown();
-            return View(new UserIdentityViewModel() { Id = Guid.NewGuid().ToString()});
+            return View(new UserIdentityViewModel() { Id = Guid.NewGuid().ToString() });
         }
 
 
@@ -224,7 +223,7 @@ namespace Aban.Dashboard.Areas.User.Controllers
 
                 #endregion
 
-#pragma warning disable CS8604 // Possible null reference argument.
+#pragma warning disable CS8604
                 Tuple<UserIdentity, ResultStatusOperation> resultRegister = await
                     userIdentityService.SignUpUser(fillControllerInfo("UserRegistrar"), resultFillModel.Item1, viewModel.Password);
 
@@ -271,7 +270,7 @@ namespace Aban.Dashboard.Areas.User.Controllers
             }
             catch (Exception exception)
             {
-                SetMessageException(new ResultStatusOperation("", "", Enumeration.MessageTypeResult.Danger, false, exception), Enumeration.MessageTypeActionMethod.Index);
+                SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), Enumeration.MessageTypeActionMethod.Index);
                 return RedirectToAction("ShowException", "Error", new { area = "" });
             }
         }
@@ -309,9 +308,9 @@ namespace Aban.Dashboard.Areas.User.Controllers
 
                             return View(resultViewModel.Item1);
                         }
-                    case Enumeration.MessageTypeResult.Danger:
+                    case MessageTypeResult.Danger:
                         {
-                            SetMessageException(resultFindModel.Item2, Enumeration.MessageTypeActionMethod.EditGet);
+                            SetMessageException(resultFindModel.Item2, MessageTypeActionMethod.EditGet);
                             return RedirectToAction("ShowException", "Error");
                         }
                     case MessageTypeResult.Warning:
@@ -323,7 +322,7 @@ namespace Aban.Dashboard.Areas.User.Controllers
             }
             catch (Exception exception)
             {
-                SetMessageException(new ResultStatusOperation("", "", Enumeration.MessageTypeResult.Danger, false, exception), Enumeration.MessageTypeActionMethod.Index);
+                SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), Enumeration.MessageTypeActionMethod.Index);
                 return RedirectToAction("ShowException", "Error");
             }
         }
@@ -383,7 +382,7 @@ namespace Aban.Dashboard.Areas.User.Controllers
                         //    return RedirectToAction(nameof(EditProfile));
                         //}
 
-                        return Redirect("/");
+                        return RedirectToAction(nameof(Index));
 
                     case MessageTypeResult.Danger:
                     case MessageTypeResult.Warning:
@@ -406,6 +405,56 @@ namespace Aban.Dashboard.Areas.User.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> EditIsLocked(string id = "", bool isLocked = true)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(id))
+                {
+                    SetMessageEditnotFound();
+                    return RedirectToAction(nameof(Index));
+                }
+                Tuple<IQueryable<UserIdentity>, ResultStatusOperation> resultFindModel = userIdentityService.SpecificationGetData(id, "", "").Result;
+
+
+#pragma warning disable CS8600
+                UserIdentity userIdentity = resultFindModel.Item1.FirstOrDefault();
+                userIdentity!.Email = userIdentity!.Email.IsNullOrEmpty() ? userIdentity.UserName + "@email.com" : userIdentity!.Email;
+                userIdentity!.IsLocked = isLocked;
+#pragma warning restore CS8600
+
+
+                Tuple<UserIdentity, ResultStatusOperation> resultEdit =
+                    await userIdentityService.UpdateUser(fillControllerInfo(), userIdentity, userIdentity.Password);
+
+                SetMessage(resultEdit.Item2);
+                switch (resultEdit.Item2.Type)
+                {
+                    case MessageTypeResult.Success:
+                        {
+                            FillDropDown();
+
+                            return RedirectToAction(nameof(Index));
+                        }
+                    case MessageTypeResult.Danger:
+                        {
+                            SetMessageException(resultEdit.Item2, MessageTypeActionMethod.EditGet);
+                            return RedirectToAction("ShowException", "Error");
+                        }
+                    case MessageTypeResult.Warning:
+                        return RedirectToAction(nameof(Index));
+
+                }
+                SetMessage(resultEdit.Item2);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception exception)
+            {
+                SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), Enumeration.MessageTypeActionMethod.Index);
+                return RedirectToAction("ShowException", "Error");
+            }
+        }
 
 
         [AllowAnonymous]

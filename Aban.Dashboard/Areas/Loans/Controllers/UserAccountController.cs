@@ -2,8 +2,11 @@
 using Aban.Common.Utility;
 using Aban.Domain.Entities;
 using Aban.Service.Interfaces;
+using Aban.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using static Aban.Domain.Enumerations.Enumeration;
 
 namespace Aban.Dashboard.Areas.Loans.Controllers
@@ -242,6 +245,39 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         //    }
         //}
 
+
+        /// <summary>
+        /// اطلاعات مربوط به منشی و خیر را باز میگرداند
+        /// </summary>
+        /// <param name="userIds"></param>
+        /// <returns></returns>
+        [HttpPost("/find-user-data")]
+        public IActionResult FindUserData(string stringUserIds)
+        {
+
+            if (stringUserIds.IsNullOrEmpty())
+            {
+                return Json(null);
+            }
+
+#pragma warning disable CS8604
+            List<string> userIds = new List<string>(JsonConvert.DeserializeObject<string[]>(stringUserIds));
+#pragma warning restore CS8604
+
+            List<UserIdentity> userData = userIdentityService.SpecificationGetData(userIds).Result.Item1.ToList();
+
+            List<UserIdentityViewModel> resultViewModel = userData.Select(x => new UserIdentityViewModel
+            {
+                Id = x.Id,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                FatherName = x.FatherName
+            }).ToList();
+
+
+            return Json(new { data = resultViewModel });
+        }
+
         [HttpGet]
         public JsonResult GetLatestAccountNumber()
         {
@@ -264,11 +300,31 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             {
 #pragma warning disable CS8604
                 ViewBag.listBankName = GenericEnumList.GetSelectValueEnum<BankName>(bankName != null ? bankName.ToString() : "");
-                ViewBag.listAccountOwner = userIdentityService.ReadAllWithFatherName(accountOwnerId);
+                //ViewBag.listAccountOwner = userIdentityService.ReadAllWithFatherName(accountOwnerId);
             }
             catch (Exception exception)
             {
                 SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), MessageTypeActionMethod.Index);
+            }
+        }
+
+        [HttpPost("/filldropdownajax")]
+        public JsonResult FillDropDownAjax(string accountOwnerId = "")
+        {
+            try
+            {
+                List<SelectListItem> listAccountOwner =
+                    userIdentityService.ReadAllWithFatherName(accountOwnerId);
+
+                return Json(new
+                {
+                    listAccountOwner = listAccountOwner
+                });
+            }
+            catch (Exception exception)
+            {
+                SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), MessageTypeActionMethod.Index);
+                return Json(new { });
             }
         }
     }

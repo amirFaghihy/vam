@@ -94,7 +94,9 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 FillDropDown(accountTransactionType, accountTransactionMethod, userAccountId);
                 #endregion
 
-                Tuple<IQueryable<UserAccountDepositWithdrawal>, ResultStatusOperation> result = userAccountDepositWithdrawalService.SpecificationGetData(userAccountId, price, totalPriceAfterTransaction, accountTransactionType, accountTransactionMethod, transactionDateTimeFrom, transactionDateTimeTo, registerDateFrom, registerDateTo);
+                Tuple<IQueryable<UserAccountDepositWithdrawal>, ResultStatusOperation> result = 
+                    userAccountDepositWithdrawalService.SpecificationGetData(userAccountId, price, totalPriceAfterTransaction, accountTransactionType, accountTransactionMethod, transactionDateTimeFrom, transactionDateTimeTo, registerDateFrom, registerDateTo);
+
                 return View(userAccountDepositWithdrawalService.Pagination(result.Item1, true, pageNumber, pageSize, isDesc, sortColumn));
                 //return View(result.Item1.ToPagedList(pageNumber, pageSize));
             }
@@ -106,11 +108,13 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult Create(
+            TransactionType? accountTransactionType = null,
+            int userAccountId = 0)
         {
             try
             {
-                FillDropDown();
+                FillDropDown(accountTransactionType: accountTransactionType, userAccountId: userAccountId);
                 return View(new UserAccountDepositWithdrawal());
             }
             catch (Exception exception)
@@ -164,7 +168,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 }
 
                 Tuple<UserAccountDepositWithdrawal, ResultStatusOperation> resultFillModel = userAccountDepositWithdrawalService.FillModel(model);
-                resultFillModel = await userAccountDepositWithdrawalService.Insert(fillControllerInfo(new List<string>() { "transactionDateTimeTime", "transactionDateTimeString" }), resultFillModel.Item1);
+                resultFillModel = await userAccountDepositWithdrawalService.Insert(fillControllerInfo(), resultFillModel.Item1);
                 switch (resultFillModel.Item2.Type)
                 {
                     case MessageTypeResult.Success:
@@ -238,25 +242,53 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(UserAccountDepositWithdrawal model, string transactionDateTimeString, string transactionDateTimeTime)
+        public async Task<IActionResult> Edit(
+            UserAccountDepositWithdrawal model,
+            string transactionDateTimeString,
+            string transactionTimeString)
         {
             try
             {
                 #region DateTime Convertor
 
                 DateTime _transactionDateTime = transactionDateTimeString.ToConvertPersianDateToDateTime(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
-                TimeSpan _transactionDateTimeTime = transactionDateTimeTime.ToConvertStringToTime();
+                TimeSpan _transactionDateTimeTime = transactionTimeString.ToConvertStringToTime();
                 model.TransactionDateTime = _transactionDateTime.MergeDateAndTime(_transactionDateTimeTime);
 
                 #endregion
 
+                double latestTotalPrice = userAccountDepositWithdrawalService.GetLatestTotalPriceAfterTransaction(model.UserAccountId);
+                if (model.UserAccountId != 0)
+                {
+                    switch (model.AccountTransactionType)
+                    {
+                        case TransactionType.واریز:
+                            model.TotalPriceAfterTransaction = latestTotalPrice + model.Price;
+                            break;
+                        case TransactionType.برداشت:
+                            model.TotalPriceAfterTransaction = latestTotalPrice - model.Price;
+                            break;
+                        case TransactionType.پرداخت_قسط:
+                            break;
+                        default:
+                            FillDropDown();
+                            return View(model);
+                    }
+                }
+                else
+                {
+                    FillDropDown();
+                    return View(model);
+                }
+
                 Tuple<UserAccountDepositWithdrawal, ResultStatusOperation> resultEdit = await userAccountDepositWithdrawalService.Update(fillControllerInfo(), model);
+                SetMessage(resultEdit.Item2);
                 switch (resultEdit.Item2.Type)
                 {
                     case MessageTypeResult.Success:
                         {
-                            SetMessage(resultEdit.Item2);
-                            return RedirectToAction("Edit", new { id = resultEdit.Item1.Id });
+                            FillDropDown();
+                            return RedirectToAction(nameof(Index));
                         }
                     case MessageTypeResult.Danger:
                         {
@@ -265,12 +297,11 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                         }
                     case MessageTypeResult.Warning:
                         {
-                            SetMessage(resultEdit.Item2);
                             FillDropDown();
                             return View(resultEdit.Item1);
                         }
                 }
-                SetMessage(resultEdit.Item2);
+
                 FillDropDown();
                 return View(resultEdit.Item1);
             }
@@ -352,7 +383,10 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 });
         }
 
-        private void FillDropDown(TransactionType? accountTransactionType = null, TransactionMethod? accountTransactionMethod = null, int userAccountId = 0)
+        private void FillDropDown(
+            TransactionType? accountTransactionType = null,
+            TransactionMethod? accountTransactionMethod = null,
+            int userAccountId = 0)
         {
             try
             {
