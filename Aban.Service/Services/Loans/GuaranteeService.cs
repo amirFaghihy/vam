@@ -78,6 +78,8 @@ namespace Aban.Service.Services
                     query = query.Where(x => x.RegisterDate >= _registerDateFrom && x.RegisterDate <= _registerDateTo);
                 }
 
+                query = query.Include(x => x.GuaranteeUser);
+
                 return Tuple.Create(query, resultStatusOperation);
             }
             catch (Exception exception)

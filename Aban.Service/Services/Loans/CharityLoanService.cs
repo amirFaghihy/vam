@@ -42,7 +42,7 @@ namespace Aban.Service.Services
                 IQueryable<CharityLoan> query = charityLoanRepository.GetAll()
                     .Where(x => !x.IsDelete);
 
-                if (guaranteeId != 0)
+                if (guaranteeId != null && guaranteeId != 0)
                 {
                     query = query.Where(x => x.GuaranteeId == guaranteeId);
                 }
@@ -50,7 +50,7 @@ namespace Aban.Service.Services
                 {
                     query = query.Where(x => x.LoanReceiverId.Contains(loanReceiverId));
                 }
-                if (loanAmount != 0)
+                if (loanAmount != null)
                 {
                     query = query.Where(x => x.LoanAmount == loanAmount);
                 }
@@ -87,6 +87,7 @@ namespace Aban.Service.Services
                     query = query.Where(x => x.IsDone == isdone);
                 }
 
+                query = query.Include(x => x.LoanReceiver);
 
                 return Tuple.Create(query, resultStatusOperation);
             }

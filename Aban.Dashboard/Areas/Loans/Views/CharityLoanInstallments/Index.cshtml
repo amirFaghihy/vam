@@ -49,7 +49,7 @@
                         <tr>
 
                             <th style="width: 162px;">@Html.ActionLink("کد", "Index", "CharityLoanInstallments", new {charityLoan = ViewBag.charityLoan , installmentAmount = ViewBag.installmentAmount , paymentDate = ViewBag.paymentDate , registerDate = ViewBag.registerDate , isdone = ViewBag.isdone ,  sortColumn = "Id", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Id" })</th>
-                            <th style="width: 162px;">@Html.ActionLink("شناسه وام", "Index", "CharityLoanInstallments", new {charityLoan = ViewBag.charityLoan , installmentAmount = ViewBag.installmentAmount , paymentDate = ViewBag.paymentDate , registerDate = ViewBag.registerDate , isdone = ViewBag.isdone ,  sortColumn = "CharityLoan", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "CharityLoan" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("شناسه وام/وام گیرنده", "Index", "CharityLoanInstallments", new {charityLoan = ViewBag.charityLoan , installmentAmount = ViewBag.installmentAmount , paymentDate = ViewBag.paymentDate , registerDate = ViewBag.registerDate , isdone = ViewBag.isdone ,  sortColumn = "CharityLoan", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "CharityLoan" })</th>
                             <th style="width: 162px;">@Html.ActionLink("مبلغ قسط", "Index", "CharityLoanInstallments", new {charityLoan = ViewBag.charityLoan , installmentAmount = ViewBag.installmentAmount , paymentDate = ViewBag.paymentDate , registerDate = ViewBag.registerDate , isdone = ViewBag.isdone ,  sortColumn = "InstallmentAmount", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "InstallmentAmount" })</th>
                             <th style="width: 162px;">@Html.ActionLink("موعد پرداخت", "Index", "CharityLoanInstallments", new {charityLoan = ViewBag.charityLoan , installmentAmount = ViewBag.installmentAmount , paymentDate = ViewBag.paymentDate , registerDate = ViewBag.registerDate , isdone = ViewBag.isdone ,  sortColumn = "PaymentDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "PaymentDate" })</th>
                             <th style="width: 162px;">@Html.ActionLink("تاریخ پرداخت", "Index", "CharityLoanInstallments", new {charityLoan = ViewBag.charityLoan , installmentAmount = ViewBag.installmentAmount , paymentDate = ViewBag.paymentDate , registerDate = ViewBag.registerDate , isdone = ViewBag.isdone ,  sortColumn = "RegisterDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "RegisterDate" })</th>
@@ -92,7 +92,7 @@
                     <tfoot>
                         <tr>
                             <th style="width: 162px;">کد</th>
-                            <th style="width: 162px;">شناسه وام</th>
+                            <th style="width: 162px;">شناسه وام/وام گیرنده</th>
                             <th style="width: 162px;">مبلغ قسط</th>
                             <th style="width: 162px;">موعد پرداخت</th>
                             <th style="width: 162px;">تاریخ پرداخت</th>

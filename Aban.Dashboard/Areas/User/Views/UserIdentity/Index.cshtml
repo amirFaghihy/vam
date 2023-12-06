@@ -60,15 +60,13 @@
                         <tr>
 
                             <th style="width: 162px;">@Html.ActionLink("کد", "Index", "UserIdentity", RouteValue("Id"), new { @id = "Id" })
-                            <th style="width: 162px;">@Html.ActionLink("نام کاربری", "Index", "UserIdentity", RouteValue("UserName"), new { @id = "UserName" })</th>
-                            <th style="width: 162px;">@Html.ActionLink("شماره موبایل", "Index", "UserIdentity", RouteValue("PhoneNumber"), new { @id = "PhoneNumber" })</th>
                             <th style="width: 162px;">@Html.ActionLink("نام", "Index", "UserIdentity", RouteValue("FirstName"), new { @id = "FirstName" })</th>
                             <th style="width: 162px;">@Html.ActionLink("نام خانوادگی", "Index", "UserIdentity", RouteValue("LastName"), new { @id = "LastName" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("شماره موبایل", "Index", "UserIdentity", RouteValue("PhoneNumber"), new { @id = "PhoneNumber" })</th>
                             <th style="width: 162px;">@Html.ActionLink("جنسیت", "Index", "UserIdentity", RouteValue("IsMale"), new { @id = "IsMale" })</th>
                             <th style="width: 162px;">@Html.ActionLink("مسدود؟", "Index", "UserIdentity", RouteValue("IsLocked"), new { @id = "IsLocked" })</th>
                             <th style="width: 162px;">@Html.ActionLink("تأیید شده؟", "Index", "UserIdentity", RouteValue("IsConfirm"), new { @id = "IsConfirm" })</th>
                             <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "UserIdentity", RouteValue("RegisterDate"), new { @id = "RegisterDate" })</th>
-                            <th style="width: 162px;">@Html.ActionLink("تاریخ تغییر", "Index", "UserIdentity", RouteValue("ModifiedDate"), new { @id = "ModifiedDate" })</th>
 
                             <th style="width: 162px;">عملیات</th>
                         </tr>
@@ -79,10 +77,9 @@
                         {
                             <tr style="@(item.IsLocked?"background-color:#fd041b;":"")">
                                 <td>@item.Id.Split("-").FirstOrDefault()</td>
-                                <td>@item.UserName </td>
-                                <td>@item.PhoneNumber </td>
                                 <td>@item.FirstName </td>
                                 <td>@item.LastName </td>
+                                <td>@item.PhoneNumber </td>
                                 @*<td>@item.NationalCode </td>*@
                                 <td>
                                     @(item.IsMale ? "آقا" : "خانم")
@@ -103,9 +100,6 @@
                         </td>*@
                                 <td>
                                     @Html.ConvertPersianDateTime(item.RegisterDate)
-                                </td>
-                                <td>
-                                    @Html.ConvertPersianDateTime(item.ModifiedDate)
                                 </td>
 
                                 <td>
@@ -139,14 +133,12 @@
                     <tfoot>
                         <tr>
                             <th style="width: 162px;">کد</th>
-                            <th style="width: 162px;">نام کاربری</th>
-                            <th style="width: 162px;">شماره موبایل</th>
                             <th style="width: 162px;">نام</th>
                             <th style="width: 162px;">نام خانوادگی</th>
+                            <th style="width: 162px;">شماره موبایل</th>
                             <th style="width: 162px;">جنسیت</th>
                             <th style="width: 162px;">مسدود؟</th>
                             <th style="width: 162px;">تأیید شده ؟</th>
-                            <th style="width: 162px;">تاریخ ثبت</th>
                             <th style="width: 162px;">تاریخ تغییر</th>
 
                             <th>عملیات</th>

@@ -48,16 +48,49 @@
 
     <script>
 
-        $("#AccountOwnerId").select2({
-            tags: true,
-        }).data('select2').$dropdown.addClass('class23');
+
+        function select2dropdowns() {
+            $("#AccountOwnerId").select2({
+                tags: true,
+            }).data('select2').$dropdown.addClass('class23');
 
 
-        $("#BankName").select2({
-            tags: true,
-        }).data('select2').$dropdown.addClass('class58');
+            $("#BankName").select2({
+                tags: true,
+            }).data('select2').$dropdown.addClass('class58');
+
+        }
+
+        function getFillDropDown() {
+            $.ajax({
+                url: '/filldropdownajax',
+                method: 'POST',
+                data: { accountOwnerId: "" },
+                success: function (data) {
+                    var listAccountOwner = data.listAccountOwner;
+
+                    $.each(listAccountOwner, function (index, item) {
+                        $('#accountOwnerId').append($('<option/>', {
+                            value: item.value,
+                            text: item.text,
+                            selected: item.selected
+                        }));
+                    });
+
+                },
+                error: function () {
+                    //alert('خطایی رخ داده است !!!');
+                }
+            });
+
+        }
 
         $(function () {
+
+            
+            getFillDropDown();
+            select2dropdowns();
+
             $.ajax(
                 {
                     method: "GET",

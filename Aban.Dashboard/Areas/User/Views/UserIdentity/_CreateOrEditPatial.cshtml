@@ -93,11 +93,11 @@
                             <label asp-for="BirthDate"></label>
                             @if (Model.BirthDate != null)
                             {
-                                <input id="BirthDate" name="BirthDateString" type="text" class="form-control mb-4 PersianDatePicker" readonly value="@Html.ConvertToPersianDate(Model.BirthDate.Value)" autocomplete="off" />
+                                <input id="BirthDate" name="BirthDateString" type="text" class="form-control mb-4 PersianDatePicker" value="@Html.ConvertToPersianDate(Model.BirthDate.Value)" autocomplete="off" />
                             }
                             else
                             {
-                                <input id="BirthDate" name="BirthDateString" type="text" class="form-control mb-4 PersianDatePicker" readonly autocomplete="off" />
+                                <input id="BirthDate" name="BirthDateString" type="text" class="form-control mb-4 PersianDatePicker" autocomplete="off" />
                             }
                             <span asp-validation-for="BirthDate" class="text-danger"></span>
                         </div>

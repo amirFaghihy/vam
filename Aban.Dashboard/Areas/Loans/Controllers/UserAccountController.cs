@@ -300,7 +300,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             {
 #pragma warning disable CS8604
                 ViewBag.listBankName = GenericEnumList.GetSelectValueEnum<BankName>(bankName != null ? bankName.ToString() : "");
-                //ViewBag.listAccountOwner = userIdentityService.ReadAllWithFatherName(accountOwnerId);
+                ViewBag.listAccountOwner = userIdentityService.ReadAllWithFatherName(accountOwnerId);
             }
             catch (Exception exception)
             {

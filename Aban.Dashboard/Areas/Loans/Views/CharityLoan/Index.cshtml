@@ -65,7 +65,9 @@
                     {
                         <tr>
                             <td>@item.Id</td>
-                            <td>@item.LoanReceiverId</td>
+                            @*<td>@item.LoanReceiverId</td>*@
+                            <td>@item.LoanReceiver.FirstName @item.LoanReceiver.LastName</td>
+
                             <td>@item.LoanAmount.ToString("N0") </td>
                             <td>
                                 @Html.ConvertPersianDateTime(item.PaymentStartDate)

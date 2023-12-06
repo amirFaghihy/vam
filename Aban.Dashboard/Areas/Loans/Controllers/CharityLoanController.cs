@@ -17,17 +17,20 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         private readonly ICharityLoanService charityLoanService;
         private readonly IUserIdentityService userIdentityService;
         private readonly ICharityLoanInstallmentsService charityLoanInstallmentsService;
+        private readonly IGuaranteeService guaranteeService;
 
 
         public CharityLoanController(
             ICharityLoanService charityLoanService,
             IUserIdentityService userIdentityService,
-            ICharityLoanInstallmentsService charityLoanInstallmentsService
+            ICharityLoanInstallmentsService charityLoanInstallmentsService,
+            IGuaranteeService guaranteeService
             )
         {
             this.charityLoanService = charityLoanService;
             this.userIdentityService = userIdentityService;
             this.charityLoanInstallmentsService = charityLoanInstallmentsService;
+            this.guaranteeService = guaranteeService;
         }
 
         #endregion
@@ -170,7 +173,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 #endregion
 
                 Tuple<CharityLoan, ResultStatusOperation> resultFillModel = charityLoanService.FillModel(model);
-                resultFillModel = await charityLoanService.Insert(fillControllerInfo(new List<string>() { "paymentStartDateString", "UserIdentityId" }), resultFillModel.Item1);
+                resultFillModel = await charityLoanService.Insert(fillControllerInfo(), resultFillModel.Item1);
                 switch (resultFillModel.Item2.Type)
                 {
                     case MessageTypeResult.Success:
@@ -313,8 +316,9 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             try
             {
                 string loanReceiverId = ViewBag.loanReceiverId;
-
+                int guaranteeId = ViewBag.guaranteeId == null ? 0 : ViewBag.guaranteeId;
                 ViewBag.listLoanReceiver = userIdentityService.ReadAllWithFatherName(loanReceiverId);
+                ViewBag.listGuarantee = guaranteeService.ReadAll(guaranteeId);
             }
             catch (Exception exception)
             {
