@@ -32,7 +32,8 @@
                             <th style="width: 162px;">@Html.ActionLink("صاحب حساب", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "AccountOwnerId", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "AccountOwnerId" })</th>
                             <th style="width: 162px;">@Html.ActionLink("نام بانک", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "BankName", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "BankName" })</th>
                             <th style="width: 162px;">@Html.ActionLink("عنوان حساب", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "Title", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Title" })</th>
-                            <th style="width: 162px;">@Html.ActionLink("شماره حساب/کارت", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "AccountNumber", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "AccountNumber" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("شماره حساب", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "AccountNumber", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "AccountNumber" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("مانده حساب", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "AccountNumber", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "AccountNumber" })</th>
                             <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "RegisterDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "RegisterDate" })</th>
 
                             <th style="width: 162px;">عملیات</th>
@@ -48,6 +49,7 @@
                             <td>@item.BankName </td>
                             <td>@item.Title </td>
                             <td>@item.AccountNumber </td>
+                            <td><span id="totalPriceAfterTransaction-@(item.Id)" data-id="@(item.Id)" class="total-price-after-transaction"></span></td>
                             <td>
                                 @Html.ConvertPersianDateTime(item.RegisterDate)
                             </td>
@@ -71,7 +73,8 @@
                             <th style="width: 162px;">صاحب حساب</th>
                             <th style="width: 162px;">نام بانک</th>
                             <th style="width: 162px;">عنوان حساب</th>
-                            <th style="width: 162px;">شماره حساب/کارت</th>
+                            <th style="width: 162px;">شماره حساب</th>
+                            <th style="width: 162px;">مانده حساب</th>
                             <th style="width: 162px;">تاریخ ثبت</th>
 
                             <th>عملیات</th>
@@ -94,6 +97,10 @@
 
     <script>
 
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
         function select2dropdowns() {
             $("#accountOwnerId").select2({
                 tags: true,
@@ -105,14 +112,53 @@
             }).data('select2').$dropdown.addClass('class58');
         }
 
+        async function lastRemaining() {
+
+            // تعریف یک آرایه برای ذخیره آی‌دی‌ها
+            var arraccountUsersIds = [];
+            // گرفتن تمام عناصر span با کلاس "get-user-data"
+            $("span.total-price-after-transaction").each(function () {
+                // افزودن آی‌دی هر عنصر به آرایه
+                arraccountUsersIds.push($(this).data("id"));
+            });
+
+            var strAccountIds = JSON.stringify(arraccountUsersIds);
+
+            $.ajax({
+                url: '/Loans/UserAccount/GetLatestRemaining',
+                type: 'POST',
+                dataType: 'json', // نوع داده دریافتی از بک‌اند
+                data: { stringAccountIds: strAccountIds },
+                success: function (result) {
+
+                    if (result == null) {
+                        alert('خطایی رخ داده است، برای بارگزاری اطلاعات صفحه را رفرش کنید.')
+                    }
+                    else {
+
+                        var depositWithdrawal = result.depositWithdrawal;
+
+                        for (var i = 0; i < depositWithdrawal.length; i++) {
+                            $('#totalPriceAfterTransaction-' + depositWithdrawal[i].userAccountId).html(numberWithCommas(depositWithdrawal[i].totalPriceAfterTransaction));
+                        }
+                    }
+
+                },
+                error: function () {
+                    // Request failed, handle the error here
+                }
+            });
+
+        }
 
         function getFillDropDown() {
             $.ajax({
                 url: '/filldropdownajax',
                 method: 'POST',
-                data: { accountOwnerId: ""},
+                data: { accountOwnerId: "" },
                 success: function (data) {
                     var listAccountOwner = data.listAccountOwner;
+                    var listBankName = data.listBankName;
 
                     $.each(listAccountOwner, function (index, item) {
                         $('#accountOwnerId').append($('<option/>', {
@@ -122,6 +168,13 @@
                         }));
                     });
 
+                    $.each(listBankName, function (index, item) {
+                        $('#bankName').append($('<option/>', {
+                            value: item.value,
+                            text: item.text,
+                            selected: item.selected
+                        }));
+                    });
                 },
                 error: function () {
                     //alert('خطایی رخ داده است !!!');
@@ -129,7 +182,6 @@
             });
 
         }
-
 
         function GetUsersData() {
 
@@ -184,6 +236,7 @@
         }
 
         $(document).ready(function () {
+            lastRemaining();
             GetUsersData();
             getFillDropDown();
             select2dropdowns();

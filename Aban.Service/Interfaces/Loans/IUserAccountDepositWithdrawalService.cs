@@ -18,6 +18,8 @@ namespace Aban.Service.Interfaces
             DateTime? registerDateFrom = null,
             DateTime? registerDateTo = null);
 
+        Tuple<IQueryable<UserAccountDepositWithdrawal>, ResultStatusOperation> SpecificationGetData(List<int> userAccountIds);
+
         Tuple<UserAccountDepositWithdrawal, ResultStatusOperation> FillModel(UserAccountDepositWithdrawal userAccountDepositWithdrawal);
 
         /// <summary>

@@ -83,6 +83,32 @@ namespace Aban.Service.Services
             }
         }
 
+        public Tuple<IQueryable<UserAccountDepositWithdrawal>, ResultStatusOperation> SpecificationGetData(
+            List<int> userAccountIds)
+        {
+            ResultStatusOperation resultStatusOperation = new ResultStatusOperation();
+            resultStatusOperation.IsSuccessed = true;
+            resultStatusOperation.Type = MessageTypeResult.Success;
+            try
+            {
+                IQueryable<UserAccountDepositWithdrawal> query = userAccountDepositWithdrawalRepository.GetAll()
+                    .Where(x => !x.IsDelete && userAccountIds.Contains(x.UserAccountId))
+                    .OrderByDescending(x => x.RegisterDate)
+                    ;
+
+                return Tuple.Create(query, resultStatusOperation);
+            }
+            catch (Exception exception)
+            {
+                resultStatusOperation.IsSuccessed = false;
+                resultStatusOperation.Message = "خطایی رخ داده است";
+                resultStatusOperation.Type = MessageTypeResult.Danger;
+                resultStatusOperation.ErrorException = exception;
+                throw new Exception("", exception);
+            }
+        }
+
+
         public Tuple<UserAccountDepositWithdrawal, ResultStatusOperation> FillModel(UserAccountDepositWithdrawal userAccountDepositWithdrawal)
         {
             ResultStatusOperation resultStatusOperation = new ResultStatusOperation();

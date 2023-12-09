@@ -2,6 +2,8 @@
 using Aban.Common.Utility;
 using Aban.Domain.Entities;
 using Aban.Service.Interfaces;
+using Aban.Service.Services;
+using Aban.ViewModel;
 using Aban.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,14 +20,17 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         #region constructor
 
         private readonly IUserAccountService userAccountService;
+        private readonly IUserAccountDepositWithdrawalService userAccountDepositWithdrawalService;
         private readonly IUserIdentityService userIdentityService;
 
 
         public UserAccountController(
             IUserAccountService userAccountService,
+            IUserAccountDepositWithdrawalService userAccountDepositWithdrawalService,
             IUserIdentityService userIdentityService)
         {
             this.userAccountService = userAccountService;
+            this.userAccountDepositWithdrawalService = userAccountDepositWithdrawalService;
             this.userIdentityService = userIdentityService;
         }
 
@@ -74,7 +79,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 }
                 ViewBag.lastColumn = ViewBag.sortColumn;
 
-                FillDropDown(bankName);
+                //FillDropDown(bankName);
                 #endregion
 
                 Tuple<IQueryable<UserAccount>, ResultStatusOperation> result = userAccountService.SpecificationGetData(accountOwnerId, bankName, title, accountNumber, registerDateFrom, registerDateTo);
@@ -278,6 +283,59 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             return Json(new { data = resultViewModel });
         }
 
+
+        /// <summary>
+        /// آخرین باقیمانده حسابها
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult GetLatestRemaining(string stringAccountIds)
+        {
+
+            if (stringAccountIds.IsNullOrEmpty())
+            {
+                return Json(null);
+            }
+
+#pragma warning disable CS8604
+
+            List<int> accountIds =
+                (new List<string>(JsonConvert.DeserializeObject<string[]>(stringAccountIds)))
+                .Select(int.Parse).ToList();
+
+#pragma warning restore CS8604
+
+            List<LatestDepositWithdrawal> latestDepositWithdrawal = new List<LatestDepositWithdrawal>();
+
+            List<UserAccountDepositWithdrawal> depositWithdrawal =
+                userAccountDepositWithdrawalService.SpecificationGetData(accountIds).Item1.ToList();
+
+            foreach (var item in depositWithdrawal.OrderByDescending(x => x.RegisterDate).GroupBy(x => x.UserAccountId))
+            {
+                latestDepositWithdrawal.Add(new LatestDepositWithdrawal()
+                {
+                    UserAccountId = item.FirstOrDefault()!.UserAccountId,
+                    TotalPriceAfterTransaction = item.FirstOrDefault()!.TotalPriceAfterTransaction
+                });
+            }
+
+            if (depositWithdrawal.Count() != 0)
+            {
+                return Json(new
+                {
+                    depositWithdrawal = latestDepositWithdrawal
+                }
+                );
+            }
+            else
+                return Json(new { });
+        }
+
+
+        /// <summary>
+        /// آخرین شماره حساب
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public JsonResult GetLatestAccountNumber()
         {
@@ -300,6 +358,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             {
 #pragma warning disable CS8604
                 ViewBag.listBankName = GenericEnumList.GetSelectValueEnum<BankName>(bankName != null ? bankName.ToString() : "");
+#pragma warning disable CS8604
                 ViewBag.listAccountOwner = userIdentityService.ReadAllWithFatherName(accountOwnerId);
             }
             catch (Exception exception)
@@ -309,15 +368,20 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         }
 
         [HttpPost("/filldropdownajax")]
-        public JsonResult FillDropDownAjax(string accountOwnerId = "")
+        public JsonResult FillDropDownAjax(BankName? bankName = null, string accountOwnerId = "")
         {
             try
             {
+#pragma warning disable CS8604
+                List<SelectListItem> listBankName =
+                    GenericEnumList.GetSelectValueEnum<BankName>(bankName != null ? bankName.ToString() : "");
+#pragma warning restore CS8604
                 List<SelectListItem> listAccountOwner =
                     userIdentityService.ReadAllWithFatherName(accountOwnerId);
 
                 return Json(new
                 {
+                    listBankName = listBankName,
                     listAccountOwner = listAccountOwner
                 });
             }

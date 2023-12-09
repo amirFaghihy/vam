@@ -275,7 +275,7 @@ namespace Aban.Service.Services
                 {
                     return new SelectListItem()
                     {
-                        Text = x.FatherName.IsNullOrEmpty() ? $"{x.LastName} {x.FirstName}" : $"{x.LastName} {x.FirstName} | فرزند: {x.FatherName}",
+                        Text = x.FatherName.IsNullOrEmpty() ? $"{x.LastName} {x.FirstName}" : $"{x.LastName} {x.FirstName} | فرزند: {x.FatherName} | {x.NationalCode}",
                         Value = x.Id,
                         Selected = !string.IsNullOrEmpty(selectedValue) ? (x.Id == selectedValue) : false
                     };

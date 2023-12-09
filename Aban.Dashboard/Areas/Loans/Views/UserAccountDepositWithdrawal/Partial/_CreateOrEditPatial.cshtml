@@ -59,7 +59,7 @@
                             @{
                                 var valueDate = (Model.TransactionDateTime != default ? Model.TransactionDateTime.ToConvertDateTimeToPersianDate() : DateTime.Now.ToConvertDateTimeToPersianDate());
                             }
-                            <input name="TransactionDateTimeString" id="TransactionDateTimeString" value="@valueDate" type="text" class="form-control PersianDatePicker" readonly />
+                            <input name="TransactionDateTimeString" id="TransactionDateTimeString" value="@valueDate" type="text" class="form-control PersianDatePicker" />
                             <span asp-validation-for="TransactionDateTime" class="text-danger"></span>
                         </div>
                     </div>

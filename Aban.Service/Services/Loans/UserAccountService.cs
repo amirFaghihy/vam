@@ -69,6 +69,7 @@ namespace Aban.Service.Services
             }
         }
 
+
         public Tuple<UserAccount, ResultStatusOperation> FillModel(UserAccount userAccount)
         {
             ResultStatusOperation resultStatusOperation = new ResultStatusOperation();
