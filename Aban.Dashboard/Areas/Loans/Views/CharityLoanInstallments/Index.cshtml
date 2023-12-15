@@ -65,14 +65,25 @@
                             <td>@item.Id</td>
                             <td>@item.CharityLoan?.LoanReceiver?.FirstName @item.CharityLoan?.LoanReceiver?.LastName</td>
                             <td>@item.InstallmentAmount.ToString("N0")</td>
-                            <td>
-                                @Html.ConvertPersianDateTime(item.PaymentDue)
+                            <td style="@(item.PaymentDue<= DateTime.Today.AddDays(1) ? "background-color: #e7515a" : "" )">
+                                @Html.ConvertToPersianDate(item.PaymentDue)
                             </td>
                             <td>
-                                @Html.ConvertPersianDateTime(item.PaymentDate)
+                                @if (item.PaymentDate != null)
+                                {
+                                    <span>
+                                        @Html.ConvertToPersianDate(item.PaymentDate.Value)
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span>
+                                        هنوز پرداخت نشده است.
+                                    </span>
+                                }
                             </td>
                             <td>
-                                @Html.ConvertPersianDateTime(item.RegisterDate)
+                                @Html.ConvertToPersianDate(item.RegisterDate)
                             </td>
                             <td>
                                 <i class="fa fa-@(((bool)item.IsDone) ? "check isVisible" : "times isHidden")"></i>

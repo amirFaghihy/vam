@@ -1,4 +1,5 @@
-﻿        <!--  BEGIN SIDEBAR  -->
+﻿@using Aban.Common.HtmlHelper
+        <!--  BEGIN SIDEBAR  -->
 <div class="sidebar-wrapper sidebar-theme">
 
 
@@ -71,6 +72,17 @@
                     </li>
                     <li class="" id="">
                         <a href="@Url.Action("Index", "CharityLoanInstallments", new{ area="Loans" })"> اقساط </a>
+                    </li>
+                    <li class="" id="">
+                        @{
+                            string _paymentDueFrom = DateTime.Today.AddYears(-10).ToString("yyyy/MM/dd");
+                            string _paymentDueTo = DateTime.Today.AddDays(1).ToString("yyyy/MM/dd");
+                        }
+                        <a href="@Url.Action("Index", "CharityLoanInstallments", new{
+                            area = "Loans",
+                            paymentDueFrom = Html.ConvertToPersianDate(DateTime.Today.AddYears(-10)),
+                            paymentDueTo = Html.ConvertToPersianDate(DateTime.Today.AddDays(1)),
+                            pageSize = 200 })"> اقساط سررسید شده </a>
                     </li>
                 </ul>
             </li>

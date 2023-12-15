@@ -43,7 +43,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             bool? isdone = null,
             int pageNumber = 1,
             int pageSize = 10,
-            string sortColumn = "RegisterDate",
+            string sortColumn = "Id",
             string lastColumn = "",
             bool isDesc = true)
         {
@@ -116,15 +116,16 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 #endregion
 
 
-                Tuple<IQueryable<CharityLoanInstallments>, ResultStatusOperation> result = charityLoanInstallmentsService.SpecificationGetData(
-                    charityLoanId, installmentAmount, _paymentDueFrom, _paymentDueTo, _paymentDate, paymentMethod,
+                Tuple<IQueryable<CharityLoanInstallments>, ResultStatusOperation> result = 
+                    charityLoanInstallmentsService.SpecificationGetData(charityLoanId, installmentAmount,
+                    _paymentDueFrom, _paymentDueTo, _paymentDate, paymentMethod,
                     _registerDateFrom, _registerDateTo, isdone);
                 return View(charityLoanInstallmentsService.Pagination(result.Item1, true, pageNumber, pageSize, isDesc, sortColumn));
                 //return View(result.Item1.ToPagedList(pageNumber, pageSize));
             }
             catch (Exception exception)
             {
-                SetMessageException(new ResultStatusOperation("", "", Enumeration.MessageTypeResult.Danger, false, exception), Enumeration.MessageTypeActionMethod.Index);
+                SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), MessageTypeActionMethod.Index);
                 return RedirectToAction("ShowException", "Error", new { area = "" });
             }
         }
@@ -139,7 +140,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             }
             catch (Exception exception)
             {
-                SetMessageException(new ResultStatusOperation("", "", Enumeration.MessageTypeResult.Danger, false, exception), Enumeration.MessageTypeActionMethod.Index);
+                SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), MessageTypeActionMethod.Index);
                 return RedirectToAction("ShowException", "Error", new { area = "" });
             }
 
@@ -158,12 +159,12 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
 
                 if (!paymentDateString.IsNullOrEmpty())
                 {
-                    DateTime _paymentDate = paymentDateString.ToConvertPersianDateToDateTime(Enumeration.DateTimeFormat.yyyy_mm_dd, Enumeration.DateTimeSpiliter.slash);
+                    DateTime _paymentDate = paymentDateString.ToConvertPersianDateToDateTime(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
                     TimeSpan _paymentDateTime = TimeSpan.Zero;
                     model.PaymentDate = _paymentDate.MergeDateAndTime(_paymentDateTime);
                 }
 
-                DateTime _paymentDue = paymentDueString.ToConvertPersianDateToDateTime(Enumeration.DateTimeFormat.yyyy_mm_dd, Enumeration.DateTimeSpiliter.slash);
+                DateTime _paymentDue = paymentDueString.ToConvertPersianDateToDateTime(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
                 TimeSpan _paymentDueTime = TimeSpan.Zero;
                 model.PaymentDue = _paymentDue.MergeDateAndTime(_paymentDueTime);
 
@@ -189,7 +190,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             }
             catch (Exception exception)
             {
-                SetMessageException(new ResultStatusOperation("", "", Enumeration.MessageTypeResult.Danger, false, exception), Enumeration.MessageTypeActionMethod.Index);
+                SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), MessageTypeActionMethod.Index);
                 return RedirectToAction("ShowException", "Error");
             }
         }
@@ -226,7 +227,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             }
             catch (Exception exception)
             {
-                SetMessageException(new ResultStatusOperation("", "", Enumeration.MessageTypeResult.Danger, false, exception), Enumeration.MessageTypeActionMethod.Index);
+                SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), MessageTypeActionMethod.Index);
                 return RedirectToAction("ShowException", "Error");
             }
         }
@@ -245,12 +246,12 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
 
                 if (!paymentDateString.IsNullOrEmpty())
                 {
-                    DateTime _paymentDate = paymentDateString.ToConvertPersianDateToDateTime(Enumeration.DateTimeFormat.yyyy_mm_dd, Enumeration.DateTimeSpiliter.slash);
+                    DateTime _paymentDate = paymentDateString.ToConvertPersianDateToDateTime(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
                     TimeSpan _paymentDateTime = TimeSpan.Zero;
                     model.PaymentDate = _paymentDate.MergeDateAndTime(_paymentDateTime);
                 }
 
-                DateTime _paymentDue = paymentDueString.ToConvertPersianDateToDateTime(Enumeration.DateTimeFormat.yyyy_mm_dd, Enumeration.DateTimeSpiliter.slash);
+                DateTime _paymentDue = paymentDueString.ToConvertPersianDateToDateTime(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
                 TimeSpan _paymentDueTime = TimeSpan.Zero;
                 model.PaymentDue = _paymentDue.MergeDateAndTime(_paymentDueTime);
 
@@ -266,7 +267,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                         return RedirectToAction(nameof(Index));
 
                     case MessageTypeResult.Danger:
-                        SetMessageException(resultEdit.Item2, Enumeration.MessageTypeActionMethod.EditPost);
+                        SetMessageException(resultEdit.Item2, MessageTypeActionMethod.EditPost);
                         return RedirectToAction("ShowException", "Error");
 
                     case MessageTypeResult.Warning:
@@ -279,7 +280,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             }
             catch (Exception exception)
             {
-                SetMessageException(new ResultStatusOperation("", "", Enumeration.MessageTypeResult.Danger, false, exception), Enumeration.MessageTypeActionMethod.Index);
+                SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), MessageTypeActionMethod.Index);
                 return RedirectToAction("ShowException", "Error");
             }
         }
@@ -306,7 +307,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             }
             catch (Exception exception)
             {
-                SetMessageException(new ResultStatusOperation("", "", Enumeration.MessageTypeResult.Danger, false, exception), Enumeration.MessageTypeActionMethod.Index);
+                SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), MessageTypeActionMethod.Index);
                 return RedirectToAction("ShowException", "Error");
             }
         }
@@ -321,7 +322,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             }
             catch (Exception exception)
             {
-                SetMessageException(new ResultStatusOperation("", "", Enumeration.MessageTypeResult.Danger, false, exception), Enumeration.MessageTypeActionMethod.Index);
+                SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), MessageTypeActionMethod.Index);
             }
         }
     }
