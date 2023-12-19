@@ -15,6 +15,7 @@ namespace Aban.Domain.Entities
         /// ضامن و مورد ضمانت
         /// </summary>
         [Display(Name = "ضامن و مورد ضمانت")]
+        [Required(ErrorMessage = "{0} را انتخاب کنید")]
 #pragma warning disable CS8618
         public int GuaranteeId { get; set; }
 
@@ -23,14 +24,15 @@ namespace Aban.Domain.Entities
         /// </summary>
         [ForeignKey(nameof(GuaranteeId))]
         [Display(Name = "ضامن و مورد ضمانت")]
+        [Required(ErrorMessage = "{0} را انتخاب کنید")]
         public Guarantee? Guarantee { get; set; }
 
         /// <summary>
         /// وام گیرنده
         /// </summary>
         [Display(Name = "وام گیرنده")]
-#pragma warning disable CS8618
         [Required(ErrorMessage = "{0} را انتخاب کنید")]
+#pragma warning disable CS8618
         public string LoanReceiverId { get; set; }
 
         /// <summary>
@@ -70,14 +72,13 @@ namespace Aban.Domain.Entities
         /// روش اعطای وام
         /// </summary>
         [Display(Name = "روش اعطای وام")]
-        public TransactionMethod GivingLoanMethod { get; set; }
+        public TransactionMethod? GivingLoanMethod { get; set; }
 
         /// <summary>
         /// توضیحات
         /// </summary>
         [Display(Name = "توضیحات")]
-        [Required(ErrorMessage = "{0} را وارد کنید")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
 
         /// <summary>

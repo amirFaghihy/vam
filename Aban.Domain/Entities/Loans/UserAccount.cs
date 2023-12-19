@@ -15,6 +15,7 @@ namespace Aban.Domain.Entities
         /// صاحب حساب
         /// </summary>
         [Display(Name = "صاحب حساب")]
+        [Required(ErrorMessage ="{0} را انتخاب کنید")]
 #pragma warning disable CS8618
         public string AccountOwnerId { get; set; }
 
@@ -31,6 +32,7 @@ namespace Aban.Domain.Entities
         /// نام بانک
         /// </summary>
         [Display(Name ="نام بانک")]
+        [Required(ErrorMessage ="{0} را انتخاب کنید")]
         public BankName BankName { get; set; }
 
         /// <summary>
@@ -50,8 +52,7 @@ namespace Aban.Domain.Entities
         /// توضیحات
         /// </summary>
         [Display(Name = "توضیحات")]
-        [Required(ErrorMessage ="{0} را وارد کنید")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary>
         /// تاریخ ثبت
