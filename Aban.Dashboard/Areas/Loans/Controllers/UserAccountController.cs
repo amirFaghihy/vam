@@ -2,7 +2,6 @@
 using Aban.Common.Utility;
 using Aban.Domain.Entities;
 using Aban.Service.Interfaces;
-using Aban.Service.Services;
 using Aban.ViewModel;
 using Aban.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -22,16 +21,22 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         private readonly IUserAccountService userAccountService;
         private readonly IUserAccountDepositWithdrawalService userAccountDepositWithdrawalService;
         private readonly IUserIdentityService userIdentityService;
+        private readonly ICharityLoanService charityLoanService;
+        private readonly ICharityLoanInstallmentsService charityLoanInstallmentsService;
 
 
         public UserAccountController(
             IUserAccountService userAccountService,
             IUserAccountDepositWithdrawalService userAccountDepositWithdrawalService,
-            IUserIdentityService userIdentityService)
+            IUserIdentityService userIdentityService,
+            ICharityLoanService charityLoanService,
+            ICharityLoanInstallmentsService charityLoanInstallmentsService)
         {
             this.userAccountService = userAccountService;
             this.userAccountDepositWithdrawalService = userAccountDepositWithdrawalService;
             this.userIdentityService = userIdentityService;
+            this.charityLoanService = charityLoanService;
+            this.charityLoanInstallmentsService = charityLoanInstallmentsService;
         }
 
         #endregion
@@ -286,6 +291,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
 
         /// <summary>
         /// آخرین باقیمانده حسابها
+        /// (موجودی حساب = (اقساط پرداخت شده) + (مبلغ وام با درصد سود) - موجودی حساب)
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -310,13 +316,47 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             List<UserAccountDepositWithdrawal> depositWithdrawal =
                 userAccountDepositWithdrawalService.SpecificationGetData(accountIds).Item1.ToList();
 
+            // لیست وام‌های کاربر
+            List<CharityLoan> listCharityLoans = charityLoanService.SpecificationGetData(
+                lstLoanReceiverId: depositWithdrawal.Select(x => x.UserAccount!.AccountOwnerId).ToList(),
+                isdone: false).Item1.ToList();
+
+            // لیست اقساط پرداخت شده‌ی وام
+            List<CharityLoanInstallments> listCharityLoanInstallments = charityLoanInstallmentsService.SpecificationGetData(
+                listCharityLoanId: listCharityLoans.Select(x => x.Id).ToList(),
+                isdone: true).Item1.ToList();
+
             foreach (var item in depositWithdrawal.OrderByDescending(x => x.RegisterDate).GroupBy(x => x.UserAccountId))
             {
-                latestDepositWithdrawal.Add(new LatestDepositWithdrawal()
+
+                CharityLoan? charityLoan = listCharityLoans.Where(x => x.LoanReceiverId == item.FirstOrDefault()!.UserAccount!.AccountOwnerId).FirstOrDefault();
+
+                if (charityLoan != null)
                 {
-                    UserAccountId = item.FirstOrDefault()!.UserAccountId,
-                    TotalPriceAfterTransaction = item.FirstOrDefault()!.TotalPriceAfterTransaction
-                });
+                    // مبلغ وام + سود وام
+                    double loanAmount = ((charityLoan.LoanAmount * charityLoan.PercentSalary) / 100) + charityLoan.LoanAmount;
+
+                    // جمع اقساط پرداخت شده وام
+                    double loanInstallmentsAmount = listCharityLoanInstallments.Where(
+                        x => x.CharityLoanId == charityLoan.Id
+                        ).Select(x => x.InstallmentAmount).ToList().Sum();
+
+                    // باقیمانده حساب منهای وام بعلاوه اقساط پرداخت شده
+                    latestDepositWithdrawal.Add(new LatestDepositWithdrawal()
+                    {
+                        UserAccountId = item.FirstOrDefault()!.UserAccountId,
+                        TotalPriceAfterTransaction = (item.FirstOrDefault()!.TotalPriceAfterTransaction - loanAmount + loanInstallmentsAmount)
+                    });
+                }
+                else
+                {
+                    // باقیمانده حساب بدون محاسبه وام و اقساط پرداخت شده
+                    latestDepositWithdrawal.Add(new LatestDepositWithdrawal()
+                    {
+                        UserAccountId = item.FirstOrDefault()!.UserAccountId,
+                        TotalPriceAfterTransaction = item.FirstOrDefault()!.TotalPriceAfterTransaction
+                    });
+                }
             }
 
             if (depositWithdrawal.Count() != 0)

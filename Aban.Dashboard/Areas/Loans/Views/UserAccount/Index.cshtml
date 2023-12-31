@@ -49,7 +49,9 @@
                             <td>@item.BankName </td>
                             <td>@item.Title </td>
                             <td>@item.AccountNumber </td>
-                            <td><span id="totalPriceAfterTransaction-@(item.Id)" data-id="@(item.Id)" class="total-price-after-transaction"></span></td>
+                            <td id="tdPrice-@(item.Id)">
+                                <span id="totalPriceAfterTransaction-@(item.Id)" data-id="@(item.Id)" class="total-price-after-transaction"></span>
+                            </td>
                             <td>
                                 @Html.ConvertPersianDateTime(item.RegisterDate)
                             </td>
@@ -61,6 +63,7 @@
                                         <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item btn btn-info mb-2"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
                                         <a href="@Url.Action("Create", "UserAccountDepositWithdrawal", new {area="Loans", userAccountId = item.Id, accountTransactionType=TransactionType.واریز })" class="dropdown-item btn btn-success mb-2" target="_blank"><i class="flaticon-home-fill-1 mr-1"></i>واریز</a>
                                         <a href="@Url.Action("Create", "UserAccountDepositWithdrawal", new {area="Loans", userAccountId = item.Id, accountTransactionType=TransactionType.برداشت })" class="dropdown-item btn btn-danger mb-2" target="_blank"><i class="flaticon-home-fill-1 mr-1"></i>برداشت</a>
+                                        <a href="@Url.Action("Index", "CharityLoan", new {area="Loans", loanReceiverId = item.AccountOwnerId })" class="dropdown-item btn btn-warning mb-2" target="_blank"><i class="flaticon-home-fill-1 mr-1"></i>وام ها</a>
                                         @*<a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>*@
                                     </div>
                                 </div>
@@ -92,7 +95,7 @@
     <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
 }
 
-    @section Scripts {
+@section Scripts {
     <script src="~/plugins/select2/select2.min.js"></script>
 
     <script>
@@ -139,7 +142,15 @@
                         var depositWithdrawal = result.depositWithdrawal;
 
                         for (var i = 0; i < depositWithdrawal.length; i++) {
-                            $('#totalPriceAfterTransaction-' + depositWithdrawal[i].userAccountId).html(numberWithCommas(depositWithdrawal[i].totalPriceAfterTransaction));
+
+                            if (depositWithdrawal[i].totalPriceAfterTransaction > 0) {
+                                $('#tdPrice-' + depositWithdrawal[i].userAccountId).css('background-color', '#8dbf42');
+                            }
+                            else if(depositWithdrawal[i].totalPriceAfterTransaction < 0) {
+                                $('#tdPrice-' + depositWithdrawal[i].userAccountId).css('background-color', '#e7515a');
+                            }
+
+                                $('#totalPriceAfterTransaction-' + depositWithdrawal[i].userAccountId).html(numberWithCommas(depositWithdrawal[i].totalPriceAfterTransaction));
                         }
                     }
 

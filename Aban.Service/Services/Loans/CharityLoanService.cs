@@ -32,7 +32,8 @@ namespace Aban.Service.Services
             byte? numberOfInstallments = null,
             DateTime? registerDateFrom = null,
             DateTime? registerDateTo = null,
-            bool? isdone = null)
+            bool? isdone = null,
+            List<string>? lstLoanReceiverId = null)
         {
             ResultStatusOperation resultStatusOperation = new ResultStatusOperation();
             resultStatusOperation.IsSuccessed = true;
@@ -42,6 +43,10 @@ namespace Aban.Service.Services
                 IQueryable<CharityLoan> query = charityLoanRepository.GetAll()
                     .Where(x => !x.IsDelete);
 
+                if (lstLoanReceiverId != null && lstLoanReceiverId.Count > 0)
+                {
+                    query = query.Where(x => lstLoanReceiverId.Contains(x.LoanReceiverId));
+                }
                 if (guaranteeId != null && guaranteeId != 0)
                 {
                     query = query.Where(x => x.GuaranteeId == guaranteeId);

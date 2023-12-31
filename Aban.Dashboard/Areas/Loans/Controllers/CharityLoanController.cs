@@ -173,7 +173,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 #endregion
 
                 Tuple<CharityLoan, ResultStatusOperation> resultFillModel = charityLoanService.FillModel(model);
-                resultFillModel = await charityLoanService.Insert(fillControllerInfo(), resultFillModel.Item1);
+                resultFillModel = await charityLoanService.Insert(fillControllerInfo("Guarantee"), resultFillModel.Item1);
                 switch (resultFillModel.Item2.Type)
                 {
                     case MessageTypeResult.Success:
@@ -255,7 +255,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
 
                 #endregion
 
-                Tuple<CharityLoan, ResultStatusOperation> resultEdit = await charityLoanService.Update(fillControllerInfo(new List<string>() { "paymentStartDateString", "UserIdentityId" }), model);
+                Tuple<CharityLoan, ResultStatusOperation> resultEdit = await charityLoanService.Update(fillControllerInfo("Guarantee"), model);
 
                 SetMessage(resultEdit.Item2);
                 switch (resultEdit.Item2.Type)

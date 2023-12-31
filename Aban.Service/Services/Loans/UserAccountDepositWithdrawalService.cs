@@ -95,6 +95,7 @@ namespace Aban.Service.Services
             {
                 IQueryable<UserAccountDepositWithdrawal> query = userAccountDepositWithdrawalRepository.GetAll()
                     .Where(x => !x.IsDelete && userAccountIds.Contains(x.UserAccountId))
+                    .Include(x => x.UserAccount!.AccountOwner)
                     .OrderByDescending(x => x.RegisterDate)
                     ;
 

@@ -85,10 +85,24 @@
                                     @(item.IsMale ? "آقا" : "خانم")
                                 </td>
                                 <td>
-                                    <i class="fa fa-@(((bool)item.IsLocked) ? "check isVisible" : "times isHidden")"></i>
+                                    @if (item.IsLocked)
+                                    {
+                                        <i class="fa fa-check" style="color: #8dbf42"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-times" style="color: #e7515a"></i>
+                                    }
                                 </td>
                                 <td>
-                                    <i class="fa fa-@(((bool)item.IsConfirm) ? "check isVisible" : "times isHidden")"></i>
+                                    @if (item.IsConfirm)
+                                    {
+                                        <i class="fa fa-check" style="color: #8dbf42"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-times" style="color: #e7515a"></i>
+                                    }
                                 </td>
                                 @*<td>
                         @if (item.BirthDate != null)
@@ -110,11 +124,11 @@
                                             <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item btn btn-info mb-2"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
                                             @if (item.IsLocked)
                                             {
-                                                <a href="@Url.Action("EditIsLocked", new { id = item.Id, isLocked = false })" class="dropdown-item btn btn-success mb-2 btn-showloader"><i class="flaticon-home-fill-1 mr-1"></i>رفع مسدودی</a>
+                                                <a href="@Url.Action("EditIsLocked", new { id = item.Id, isLocked = false })" class="dropdown-item btn btn-success mb-2 btn-showloader" onclick="return confirm('آیا اطمینان دارید ؟');"><i class="flaticon-home-fill-1 mr-1"></i>رفع مسدودی</a>
                                             }
                                             else
                                             {
-                                                <a href="@Url.Action("EditIsLocked", new { id = item.Id, isLocked = true })" class="dropdown-item btn btn-danger mb-2 btn-showloader"><i class="flaticon-home-fill-1 mr-1"></i>مسدود کردن</a>
+                                                <a href="@Url.Action("EditIsLocked", new { id = item.Id, isLocked = true })" class="dropdown-item btn btn-danger mb-2 btn-showloader" onclick="return confirm('آیا اطمینان دارید ؟');"><i class="flaticon-home-fill-1 mr-1"></i>مسدود کردن</a>
                                             }
                                         </div>
                                     </div>

@@ -66,7 +66,7 @@
                         <tr>
                             <td>@item.Id</td>
                             @*<td>@item.LoanReceiverId</td>*@
-                            <td>@item.LoanReceiver.FirstName @item.LoanReceiver.LastName</td>
+                            <td>@item.LoanReceiver!.FirstName @item.LoanReceiver.LastName</td>
 
                             <td>@item.LoanAmount.ToString("N0") </td>
                             <td>
@@ -77,15 +77,22 @@
                                 @Html.ConvertPersianDateTime(item.RegisterDate)
                             </td>
                             <td>
-                                <i class="fa fa-@(((bool)item.IsDone) ? "check isVisible" : "times isHidden")"></i>
+                                @if (item.IsDone)
+                                {
+                                    <i class="fa fa-check" style="color: #8dbf42"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-times" style="color: #e7515a"></i>
+                                }
                             </td>
 
                             <td>
                                 <div class="btn-group" role="group">
                                     <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
                                     <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
-                                        <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
-                                        <a href="@Url.Action("Index", "CharityLoanInstallments", new { area="Loans", charityLoanId = item.Id })" class="dropdown-item" target="_blank"><i class="flaticon-home-fill-1 mr-1"></i> اقساط </a>
+                                        <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item btn btn-success mb-2"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
+                                        <a href="@Url.Action("Index", "CharityLoanInstallments", new { area="Loans", charityLoanId = item.Id })" class="dropdown-item btn btn-warning mb-2" target="_blank"><i class="flaticon-home-fill-1 mr-1"></i> اقساط </a>
                                         @*<a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>*@
                                     </div>
                                 </div>

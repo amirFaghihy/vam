@@ -116,7 +116,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 #endregion
 
 
-                Tuple<IQueryable<CharityLoanInstallments>, ResultStatusOperation> result = 
+                Tuple<IQueryable<CharityLoanInstallments>, ResultStatusOperation> result =
                     charityLoanInstallmentsService.SpecificationGetData(charityLoanId, installmentAmount,
                     _paymentDueFrom, _paymentDueTo, _paymentDate, paymentMethod,
                     _registerDateFrom, _registerDateTo, isdone);
@@ -283,6 +283,27 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), MessageTypeActionMethod.Index);
                 return RedirectToAction("ShowException", "Error");
             }
+        }
+
+        public async Task<IActionResult> PayInstallment(string paymentDateString, int loanInstallmentId, int loanId)
+        {
+
+            if (!string.IsNullOrEmpty(paymentDateString))
+            {
+                Tuple<CharityLoanInstallments, ResultStatusOperation> resultFindModel = await charityLoanInstallmentsService.Find(loanInstallmentId);
+
+                DateTime _paymentDate = paymentDateString.ToConvertPersianDateToDateTime(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
+                TimeSpan _paymentDateTime = TimeSpan.Zero;
+                resultFindModel.Item1.PaymentDate = _paymentDate.MergeDateAndTime(_paymentDateTime);
+
+                resultFindModel.Item1.IsDone = true;
+
+                Tuple<CharityLoanInstallments, ResultStatusOperation> resultEdit = await charityLoanInstallmentsService.Update(fillControllerInfo(), resultFindModel.Item1);
+
+
+            }
+
+            return RedirectToAction(nameof(Index), new { charityLoanId = loanId });
         }
 
         [HttpGet]

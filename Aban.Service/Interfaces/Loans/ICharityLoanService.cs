@@ -20,7 +20,8 @@ namespace Aban.Service.Interfaces
             byte? numberOfInstallments = null,
             DateTime? registerDateFrom = null,
             DateTime? registerDateTo = null,
-            bool? isdone = null);
+            bool? isdone = null,
+            List<string>? lstLoanReceiverId = null);
         List<SelectListItem> ReadAll(int selectedValue);
     }
 }
