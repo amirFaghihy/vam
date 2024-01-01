@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Aban.Domain.Enumerations;
 using static Aban.Domain.Enumerations.Enumeration;
+using System.Drawing.Printing;
 
 namespace Aban.Dashboard.Areas.Loans.Controllers
 {
@@ -43,7 +44,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             bool? isdone = null,
             int pageNumber = 1,
             int pageSize = 10,
-            string sortColumn = "Id",
+            string sortColumn = "PaymentDue",
             string lastColumn = "",
             bool isDesc = true)
         {
@@ -304,6 +305,34 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             }
 
             return RedirectToAction(nameof(Index), new { charityLoanId = loanId });
+        }
+
+        /// <summary>
+        /// موعد پرداخت قسط را به یکی بعد از آخرین قسط منتقل میکند
+        /// </summary>
+        /// <param name="loanInstallmentId"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> PostponingInstallment(int loanInstallmentId)
+        {
+            try
+            {
+                CharityLoanInstallments loanInstallment = charityLoanInstallmentsService.Find(loanInstallmentId).Result.Item1;
+
+                List<CharityLoanInstallments> listInstallments = charityLoanInstallmentsService.SpecificationGetData(
+                    charityLoanId: loanInstallment.CharityLoanId)
+                    .Item1.OrderByDescending(x => x.PaymentDue).ToList();
+
+                loanInstallment.PaymentDue = listInstallments.First().PaymentDue.AddMonths(1);
+
+                await charityLoanInstallmentsService.Update(fillControllerInfo(), loanInstallment);
+
+                return RedirectToAction(nameof(Index), new { charityLoanId = loanInstallment.CharityLoanId, pageSize = 100 });
+            }
+            catch (Exception exception)
+            {
+                SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), MessageTypeActionMethod.Index);
+                return RedirectToAction("ShowException", "Error");
+            }
         }
 
         [HttpGet]

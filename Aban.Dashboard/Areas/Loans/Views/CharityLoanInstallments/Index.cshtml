@@ -102,6 +102,10 @@
                                     <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
                                         <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item btn btn-success mb-2"><i class="flaticon-home-fill-1 mr-1"></i> ویرایش </a>
                                         <a data-itemid="@item.Id" data-loanid="@item.CharityLoanId" class="dropdown-item btn btn-warning mb-2" onclick="showModal(this);"><i class="flaticon-home-fill-1 mr-1"></i> پرداخت قسط </a>
+                                        @if (!item.IsDone)
+                                        {
+                                            <a href="@Url.Action("PostponingInstallment", new{ loanInstallmentId = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item btn mb-2" style="background-color: #5c1ac3;"><i class="flaticon-home-fill-1 mr-1"></i> تعویق قسط </a>
+                                        }
                                         @*<a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>*@
                                     </div>
                                 </div>

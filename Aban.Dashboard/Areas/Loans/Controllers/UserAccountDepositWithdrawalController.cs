@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Aban.Common;
+﻿using Aban.Common;
 using Aban.Common.Utility;
-using Aban.Domain;
 using Aban.Domain.Entities;
 using Aban.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Aban.Domain.Enumerations;
 using static Aban.Domain.Enumerations.Enumeration;
 
 namespace Aban.Dashboard.Areas.Loans.Controllers
