@@ -65,7 +65,7 @@
                             <td>@item.Id</td>
                             <td>@item.CharityLoan?.LoanReceiver?.FirstName @item.CharityLoan?.LoanReceiver?.LastName</td>
                             <td>@item.InstallmentAmount.ToString("N0")</td>
-                            <td style="@(item.PaymentDue<= DateTime.Today.AddDays(1) ? "background-color: #e7515a" : "" )">
+                            <td style="@(item.PaymentDue <= DateTime.Today.AddDays(1) && !item.IsDone ? "background-color: #e7515a" : "" )">
                                 @Html.ConvertToPersianDate(item.PaymentDue)
                             </td>
                             <td>

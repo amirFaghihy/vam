@@ -44,7 +44,19 @@
                     <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
                         <div class="form-group">
                             <label asp-for="AccountTransactionMethod"></label>
-                            <select asp-for="AccountTransactionMethod" asp-items="ViewBag.listAccountTransactionMethod" class="form-control">
+                            @{
+                                // دریافت viewbag از کنترلر
+                                var items = ViewBag.listAccountTransactionMethod as List<SelectListItem>;
+
+                                #pragma warning disable CS8604
+                                // پیدا کردن آیتم مورد نظر از لیست
+                                var itemToRemove = items.FirstOrDefault(x => x.Value == "6");
+
+                                // حذف آیتم مورد نظر از لیست
+                                items.Remove(itemToRemove);
+
+                            }
+                            <select asp-for="AccountTransactionMethod" asp-items="items" class="form-control">
                                 <option value="">انتخاب</option>
                             </select>
                             <span asp-validation-for="AccountTransactionMethod" class="text-danger"></span>
@@ -55,7 +67,7 @@
 
                     <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
                         <div class="form-group">
-                            <label for="TransactionDateTimeString"></label>
+                            <label for="TransactionDateTimeString">تاریخ واریز/برداشت</label>
                             @{
                                 var valueDate = (Model.TransactionDateTime != default ? Model.TransactionDateTime.ToConvertDateTimeToPersianDate() : DateTime.Now.ToConvertDateTimeToPersianDate());
                             }
@@ -66,7 +78,7 @@
 
                     <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
                         <div class="form-group">
-                            <label for="TransactionTimeString">ساعت واریزی</label>
+                            <label for="TransactionTimeString">ساعت واریز/برداشت</label>
                             @{
                                 var valueTime = (Model.TransactionDateTime != default ? Model.TransactionDateTime.ToString("HH:mm") : "00:00");
                             }

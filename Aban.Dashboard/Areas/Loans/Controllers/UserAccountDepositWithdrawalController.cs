@@ -2,6 +2,7 @@
 using Aban.Common.Utility;
 using Aban.Domain.Entities;
 using Aban.Service.Interfaces;
+using Aban.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static Aban.Domain.Enumerations.Enumeration;
@@ -16,16 +17,25 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
 
         private readonly IUserAccountDepositWithdrawalService userAccountDepositWithdrawalService;
         private readonly IUserAccountService userAccountService;
+        private readonly ICharityLoanInstallmentsService charityLoanInstallmentsService;
+        ICharityLoanService charityLoanService;
+        private readonly IUserIdentityService userIdentityService;
 
 
         public UserAccountDepositWithdrawalController(
             IUserAccountDepositWithdrawalService userAccountDepositWithdrawalService,
-            IUserAccountService userAccountService
+            IUserAccountService userAccountService,
+            ICharityLoanInstallmentsService charityLoanInstallmentsService,
+            ICharityLoanService charityLoanService,
+            IUserIdentityService userIdentityService
             )
         {
 
             this.userAccountDepositWithdrawalService = userAccountDepositWithdrawalService;
             this.userAccountService = userAccountService;
+            this.charityLoanInstallmentsService = charityLoanInstallmentsService;
+            this.charityLoanService = charityLoanService;
+            this.userIdentityService = userIdentityService;
         }
 
         #endregion
@@ -88,7 +98,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 FillDropDown(accountTransactionType, accountTransactionMethod, userAccountId);
                 #endregion
 
-                Tuple<IQueryable<UserAccountDepositWithdrawal>, ResultStatusOperation> result = 
+                Tuple<IQueryable<UserAccountDepositWithdrawal>, ResultStatusOperation> result =
                     userAccountDepositWithdrawalService.SpecificationGetData(userAccountId, price, totalPriceAfterTransaction, accountTransactionType, accountTransactionMethod, transactionDateTimeFrom, transactionDateTimeTo, registerDateFrom, registerDateTo);
 
                 return View(userAccountDepositWithdrawalService.Pagination(result.Item1, true, pageNumber, pageSize, isDesc, sortColumn));
@@ -128,6 +138,8 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         {
             try
             {
+                bool isPayInstallment = false;
+
                 #region DateTime Convertor
 
                 DateTime _transactionDateTime = transactionDateTimeString.ToConvertPersianDateToDateTime(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
@@ -135,7 +147,6 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 model.TransactionDateTime = _transactionDateTime.MergeDateAndTime(_transactionDateTimeTime);
 
                 #endregion
-
 
                 double latestTotalPrice = userAccountDepositWithdrawalService.GetLatestTotalPriceAfterTransaction(model.UserAccountId);
                 if (model.UserAccountId != 0)
@@ -149,6 +160,8 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                             model.TotalPriceAfterTransaction = latestTotalPrice - model.Price;
                             break;
                         case TransactionType.پرداخت_قسط:
+                            isPayInstallment = true;
+                            model.TotalPriceAfterTransaction = latestTotalPrice + model.Price;
                             break;
                         default:
                             FillDropDown();
@@ -163,11 +176,15 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
 
                 Tuple<UserAccountDepositWithdrawal, ResultStatusOperation> resultFillModel = userAccountDepositWithdrawalService.FillModel(model);
                 resultFillModel = await userAccountDepositWithdrawalService.Insert(fillControllerInfo(), resultFillModel.Item1);
+                SetMessage(resultFillModel.Item2);
                 switch (resultFillModel.Item2.Type)
                 {
                     case MessageTypeResult.Success:
                         {
-                            SetMessage(resultFillModel.Item2);
+                            if (isPayInstallment)
+                            {
+                                PayInstallment(resultFillModel.Item1);
+                            }
                             return RedirectToAction(nameof(Index));
                         }
                     case MessageTypeResult.Danger:
@@ -178,7 +195,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                     case MessageTypeResult.Warning:
                         {
                             FillDropDown();
-                            SetMessage(resultFillModel.Item2);
+
                             return View(resultFillModel.Item1);
                         }
                 }
@@ -193,6 +210,51 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             }
         }
 
+        private async Task PayInstallment(UserAccountDepositWithdrawal model)
+        {
+            string userReciverId = userAccountService.Find(model.UserAccountId).Result.Item1.AccountOwnerId;
+            CharityLoan? charityLoan = charityLoanService.SpecificationGetData(loanReceiverId: userReciverId).Item1.FirstOrDefault();
+
+            if (charityLoan != null)
+            {
+
+                List<CharityLoanInstallments> charityLoanInstallments =
+                    charityLoanInstallmentsService.SpecificationGetData(charityLoanId: charityLoan.Id, isdone: false)
+                    .Item1.OrderBy(x => x.PaymentDue).ToList();
+
+                int countOfInstallments = (int)(model.TotalPriceAfterTransaction / charityLoanInstallments.First().InstallmentAmount);
+
+                for (int i = 0; i < countOfInstallments; i++)
+                {
+                    Tuple<CharityLoanInstallments, ResultStatusOperation> resultFindModel = await charityLoanInstallmentsService.Find(charityLoanInstallments[i].Id);
+
+                    resultFindModel.Item1.PaymentDate = DateTime.Now;
+                    resultFindModel.Item1.IsDone = true;
+
+                    UserAccountDepositWithdrawal newModel = new UserAccountDepositWithdrawal()
+                    {
+                        UserAccountId = model.UserAccountId,
+                        Price = resultFindModel.Item1.InstallmentAmount,
+                        AccountTransactionType = TransactionType.برداشت,
+                        AccountTransactionMethod = TransactionMethod.برداشت_سیستمی,
+                        TotalPriceAfterTransaction = userAccountDepositWithdrawalService.GetLatestTotalPriceAfterTransaction(model.UserAccountId) - resultFindModel.Item1.InstallmentAmount,
+                        Description = "پرداخت قسط سیستمی"
+                    };
+
+
+                    await charityLoanInstallmentsService.Update(fillControllerInfo(), resultFindModel.Item1, false);
+
+                    Tuple<UserAccountDepositWithdrawal, ResultStatusOperation> resultFillModel = userAccountDepositWithdrawalService.FillModel(newModel);
+                    await userAccountDepositWithdrawalService.Insert(fillControllerInfo(), resultFillModel.Item1);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Not working
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -234,6 +296,13 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             }
         }
 
+        /// <summary>
+        /// Not working
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="transactionDateTimeString"></param>
+        /// <param name="transactionTimeString"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
@@ -358,6 +427,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                         totalPriceAfterTransaction -= price;
                         break;
                     case TransactionType.پرداخت_قسط:
+                        totalPriceAfterTransaction += price;
                         break;
                     default:
                         break;
