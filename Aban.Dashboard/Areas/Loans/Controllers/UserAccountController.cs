@@ -328,24 +328,32 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
 
             foreach (var item in depositWithdrawal.OrderByDescending(x => x.RegisterDate).GroupBy(x => x.UserAccountId))
             {
-
-                CharityLoan? charityLoan = listCharityLoans.Where(x => x.LoanReceiverId == item.FirstOrDefault()!.UserAccount!.AccountOwnerId).FirstOrDefault();
-
-                if (charityLoan != null)
+                if (listCharityLoans.Where(x => x.LoanReceiverId == item.FirstOrDefault()!.UserAccount!.AccountOwnerId).Count() != 0)
                 {
-                    // مبلغ وام + سود وام
-                    double loanAmount = ((charityLoan.LoanAmount * charityLoan.PercentSalary) / 100) + charityLoan.LoanAmount;
 
-                    // جمع اقساط پرداخت شده وام
-                    double loanInstallmentsAmount = listCharityLoanInstallments.Where(
-                        x => x.CharityLoanId == charityLoan.Id
-                        ).Select(x => x.InstallmentAmount).ToList().Sum();
+                    double singleTotalPrice = 0;
+                    foreach (var charityLoan in listCharityLoans.Where(x => x.LoanReceiverId == item.FirstOrDefault()!.UserAccount!.AccountOwnerId))
+                    {
+                        if (charityLoan != null)
+                        {
+                            // مبلغ وام + سود وام
+                            double loanAmount = ((charityLoan.LoanAmount * charityLoan.PercentSalary) / 100) + charityLoan.LoanAmount;
 
+                            // جمع اقساط پرداخت شده وام
+                            double loanInstallmentsAmount = listCharityLoanInstallments.Where(
+                                x => x.CharityLoanId == charityLoan.Id
+                                ).Select(x => x.InstallmentAmount).ToList().Sum();
+
+
+                            singleTotalPrice += (loanAmount - loanInstallmentsAmount);
+
+                        }
+                    }
                     // باقیمانده حساب منهای وام بعلاوه اقساط پرداخت شده
                     latestDepositWithdrawal.Add(new LatestDepositWithdrawal()
                     {
                         UserAccountId = item.FirstOrDefault()!.UserAccountId,
-                        TotalPriceAfterTransaction = (item.FirstOrDefault()!.TotalPriceAfterTransaction - loanAmount + loanInstallmentsAmount)
+                        TotalPriceAfterTransaction = item.FirstOrDefault()!.TotalPriceAfterTransaction - singleTotalPrice
                     });
                 }
                 else
