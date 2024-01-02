@@ -183,7 +183,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                         {
                             if (isPayInstallment)
                             {
-                                PayInstallment(resultFillModel.Item1);
+                                await PayInstallment(resultFillModel.Item1);
                             }
                             return RedirectToAction(nameof(Index));
                         }
@@ -238,6 +238,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                         AccountTransactionType = TransactionType.برداشت,
                         AccountTransactionMethod = TransactionMethod.برداشت_سیستمی,
                         TotalPriceAfterTransaction = userAccountDepositWithdrawalService.GetLatestTotalPriceAfterTransaction(model.UserAccountId) - resultFindModel.Item1.InstallmentAmount,
+                        TransactionDateTime = DateTime.Now,
                         Description = "پرداخت قسط سیستمی"
                     };
 
