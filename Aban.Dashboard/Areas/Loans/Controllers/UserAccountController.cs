@@ -46,7 +46,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             string accountOwnerId = "",
             BankName? bankName = null,
             string title = "",
-            string? accountNumber = null,
+            double? accountNumber = null,
             DateTime? registerDateFrom = null,
             DateTime? registerDateTo = null,
             int pageNumber = 1,
@@ -389,7 +389,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         {
             bool isSuccess = false;
             UserAccount? userAccount =
-                userAccountService.GetAll().OrderByDescending(x => x.Id).FirstOrDefault();
+                userAccountService.GetAll().OrderByDescending(x => x.AccountNumber).FirstOrDefault();
 
             if (userAccount != null)
             {

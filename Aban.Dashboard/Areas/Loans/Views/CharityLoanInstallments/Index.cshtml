@@ -72,7 +72,7 @@
                                 @if (item.PaymentDate != null)
                                 {
                                     <span>
-                                        @Html.ConvertToPersianDate(item.PaymentDate.Value)
+                                        @Html.ConvertToPersianDateTime(item.PaymentDate.Value)
                                     </span>
                                 }
                                 else
@@ -101,9 +101,9 @@
                                     <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
                                     <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
                                         <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item btn btn-success mb-2"><i class="flaticon-home-fill-1 mr-1"></i> ویرایش </a>
-                                        <a data-itemid="@item.Id" data-loanid="@item.CharityLoanId" class="dropdown-item btn btn-warning mb-2" onclick="showModal(this);"><i class="flaticon-home-fill-1 mr-1"></i> پرداخت قسط </a>
                                         @if (!item.IsDone)
                                         {
+                                            <a data-itemid="@item.Id" data-loanid="@item.CharityLoanId" class="dropdown-item btn btn-warning mb-2" onclick="showModal(this);"><i class="flaticon-home-fill-1 mr-1"></i> پرداخت قسط </a>
                                             <a href="@Url.Action("PostponingInstallment", new{ loanInstallmentId = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item btn mb-2" style="background-color: #5c1ac3;"><i class="flaticon-home-fill-1 mr-1"></i> تعویق قسط </a>
                                         }
                                         @*<a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>*@
@@ -145,14 +145,24 @@
             </div>
             <div class="modal-body">
                 <p class="modal-text">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <form id="payinstallmentform" asp-action="PayInstallment" class="needs-validation" novalidate>
-                            <div class="form-group">
-                                <lable for="paymentDateString"> تاریخ پرداخت </lable>
-                                <input id="paymentDateString" name="paymentDateString" class="form-control mb-4 PersianDatePicker" type="text" autocomplete="off" />
-                                <input type="hidden" id="loanInstallmentId" name="loanInstallmentId" value="" />
-                                <input type="hidden" id="loanId" name="loanId" value="" />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <lable for="paymentDateString"> تاریخ پرداخت </lable>
+                                        <input id="paymentDateString" name="paymentDateString" class="form-control mb-4 PersianDatePicker" type="text" autocomplete="off" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <lable for="paymentDateString"> ساعت پرداخت </lable>
+                                        <input id="paymentDateStringTimeString" name="paymentDateStringTimeString" class="form-control mb-4 clockPicker" type="text" autocomplete="off" value="00:00" />
+                                    </div>
+                                </div>
                             </div>
+                            <input type="hidden" id="loanInstallmentId" name="loanInstallmentId" value="" />
+                            <input type="hidden" id="loanId" name="loanId" value="" />
                         </form>
                     </div>
                 </p>
@@ -168,6 +178,13 @@
 @section Styles {
     <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+
+    <style>
+        .flatpickr-calendar.open {
+            z-index: 2000;
+            left: 500px !important;
+        }
+    </style>
 }
 
 @section Scripts {

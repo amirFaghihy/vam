@@ -24,7 +24,7 @@
 
             @await Html.PartialAsync("~/Views/Shared/Generic/_CreateButtonWithPageSize.cshtml", "حساب جدید")
             <div class="table-responsive text-center">
-                <table class="table table-bordered table-hover mb-4">
+                <table class="table table-bordered table-hover mb-4" style="min-height: 300px;">
                     <thead>
                         <tr>
 
@@ -53,7 +53,7 @@
                                 <span id="totalPriceAfterTransaction-@(item.Id)" data-id="@(item.Id)" class="total-price-after-transaction"></span>
                             </td>
                             <td>
-                                @Html.ConvertPersianDateTime(item.RegisterDate)
+                                @Html.ConvertToPersianDateTime(item.RegisterDate)
                             </td>
 
                             <td>
@@ -63,6 +63,7 @@
                                         <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item btn btn-info mb-2"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
                                         <a href="@Url.Action("Create", "UserAccountDepositWithdrawal", new {area="Loans", userAccountId = item.Id, accountTransactionType=TransactionType.واریز })" class="dropdown-item btn btn-success mb-2" target="_blank"><i class="flaticon-home-fill-1 mr-1"></i>واریز</a>
                                         <a href="@Url.Action("Create", "UserAccountDepositWithdrawal", new {area="Loans", userAccountId = item.Id, accountTransactionType=TransactionType.برداشت })" class="dropdown-item btn btn-danger mb-2" target="_blank"><i class="flaticon-home-fill-1 mr-1"></i>برداشت</a>
+                                        <a href="@Url.Action("Index", "UserAccountDepositWithdrawal", new {area="Loans", UserAccountId = item.Id })" class="dropdown-item btn btn-secondary  mb-2" target="_blank"><i class="flaticon-home-fill-1 mr-1"></i>واریز/برداشتها</a>
                                         <a href="@Url.Action("Index", "CharityLoan", new {area="Loans", loanReceiverId = item.AccountOwnerId })" class="dropdown-item btn btn-warning mb-2" target="_blank"><i class="flaticon-home-fill-1 mr-1"></i>وام ها</a>
                                         @*<a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>*@
                                     </div>

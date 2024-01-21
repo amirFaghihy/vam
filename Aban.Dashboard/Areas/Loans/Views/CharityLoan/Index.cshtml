@@ -72,11 +72,11 @@
                             <td>@item.LoanAmount.ToString("N0") </td>
                             <td>@item.PercentSalary % </td>
                             <td>
-                                @Html.ConvertPersianDateTime(item.PaymentStartDate)
+                                @Html.ConvertToPersianDate(item.PaymentStartDate)
                             </td>
                             <td>@item.NumberOfInstallments </td>
                             <td>
-                                @Html.ConvertPersianDateTime(item.RegisterDate)
+                                @Html.ConvertToPersianDateTime(item.RegisterDate)
                             </td>
                             <td>
                                 @if (item.IsDone)

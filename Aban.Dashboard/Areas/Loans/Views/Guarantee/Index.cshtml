@@ -67,7 +67,7 @@
                     {
                         <tr>
                             <td>@item.Id</td>
-                            <td>@item.GuaranteeUser.FirstName @item.GuaranteeUser.LastName</td>
+                            <td>@item.GuaranteeUser!.FirstName @item.GuaranteeUser.LastName</td>
                             <td>@item.ChequeNumber </td>
                             <td>@item.BankName </td>
                             <td>@item.ChequePrice </td>
@@ -76,7 +76,7 @@
                             <td>@item.GoldGuarantee </td>
                             <td>@item.PaySlip </td>
                             <td>
-                                @Html.ConvertPersianDateTime(item.RegisterDate)
+                                @Html.ConvertToPersianDateTime(item.RegisterDate)
                             </td>
 
                             <td>

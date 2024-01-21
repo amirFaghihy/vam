@@ -183,9 +183,10 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                         {
                             if (isPayInstallment)
                             {
-                                await PayInstallment(resultFillModel.Item1);
+                                int loanId = await PayInstallment(resultFillModel.Item1);
+                                charityLoanService.ChangeLoanStatus(loanId);
                             }
-                            return RedirectToAction(nameof(Index));
+                            return RedirectToAction(nameof(Index), new { userAccountId = model.UserAccountId });
                         }
                     case MessageTypeResult.Danger:
                         {
@@ -210,7 +211,12 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             }
         }
 
-        private async Task PayInstallment(UserAccountDepositWithdrawal model)
+        /// <summary>
+        /// پرداخت قسط
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        private async Task<int> PayInstallment(UserAccountDepositWithdrawal model)
         {
             string userReciverId = userAccountService.Find(model.UserAccountId).Result.Item1.AccountOwnerId;
             CharityLoan? charityLoan = charityLoanService.SpecificationGetData(loanReceiverId: userReciverId).Item1.FirstOrDefault();
@@ -248,7 +254,11 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                     Tuple<UserAccountDepositWithdrawal, ResultStatusOperation> resultFillModel = userAccountDepositWithdrawalService.FillModel(newModel);
                     await userAccountDepositWithdrawalService.Insert(fillControllerInfo(), resultFillModel.Item1);
                 }
+
+                return charityLoan.Id;
             }
+
+            return 0;
         }
 
         /// <summary>

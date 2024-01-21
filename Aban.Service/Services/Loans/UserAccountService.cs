@@ -23,7 +23,7 @@ namespace Aban.Service.Services
             string accountOwnerId = "",
             BankName? bankName = null,
             string title = "",
-            string? accountNumber = null,
+            double? accountNumber = null,
             DateTime? registerDateFrom = null,
             DateTime? registerDateTo = null)
         {

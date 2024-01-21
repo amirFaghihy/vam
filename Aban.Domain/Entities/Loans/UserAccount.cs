@@ -15,7 +15,7 @@ namespace Aban.Domain.Entities
         /// صاحب حساب
         /// </summary>
         [Display(Name = "صاحب حساب")]
-        [Required(ErrorMessage ="{0} را انتخاب کنید")]
+        [Required(ErrorMessage = "{0} را انتخاب کنید")]
 #pragma warning disable CS8618
         public string AccountOwnerId { get; set; }
 
@@ -31,22 +31,24 @@ namespace Aban.Domain.Entities
         /// <summary>
         /// نام بانک
         /// </summary>
-        [Display(Name ="نام بانک")]
-        [Required(ErrorMessage ="{0} را انتخاب کنید")]
+        [Display(Name = "نام بانک")]
+        [Required(ErrorMessage = "{0} را انتخاب کنید")]
         public BankName BankName { get; set; }
 
         /// <summary>
         /// عنوان حساب
         /// </summary>
         [Display(Name = "عنوان حساب")]
-        [Required(ErrorMessage ="{0} را وارد کنید")]
+        [Required(ErrorMessage = "{0} را وارد کنید")]
         public string Title { get; set; }
 
         /// <summary>
         /// شماره حساب
         /// </summary>
         [Display(Name = "شماره حساب")]
-        public string? AccountNumber { get; set; }
+        [Required(ErrorMessage = "{0} را وارد کنید")]
+        [RegularExpression(@"^\d+$", ErrorMessage = "{0} فقط میتواند عدد باشد.")]
+        public double AccountNumber { get; set; }
 
         /// <summary>
         /// توضیحات

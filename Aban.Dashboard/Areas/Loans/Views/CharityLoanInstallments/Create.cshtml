@@ -46,5 +46,18 @@
         $("#CharityLoanId").select2({
             tags: true,
         }).data('select2').$dropdown.addClass('class23');
+
+        $(function () {
+
+            $('.submit-form').click(function () {
+                if ($('#mainform').valid()) {
+                    var userConfirmed = window.confirm('آیا اطمینان دارید؟');
+                    if (userConfirmed) {
+                        $('#form_loader').modal('show');
+                        $('#mainform').submit();
+                    }
+                }
+            });
+        });
     </script>
 }

@@ -38,11 +38,11 @@
     </div>
 </div>
 
-@section Styles{
+@section Styles {
     <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
 }
 
-    @section Scripts{
+@section Scripts {
     <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
     <script src="~/plugins/select2/select2.min.js"></script>
 
@@ -87,8 +87,7 @@
 
         $(function () {
 
-            
-            getFillDropDown();
+            //getFillDropDown();
             select2dropdowns();
 
             $.ajax(
@@ -111,6 +110,15 @@
                 }
             );
 
+            $('.submit-form').click(function () {
+                if ($('#mainform').valid()) {
+                    var userConfirmed = window.confirm('آیا اطمینان دارید؟');
+                    if (userConfirmed) {
+                        $('#form_loader').modal('show');
+                        $('#mainform').submit();
+                    }
+                }
+            });
         });
 
     </script>

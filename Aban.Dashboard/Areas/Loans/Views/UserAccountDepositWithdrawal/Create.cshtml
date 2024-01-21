@@ -122,7 +122,16 @@
 
                 setDepositWithdrawal(_userAccountId, _price, _accountTransactionType);
             });
-
+            
+            $('.submit-form').click(function () {
+                if ($('#mainform').valid()) {
+                    var userConfirmed = window.confirm('آیا اطمینان دارید؟');
+                    if (userConfirmed) {
+                        $('#form_loader').modal('show');
+                        $('#mainform').submit();
+                    }
+                }
+            });
         });
 
     </script>

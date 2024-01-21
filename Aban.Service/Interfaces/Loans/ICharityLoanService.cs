@@ -7,6 +7,7 @@ namespace Aban.Service.Interfaces
 {
     public interface ICharityLoanService : IGenericService<CharityLoan>
     {
+        void ChangeLoanStatus(int charityLoanId);
         Tuple<CharityLoan, ResultStatusOperation> FillModel(CharityLoan charityLoan);
         Tuple<IQueryable<CharityLoan>, ResultStatusOperation> SpecificationGetData(
             int? guaranteeId = null,

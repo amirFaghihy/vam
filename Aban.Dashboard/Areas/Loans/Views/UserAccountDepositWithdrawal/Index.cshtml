@@ -27,13 +27,13 @@
                     <thead>
                         <tr>
 
-                            <th style="width: 162px;">@Html.ActionLink("کد", "Index", "UserAccountDepositWithdrawal", new {userAccountId = ViewBag.userAccountId , price = ViewBag.price , totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction , accountTransactionType = ViewBag.accountTransactionType , transactionDateTime = ViewBag.transactionDateTime , registerDate = ViewBag.registerDate ,  sortColumn = "Id", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Id" })</th>
-                            <th style="width: 162px;">@Html.ActionLink("حساب", "Index", "UserAccountDepositWithdrawal", new {userAccountId = ViewBag.userAccountId , price = ViewBag.price , totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction , accountTransactionType = ViewBag.accountTransactionType , transactionDateTime = ViewBag.transactionDateTime , registerDate = ViewBag.registerDate ,  sortColumn = "UserAccountId", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "UserAccountId" })</th>
-                            <th style="width: 162px;">@Html.ActionLink("مبلغ واریز/برداشت", "Index", "UserAccountDepositWithdrawal", new {userAccountId = ViewBag.userAccountId , price = ViewBag.price , totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction , accountTransactionType = ViewBag.accountTransactionType , transactionDateTime = ViewBag.transactionDateTime , registerDate = ViewBag.registerDate ,  sortColumn = "Price", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Price" })</th>
-                            <th style="width: 162px;">@Html.ActionLink("مانده بعد از تراکنش", "Index", "UserAccountDepositWithdrawal", new {userAccountId = ViewBag.userAccountId , price = ViewBag.price , totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction , accountTransactionType = ViewBag.accountTransactionType , transactionDateTime = ViewBag.transactionDateTime , registerDate = ViewBag.registerDate ,  sortColumn = "TotalPriceAfterTransaction", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "TotalPriceAfterTransaction" })</th>
-                            <th style="width: 162px;">@Html.ActionLink("واریز/برداشت", "Index", "UserAccountDepositWithdrawal", new {userAccountId = ViewBag.userAccountId , price = ViewBag.price , totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction , accountTransactionType = ViewBag.accountTransactionType , transactionDateTime = ViewBag.transactionDateTime , registerDate = ViewBag.registerDate ,  sortColumn = "AccountTransactionType", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "AccountTransactionType" })</th>
-                            <th style="width: 162px;">@Html.ActionLink("تاریخ تراکنش", "Index", "UserAccountDepositWithdrawal", new {userAccountId = ViewBag.userAccountId , price = ViewBag.price , totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction , accountTransactionType = ViewBag.accountTransactionType , transactionDateTime = ViewBag.transactionDateTime , registerDate = ViewBag.registerDate ,  sortColumn = "TransactionDateTime", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "TransactionDateTime" })</th>
-                            <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "UserAccountDepositWithdrawal", new {userAccountId = ViewBag.userAccountId , price = ViewBag.price , totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction , accountTransactionType = ViewBag.accountTransactionType , transactionDateTime = ViewBag.transactionDateTime , registerDate = ViewBag.registerDate ,  sortColumn = "RegisterDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "RegisterDate" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("کد", "Index", "UserAccountDepositWithdrawal", new { userAccountId = ViewBag.userAccountId, price = ViewBag.price, totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction, accountTransactionType = ViewBag.accountTransactionType, transactionDateTime = ViewBag.transactionDateTime, registerDate = ViewBag.registerDate, sortColumn = "Id", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Id" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("حساب", "Index", "UserAccountDepositWithdrawal", new { userAccountId = ViewBag.userAccountId, price = ViewBag.price, totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction, accountTransactionType = ViewBag.accountTransactionType, transactionDateTime = ViewBag.transactionDateTime, registerDate = ViewBag.registerDate, sortColumn = "UserAccountId", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "UserAccountId" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("مبلغ واریز/برداشت", "Index", "UserAccountDepositWithdrawal", new { userAccountId = ViewBag.userAccountId, price = ViewBag.price, totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction, accountTransactionType = ViewBag.accountTransactionType, transactionDateTime = ViewBag.transactionDateTime, registerDate = ViewBag.registerDate, sortColumn = "Price", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Price" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("مانده بعد از تراکنش", "Index", "UserAccountDepositWithdrawal", new { userAccountId = ViewBag.userAccountId, price = ViewBag.price, totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction, accountTransactionType = ViewBag.accountTransactionType, transactionDateTime = ViewBag.transactionDateTime, registerDate = ViewBag.registerDate, sortColumn = "TotalPriceAfterTransaction", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "TotalPriceAfterTransaction" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("واریز/برداشت", "Index", "UserAccountDepositWithdrawal", new { userAccountId = ViewBag.userAccountId, price = ViewBag.price, totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction, accountTransactionType = ViewBag.accountTransactionType, transactionDateTime = ViewBag.transactionDateTime, registerDate = ViewBag.registerDate, sortColumn = "AccountTransactionType", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "AccountTransactionType" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تاریخ تراکنش", "Index", "UserAccountDepositWithdrawal", new { userAccountId = ViewBag.userAccountId, price = ViewBag.price, totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction, accountTransactionType = ViewBag.accountTransactionType, transactionDateTime = ViewBag.transactionDateTime, registerDate = ViewBag.registerDate, sortColumn = "TransactionDateTime", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "TransactionDateTime" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "UserAccountDepositWithdrawal", new { userAccountId = ViewBag.userAccountId, price = ViewBag.price, totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction, accountTransactionType = ViewBag.accountTransactionType, transactionDateTime = ViewBag.transactionDateTime, registerDate = ViewBag.registerDate, sortColumn = "RegisterDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "RegisterDate" })</th>
 
                             @*<th style="width: 162px;">عملیات</th>*@
                         </tr>
@@ -42,15 +42,17 @@
                     {
                         <tr>
                             <td>@item.Id</td>
-                            <td>@item.UserAccount!.AccountOwner!.FirstName @item.UserAccount.AccountOwner.LastName @(string.IsNullOrEmpty(item.UserAccount.AccountOwner.FatherName) ? "" : ( "| " + item.UserAccount.AccountOwner.FatherName)) </td>
+                            <td>@item.UserAccount!.AccountOwner!.FirstName @item.UserAccount.AccountOwner.LastName @(string.IsNullOrEmpty(item.UserAccount.AccountOwner.FatherName) ? "" : ("| " + item.UserAccount.AccountOwner.FatherName)) </td>
                             <td>@item.Price.ToString("N0")</td>
                             <td>@item.TotalPriceAfterTransaction.ToString("N0")</td>
-                            <td>@item.AccountTransactionType </td>
-                            <td>
-                                @Html.ConvertPersianDateTime(item.TransactionDateTime)
+                            <td style="background-color: @(item.AccountTransactionType == Aban.Domain.Enumerations.Enumeration.TransactionType.واریز ? "#8dbf42;" : item.AccountTransactionType == Aban.Domain.Enumerations.Enumeration.TransactionType.پرداخت_قسط ? "#e2a03f;" :  "#e7515a;")">
+                                @item.AccountTransactionType
                             </td>
                             <td>
-                                @Html.ConvertPersianDateTime(item.RegisterDate)
+                                @Html.ConvertToPersianDateTime(item.TransactionDateTime)
+                            </td>
+                            <td>
+                                @Html.ConvertToPersianDateTime(item.RegisterDate)
                             </td>
 
                             @*<td>
@@ -85,11 +87,11 @@
     </div>
 </div>
 
-@section Styles{
+@section Styles {
     <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
 }
 
-    @section Scripts{
+@section Scripts {
     <script src="~/plugins/select2/select2.min.js"></script>
 
     <script>
@@ -107,4 +109,4 @@
             tags: true,
         }).data('select2').$dropdown.addClass('class58');
     </script>
-    }
+}

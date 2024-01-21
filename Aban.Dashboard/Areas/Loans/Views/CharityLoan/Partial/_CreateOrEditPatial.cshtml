@@ -6,7 +6,12 @@
                 <div class="row">
 
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("right")" />
+                        <div class="col-md-12" style="float: right !important; margin-bottom: 15px;">
+                            <div class="text-right">
+                                <a style="cursor:pointer" class="btn btn-success mb-2 pr-5 pl-5 submit-form">ذخیره</a>
+                                <a class="btn btn-danger mb-2 btn-showloader" href="/Loans/CharityLoan/Index">انصراف</a>
+                            </div>
+                        </div>
                         <br />
                         <br />
                     </div>
@@ -115,4 +120,10 @@
         </div>
     </div>
 </div>
-<partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("left")" />
+
+<div class="col-md-12" style="float: left !important; margin-bottom: 15px;">
+    <div class="text-left">
+        <a style="cursor:pointer" class="btn btn-success mb-2 pr-5 pl-5 submit-form">ذخیره</a>
+        <a class="btn btn-danger mb-2 btn-showloader" href="/Loans/CharityLoan/Index">انصراف</a>
+    </div>
+</div>

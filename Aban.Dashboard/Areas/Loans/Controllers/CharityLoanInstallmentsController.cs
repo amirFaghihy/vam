@@ -152,7 +152,8 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         public async Task<IActionResult> Create(
             CharityLoanInstallments model,
             string paymentDateString,
-            string paymentDueString)
+            string paymentDueString,
+            string paymentDateStringTimeString)
         {
             try
             {
@@ -161,7 +162,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 if (!paymentDateString.IsNullOrEmpty())
                 {
                     DateTime _paymentDate = paymentDateString.ToConvertPersianDateToDateTime(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
-                    TimeSpan _paymentDateTime = TimeSpan.Zero;
+                    TimeSpan _paymentDateTime = paymentDateStringTimeString.ToConvertStringToTime();
                     model.PaymentDate = _paymentDate.MergeDateAndTime(_paymentDateTime);
                 }
 
@@ -238,7 +239,8 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         public async Task<IActionResult> Edit(
             CharityLoanInstallments model,
             string paymentDateString,
-            string paymentDueString)
+            string paymentDueString,
+            string paymentDateStringTimeString)
         {
             try
             {
@@ -248,7 +250,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 if (!paymentDateString.IsNullOrEmpty())
                 {
                     DateTime _paymentDate = paymentDateString.ToConvertPersianDateToDateTime(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
-                    TimeSpan _paymentDateTime = TimeSpan.Zero;
+                    TimeSpan _paymentDateTime = paymentDateStringTimeString.ToConvertStringToTime();
                     model.PaymentDate = _paymentDate.MergeDateAndTime(_paymentDateTime);
                 }
 
@@ -265,6 +267,8 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 switch (resultEdit.Item2.Type)
                 {
                     case MessageTypeResult.Success:
+                        charityLoanService.ChangeLoanStatus(resultEdit.Item1.CharityLoanId);
+
                         return RedirectToAction(nameof(Index));
 
                     case MessageTypeResult.Danger:
@@ -286,7 +290,11 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             }
         }
 
-        public async Task<IActionResult> PayInstallment(string paymentDateString, int loanInstallmentId, int loanId)
+        public async Task<IActionResult> PayInstallment(
+            string paymentDateString,
+            string paymentDateStringTimeString,
+            int loanInstallmentId,
+            int loanId)
         {
 
             if (!string.IsNullOrEmpty(paymentDateString))
@@ -294,14 +302,14 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 Tuple<CharityLoanInstallments, ResultStatusOperation> resultFindModel = await charityLoanInstallmentsService.Find(loanInstallmentId);
 
                 DateTime _paymentDate = paymentDateString.ToConvertPersianDateToDateTime(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
-                TimeSpan _paymentDateTime = TimeSpan.Zero;
+                TimeSpan _paymentDateTime = paymentDateStringTimeString.ToConvertStringToTime();
                 resultFindModel.Item1.PaymentDate = _paymentDate.MergeDateAndTime(_paymentDateTime);
 
                 resultFindModel.Item1.IsDone = true;
 
                 Tuple<CharityLoanInstallments, ResultStatusOperation> resultEdit = await charityLoanInstallmentsService.Update(fillControllerInfo(), resultFindModel.Item1);
 
-
+                charityLoanService.ChangeLoanStatus(loanId);
             }
 
             return RedirectToAction(nameof(Index), new { charityLoanId = loanId });

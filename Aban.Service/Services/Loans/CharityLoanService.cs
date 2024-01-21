@@ -13,10 +13,12 @@ namespace Aban.Service.Services
     public class CharityLoanService : GenericService<CharityLoan>, ICharityLoanService
     {
         private readonly ICharityLoanRepository charityLoanRepository;
+        private readonly ICharityLoanInstallmentsRepository charityLoanInstallmentsRepository;
 
         public CharityLoanService(AppDbContext _dbContext) : base(_dbContext)
         {
             charityLoanRepository = new DataLayer.Repositories.CharityLoanRepository(_dbContext);
+            charityLoanInstallmentsRepository = new DataLayer.Repositories.CharityLoanInstallmentsRepository(_dbContext);
         }
 
 
@@ -103,6 +105,24 @@ namespace Aban.Service.Services
                 resultStatusOperation.Type = MessageTypeResult.Danger;
                 resultStatusOperation.ErrorException = exception;
                 throw new Exception("", exception);
+            }
+        }
+
+        /// <summary>
+        /// بر اساس آی دی وام، اگر تمام اقساطش پرداخت شده باشه، وام را هم پرداخت شده میکند
+        /// </summary>
+        /// <param name="charityLoanId"></param>
+        /// <returns></returns>
+        public void ChangeLoanStatus(int charityLoanId)
+        {
+            List<CharityLoanInstallments> charityLoanInstallments = charityLoanInstallmentsRepository.GetAll()
+            .Where(x => !x.IsDelete && !x.IsDone && x.CharityLoanId == charityLoanId).ToList();
+            if (charityLoanInstallments == null || charityLoanInstallments.Count() > 0)
+            {
+                CharityLoan charityLoan = this.Find(charityLoanId).Result.Item1;
+
+                charityLoan.IsDone = true;
+                _ = this.Update(true, charityLoan);
             }
         }
 
