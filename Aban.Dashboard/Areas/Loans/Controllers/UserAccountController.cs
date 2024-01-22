@@ -7,6 +7,7 @@ using Aban.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using static Aban.Domain.Enumerations.Enumeration;
 
@@ -398,6 +399,85 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
             }
             else
                 return Json(new { isSuccess = isSuccess });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userAccountId"></param>
+        /// <param name="loanReceiverId"></param>
+        /// <returns></returns>
+        public IActionResult SummaryReport(int userAccountId, string loanReceiverId)
+        {
+            try
+            {
+                List<LoansInstallmentsDepositWithdrawal> listLoansInstallmentsDepositWithdrawals = new List<LoansInstallmentsDepositWithdrawal>();
+
+                List<UserAccountDepositWithdrawal> userAccountDepositWithdrawals =
+                    userAccountDepositWithdrawalService.SpecificationGetData(userAccountId).Item1.ToList();
+
+                foreach (var item in userAccountDepositWithdrawals)
+                {
+                    listLoansInstallmentsDepositWithdrawals.Add(new LoansInstallmentsDepositWithdrawal()
+                    {
+                        RecordId = item.Id,
+                        FullName = $"{item.UserAccount?.AccountOwner?.FirstName} {item.UserAccount?.AccountOwner?.LastName}",
+                        Price = item.Price, 
+                        RegisterDate = item.RegisterDate,
+                        TransactionDateTime = item.TransactionDateTime,
+                        TransactionType = item.AccountTransactionType == TransactionType.واریز ?
+                             SummaryTransactionType.واریز
+                             : item.AccountTransactionType == TransactionType.برداشت ? SummaryTransactionType.برداشت
+                             : SummaryTransactionType.پرداخت_قسط
+                    });
+                }
+
+                List<CharityLoan> charityLoans =
+                    charityLoanService.SpecificationGetData(loanReceiverId: loanReceiverId).Item1.ToList();
+
+                foreach (var item in charityLoans)
+                {
+                    listLoansInstallmentsDepositWithdrawals.Add(new LoansInstallmentsDepositWithdrawal()
+                    {
+                        RecordId = item.Id,
+                        FullName = $"{item.LoanReceiver?.FirstName} {item.LoanReceiver?.LastName}",
+                        Price = item.LoanAmount,
+                        RegisterDate = item.RegisterDate,
+                        TransactionDateTime = item.RegisterDate,
+                        TransactionType = SummaryTransactionType.واریز_وام
+                    });
+                }
+
+                List<CharityLoanInstallments> charityLoanInstallments = new List<CharityLoanInstallments>();
+
+                if (charityLoans != null && charityLoans.Count() > 0)
+                {
+                    // اقساط پردخت شده همه‌ی وام ها
+                    charityLoanInstallments = charityLoanInstallmentsService.SpecificationGetData(listCharityLoanId: charityLoans.Select(x => x.Id).ToList(), isdone: true)
+                        .Item1.Include(x=>x.CharityLoan).ThenInclude(x=>x!.LoanReceiver).ToList();
+
+                    foreach (var item in charityLoanInstallments)
+                    {
+                        listLoansInstallmentsDepositWithdrawals.Add(new LoansInstallmentsDepositWithdrawal()
+                        {
+                            RecordId = item.Id,
+                            FullName = $"{item.CharityLoan?.LoanReceiver?.FirstName} {item.CharityLoan?.LoanReceiver?.LastName}",
+                            Price = item.InstallmentAmount,
+                            RegisterDate = item.RegisterDate,
+                            TransactionDateTime = item.PaymentDate!.Value,
+                            TransactionType = SummaryTransactionType.پرداخت_قسط
+                        });
+                    }
+                }
+
+
+                return View(listLoansInstallmentsDepositWithdrawals);
+            }
+            catch (Exception exception)
+            {
+                SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), MessageTypeActionMethod.Index);
+                return RedirectToAction("ShowException", "Error");
+            }
         }
 
         private void FillDropDown(BankName? bankName = null, string accountOwnerId = "")

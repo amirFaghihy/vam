@@ -1,0 +1,103 @@
+﻿@using Aban.Domain.Enumerations
+@model List<LoansInstallmentsDepositWithdrawal>
+
+
+
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.PageTitle = "واریز/براشت ها";
+    breadCrumb.Title = "واریز/براشت ها";
+
+    breadCrumb.Links = new List<string[]> { new string[2] { Url.Action("Index"), breadCrumb.PageTitle } };
+
+    int row = 0;
+}
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
+
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+
+            @*<partial name="./Partial/_FilterTablePartial" />*@
+
+            <div class="table-responsive text-center">
+                <table class="table table-bordered table-hover mb-4">
+                    <thead>
+                        <tr>
+
+                            <th style="width: 110px;">@Html.ActionLink("ردیف", "#")</th>
+                            <th style="width: 110px;">@Html.ActionLink("کد", "#")</th>
+                            <th style="width: 162px;">@Html.ActionLink("نام و نام خانوادگی", "#")</th>
+                            <th style="width: 162px;">@Html.ActionLink("نوع تراکنش", "#")</th>
+                            <th style="width: 162px;">@Html.ActionLink("مبلغ", "#")</th>
+                            <th style="width: 190px;">@Html.ActionLink("تاریخ تراکنش", "#")</th>
+                            <th style="width: 190px;">@Html.ActionLink("تاریخ ثبت", "#")</th>
+                            @*<th style="width: 162px;">عملیات</th>*@
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model)
+                    {
+                        row++;
+                        <tr>
+                            <td>@row</td>
+                            <td>@item.RecordId</td>
+                            <td>@item.FullName</td>
+                            <td style="background-color: @(item.TransactionType == Enumeration.SummaryTransactionType.واریز ? "#8dbf42;" : item.TransactionType == Enumeration.SummaryTransactionType.پرداخت_قسط ? "#e2a03f;" : item.TransactionType == Enumeration.SummaryTransactionType.واریز_وام ? "#5c1ac3" : "#e7515a;")">
+                                @item.TransactionType.ToString().Replace("_", " ")
+                            </td>
+                            <td>@item.Price.ToString("N0")</td>
+                            <td>
+                                @Html.ConvertToPersianDateTime(item.TransactionDateTime)
+                            </td>
+                            <td>
+                                @Html.ConvertToPersianDateTime(item.RegisterDate)
+                            </td>
+
+                            @*<td>
+                        <div class="btn-group" role="group">
+                        <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
+                        <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
+                        <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
+                        <a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>
+                        </div>
+                        </div>
+                        </td>*@
+                        </tr>
+                    }
+                    <tfoot>
+                        <tr>
+                            <th style="width: 162px;">ردیف</th>
+                            <th style="width: 162px;">کد</th>
+                            <th style="width: 162px;">نام و نام خانوادگی</th>
+                            <th style="width: 162px;">نوع تراکنش</th>
+                            <th style="width: 162px;">مبلغ</th>
+                            <th style="width: 162px;">تاریخ تراکنش</th>
+                            <th style="width: 162px;">تاریخ ثبت</th>
+
+                            @*<th>عملیات</th>*@
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            @*<partial name="./Partial/_PaginationCount" model="new PaginationInfo(Model)" />*@
+
+        </div>
+    </div>
+</div>
+
+@section Styles {
+
+}
+
+@section Scripts {
+
+    <script>
+
+
+    </script>
+}

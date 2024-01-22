@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Aban.Domain.Enumerations
 {
@@ -188,6 +183,17 @@ namespace Aban.Domain.Enumerations
             واریز,
             برداشت,
             پرداخت_قسط,
+        }
+
+        /// <summary>
+        /// گزارش نوع تراکنش
+        /// </summary>
+        public enum SummaryTransactionType : byte
+        {
+            واریز,
+            برداشت,
+            پرداخت_قسط,
+            واریز_وام
         }
 
         /// <summary>
