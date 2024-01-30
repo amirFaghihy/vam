@@ -36,7 +36,7 @@ namespace Aban.ViewModel
         /// تاریخ تراکنش
         /// </summary>
         [Display(Name = "تاریخ تراکنش")]
-        public DateTime TransactionDateTime { get; set; }
+        public DateTime? TransactionDateTime { get; set; }
 
         /// <summary>
         /// تاریخ ثبت

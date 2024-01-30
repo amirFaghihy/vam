@@ -422,7 +422,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                     {
                         RecordId = item.Id,
                         FullName = $"{item.UserAccount?.AccountOwner?.FirstName} {item.UserAccount?.AccountOwner?.LastName}",
-                        Price = item.Price, 
+                        Price = item.Price,
                         RegisterDate = item.RegisterDate,
                         TransactionDateTime = item.TransactionDateTime,
                         TransactionType = item.AccountTransactionType == TransactionType.واریز ?
@@ -454,7 +454,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 {
                     // اقساط پردخت شده همه‌ی وام ها
                     charityLoanInstallments = charityLoanInstallmentsService.SpecificationGetData(listCharityLoanId: charityLoans.Select(x => x.Id).ToList(), isdone: true)
-                        .Item1.Include(x=>x.CharityLoan).ThenInclude(x=>x!.LoanReceiver).ToList();
+                        .Item1.Include(x => x.CharityLoan).ThenInclude(x => x!.LoanReceiver).ToList();
 
                     foreach (var item in charityLoanInstallments)
                     {
@@ -464,7 +464,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                             FullName = $"{item.CharityLoan?.LoanReceiver?.FirstName} {item.CharityLoan?.LoanReceiver?.LastName}",
                             Price = item.InstallmentAmount,
                             RegisterDate = item.RegisterDate,
-                            TransactionDateTime = item.PaymentDate!.Value,
+                            TransactionDateTime = item.PaymentDate != null ? item.PaymentDate!.Value : null,
                             TransactionType = SummaryTransactionType.پرداخت_قسط
                         });
                     }

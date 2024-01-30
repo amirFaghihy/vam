@@ -52,7 +52,12 @@
                             </td>
                             <td>@item.Price.ToString("N0")</td>
                             <td>
-                                @Html.ConvertToPersianDateTime(item.TransactionDateTime)
+                                @if (item.TransactionDateTime != null)
+                                {
+                                    <span>
+                                        @Html.ConvertToPersianDateTime(item.TransactionDateTime.Value)
+                                    </span>
+                                }
                             </td>
                             <td>
                                 @Html.ConvertToPersianDateTime(item.RegisterDate)
