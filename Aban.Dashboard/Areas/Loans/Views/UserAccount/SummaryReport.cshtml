@@ -40,7 +40,7 @@
                             @*<th style="width: 162px;">عملیات</th>*@
                         </tr>
                     </thead>
-                    @foreach (var item in Model)
+                    @foreach (var item in Model.OrderByDescending(x => x.RegisterDate))
                     {
                         row++;
                         <tr>

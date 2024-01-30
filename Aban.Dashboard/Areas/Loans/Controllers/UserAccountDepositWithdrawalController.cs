@@ -212,7 +212,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         }
 
         /// <summary>
-        /// پرداخت قسط
+        /// پرداخت قسط بر اساس مبلغ واریزی
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -228,12 +228,13 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                     charityLoanInstallmentsService.SpecificationGetData(charityLoanId: charityLoan.Id, isdone: false)
                     .Item1.OrderBy(x => x.PaymentDue).ToList();
 
-                int countOfInstallments = (int)(model.TotalPriceAfterTransaction / charityLoanInstallments.First().InstallmentAmount);
+                int countOfInstallments = (int)(model.Price / charityLoanInstallments.First().InstallmentAmount);
 
                 for (int i = 0; i < countOfInstallments; i++)
                 {
                     Tuple<CharityLoanInstallments, ResultStatusOperation> resultFindModel = await charityLoanInstallmentsService.Find(charityLoanInstallments[i].Id);
 
+                    resultFindModel.Item1.PaymentMethod = TransactionMethod.برداشت_سیستمی;
                     resultFindModel.Item1.PaymentDate = DateTime.Now;
                     resultFindModel.Item1.IsDone = true;
 

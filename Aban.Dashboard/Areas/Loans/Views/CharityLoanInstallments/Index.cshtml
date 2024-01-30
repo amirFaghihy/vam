@@ -89,6 +89,7 @@
                                 @if (item.IsDone)
                                 {
                                     <i class="fa fa-check" style="color: #8dbf42"></i>
+                                    @(item.PaymentMethod == Aban.Domain.Enumerations.Enumeration.TransactionMethod.برداشت_سیستمی ? "پرداخت قسط سیستمی" : "")
                                 }
                                 else
                                 {

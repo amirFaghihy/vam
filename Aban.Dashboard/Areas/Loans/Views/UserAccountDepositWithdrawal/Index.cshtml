@@ -45,8 +45,10 @@
                             <td>@item.UserAccount!.AccountOwner!.FirstName @item.UserAccount.AccountOwner.LastName @(string.IsNullOrEmpty(item.UserAccount.AccountOwner.FatherName) ? "" : ("| " + item.UserAccount.AccountOwner.FatherName)) </td>
                             <td>@item.Price.ToString("N0")</td>
                             <td>@item.TotalPriceAfterTransaction.ToString("N0")</td>
-                            <td style="background-color: @(item.AccountTransactionType == Aban.Domain.Enumerations.Enumeration.TransactionType.واریز ? "#8dbf42;" : item.AccountTransactionType == Aban.Domain.Enumerations.Enumeration.TransactionType.پرداخت_قسط ? "#e2a03f;" :  "#e7515a;")">
+                            <td style="background-color: @(item.AccountTransactionType == Aban.Domain.Enumerations.Enumeration.TransactionType.واریز ? "#8dbf42;" : item.AccountTransactionType == Aban.Domain.Enumerations.Enumeration.TransactionType.پرداخت_قسط ? "#e2a03f;" : item.AccountTransactionMethod == Aban.Domain.Enumerations.Enumeration.TransactionMethod.برداشت_سیستمی ? "#5c1ac3" : "#e7515a;")">
                                 @item.AccountTransactionType
+                                <br />
+                                @(item.AccountTransactionMethod == Aban.Domain.Enumerations.Enumeration.TransactionMethod.برداشت_سیستمی ? "پرداخت قسط سیستمی" : "")
                             </td>
                             <td>
                                 @Html.ConvertToPersianDateTime(item.TransactionDateTime)

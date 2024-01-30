@@ -117,7 +117,7 @@ namespace Aban.Service.Services
         {
             List<CharityLoanInstallments> charityLoanInstallments = charityLoanInstallmentsRepository.GetAll()
             .Where(x => !x.IsDelete && !x.IsDone && x.CharityLoanId == charityLoanId).ToList();
-            if (charityLoanInstallments == null || charityLoanInstallments.Count() > 0)
+            if (charityLoanInstallments == null || charityLoanInstallments.Count() == 0)
             {
                 CharityLoan charityLoan = this.Find(charityLoanId).Result.Item1;
 
