@@ -4,7 +4,7 @@
     "ViewDirectoryName": "Loans",
     "HomePageUrl": "/Loans/Home/Index",
     "LoginURL": "~/cms/Authentication/login",
-    "WebsiteURL": "https://localhost:7262",
+    "WebsiteURL": "https://localhost:7261",
     "HostingEnvironmentPath": "D:\\Projects\\ABAN\\Aban\\Aban.Dashboard\\wwwroot"
   },
 
