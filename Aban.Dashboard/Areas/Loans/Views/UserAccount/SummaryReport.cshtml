@@ -1,5 +1,4 @@
-﻿@using Aban.Domain.Enumerations
-@model List<LoansInstallmentsDepositWithdrawal>
+﻿@model List<LoansInstallmentsDepositWithdrawal>
 
 
 
@@ -23,13 +22,13 @@
     <div class="col-lg-12 col-12 layout-spacing">
         <div class="statbox widget box box-shadow">
 
-            @*<partial name="./Partial/_FilterTablePartial" />*@
+            <partial name="./Partial/_SummaryReportFilterTablePartial" model="Model" />
+
 
             <div class="table-responsive text-center">
                 <table class="table table-bordered table-hover mb-4">
                     <thead>
                         <tr>
-
                             <th style="width: 110px;">@Html.ActionLink("ردیف", "#")</th>
                             <th style="width: 110px;">@Html.ActionLink("کد", "#")</th>
                             <th style="width: 162px;">@Html.ActionLink("نام و نام خانوادگی", "#")</th>
@@ -96,13 +95,17 @@
 </div>
 
 @section Styles {
-
+    <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
 }
 
 @section Scripts {
+    <script src="~/plugins/select2/select2.min.js"></script>
 
     <script>
 
 
+        $("#TransactionType").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class23');
     </script>
 }

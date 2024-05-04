@@ -9,6 +9,16 @@ namespace Aban.ViewModel
     public class LoansInstallmentsDepositWithdrawal
     {
         /// <summary>
+        /// شناسه حساب
+        /// </summary>
+        public int UserAccountId { get; set; }
+
+        /// <summary>
+        /// شناسه دریافت کننده وام
+        /// </summary>
+        public string LoanReceiverId { get; set; }
+
+        /// <summary>
         /// کد
         /// </summary>
         [Display(Name = "کد")]
@@ -18,7 +28,7 @@ namespace Aban.ViewModel
         /// نام و نام خانوادگی
         /// </summary>
         [Display(Name = "نام و نام خانوادگی")]
-        public string? FullName { get; set; }
+        public string FullName { get; set; }
 
         /// <summary>
         /// نوع تراکنش

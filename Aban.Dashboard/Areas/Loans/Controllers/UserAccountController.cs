@@ -407,14 +407,21 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         /// <param name="userAccountId"></param>
         /// <param name="loanReceiverId"></param>
         /// <returns></returns>
-        public IActionResult SummaryReport(int userAccountId, string loanReceiverId)
+        public IActionResult SummaryReport(
+            int userAccountId,
+            string loanReceiverId,
+            int pageSize = 100,
+            TransactionType? transactionType = null
+            )
         {
             try
             {
                 List<LoansInstallmentsDepositWithdrawal> listLoansInstallmentsDepositWithdrawals = new List<LoansInstallmentsDepositWithdrawal>();
 
                 List<UserAccountDepositWithdrawal> userAccountDepositWithdrawals =
-                    userAccountDepositWithdrawalService.SpecificationGetData(userAccountId).Item1.ToList();
+                    userAccountDepositWithdrawalService.SpecificationGetData(userAccountId, accountTransactionType: transactionType).Item1
+                    .OrderByDescending(x => x.RegisterDate).Take(pageSize)
+                    .ToList();
 
                 foreach (var item in userAccountDepositWithdrawals)
                 {
@@ -470,6 +477,9 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                     }
                 }
 
+                listLoansInstallmentsDepositWithdrawals.ForEach(x => x.UserAccountId = userAccountId);
+                listLoansInstallmentsDepositWithdrawals.ForEach(x => x.LoanReceiverId = loanReceiverId);
+
 
                 return View(listLoansInstallmentsDepositWithdrawals);
             }
@@ -484,9 +494,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         {
             try
             {
-#pragma warning disable CS8604
                 ViewBag.listBankName = GenericEnumList.GetSelectValueEnum<BankName>(bankName != null ? bankName.ToString() : "");
-#pragma warning disable CS8604
                 ViewBag.listAccountOwner = userIdentityService.ReadAllWithFatherName(accountOwnerId);
             }
             catch (Exception exception)
@@ -500,10 +508,9 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         {
             try
             {
-#pragma warning disable CS8604
                 List<SelectListItem> listBankName =
                     GenericEnumList.GetSelectValueEnum<BankName>(bankName != null ? bankName.ToString() : "");
-#pragma warning restore CS8604
+
                 List<SelectListItem> listAccountOwner =
                     userIdentityService.ReadAllWithFatherName(accountOwnerId);
 
