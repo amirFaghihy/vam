@@ -423,7 +423,7 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                     .OrderByDescending(x => x.RegisterDate).Take(pageSize)
                     .ToList();
 
-                foreach (var item in userAccountDepositWithdrawals)
+                foreach (var item in userAccountDepositWithdrawals.Where(x => x.AccountTransactionType != TransactionType.پرداخت_قسط))
                 {
                     listLoansInstallmentsDepositWithdrawals.Add(new LoansInstallmentsDepositWithdrawal()
                     {
