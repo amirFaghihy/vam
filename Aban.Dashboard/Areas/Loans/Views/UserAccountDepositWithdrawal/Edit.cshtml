@@ -1,0 +1,140 @@
+﻿@model UserAccountDepositWithdrawal
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@* قسمت واریز و برداشت این پروژه، ویرایش ندارد *@
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.Title = "ویرایش";
+    breadCrumb.PageTitle = "ویرایش";
+
+    breadCrumb.Links = new List<string[]>
+{
+new string[2]{Url.Action("Index"),"صفحه اصلی" }
+};
+}
+
+
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+            <form id="mainform" enctype="multipart/form-data" method="post" class="section contact">
+                @Html.ValidationSummary(true)
+                @*<div asp-validation-summary="All"></div>
+                <div asp-validation-summary="ModelOnly"></div>*@
+                <fieldset>
+                    @Html.HiddenFor(X => X.Id)
+                    @Html.HiddenFor(X => X.IsDelete)
+                    @Html.HiddenFor(X => X.RegisterDate)
+                    <partial name="./Partial/_CreateOrEditPatial.cshtml" model="Model" />
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Styles{
+    <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
+}
+
+    @section Scripts{
+    <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+    <script src="~/plugins/select2/select2.min.js"></script>
+
+    <script>
+
+        $("#UserAccountId").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class23');
+
+        $("#AccountTransactionType").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class23');
+
+
+        $("#AccountTransactionMethod").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class58');
+
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function setDepositWithdrawal(accountNumber, price, accountTransactionType) {
+            var _accountNumber = accountNumber;
+            var _price = price;
+            var _accountTransactionType = accountTransactionType;
+            $.ajax(
+                {
+                    method: "POST",
+                    url: "/Loans/UserAccountDepositWithdrawal/SetDepositWithdrawal",
+                    data: { accountNumber: _accountNumber, price: _price, accountTransactionType: _accountTransactionType },
+                    success: function (data) {
+
+                        var _latestDepositWithdrawal = data.latestDepositWithdrawal;
+
+                        if (data.isSuccess == true) {
+
+                            //alert('جمع: ' + numberWithCommas(_latestDepositWithdrawal));
+
+                            $('#TotalPriceAfterTransaction').text(numberWithCommas(_latestDepositWithdrawal)).val(numberWithCommas(_latestDepositWithdrawal));
+                        }
+                        else {
+                            $('#TotalPriceAfterTransaction').text(numberWithCommas(_latestDepositWithdrawal)).val(_latestDepositWithdrawal);
+                            //$('#TotalPriceAfterTransaction').attr('value', $('#Price').val());
+                        }
+                    },
+                    error: function () {
+                        alert('خطایی رخ داده است، صفحه را دوباره رفرش کنید !');
+                    }
+                }
+            );
+
+        }
+
+        $(function () {
+            $('#Price').on('blur', function () {
+
+                var _userAccountId = $('#UserAccountId').find(":selected").val();
+                var _price = $('#Price').val();
+                var _accountTransactionType = $('#AccountTransactionType').find(":selected").val();
+
+                //alert(`AccountId is: ${_userAccountId}\nprice is: ${_price}\naccount Type is: ${_accountTransactionType}`);
+
+                setDepositWithdrawal(_userAccountId, _price, _accountTransactionType);
+            });
+
+            $("#AccountTransactionType").change(function () {
+
+                var _userAccountId = $('#UserAccountId').find(":selected").val();
+                var _price = $('#Price').val();
+                var _accountTransactionType = $('option:selected', this).val();
+
+                //alert(`AccountId is: ${_userAccountId}\nprice is: ${_price}\naccount Type is: ${_accountTransactionType}`)
+
+                setDepositWithdrawal(_userAccountId, _price, _accountTransactionType);
+            });
+
+            $("#UserAccountId").change(function () {
+
+                var _userAccountId = $('option:selected', this).val();
+                var _price = $('#Price').val();
+                var _accountTransactionType = $('#AccountTransactionType').find(":selected").val();
+
+                //alert(`AccountId is: ${_userAccountId}\nprice is: ${_price}\naccount Type is: ${_accountTransactionType}`);
+
+                setDepositWithdrawal(_userAccountId, _price, _accountTransactionType);
+            });
+
+        });
+
+    </script>
+}

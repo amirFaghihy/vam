@@ -1,0 +1,132 @@
+﻿@model X.PagedList.IPagedList<CharityWage>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.PageTitle = "حقوق";
+    breadCrumb.Title = "حقوق";
+
+    breadCrumb.Links = new List<string[]> {
+#pragma warning disable CS8601 // Possible null reference assignment.
+        new string[2] { Url.Action("Index"), breadCrumb.PageTitle }
+#pragma warning disable CS8601 // Possible null reference assignment.
+    };
+
+    string sortColumn = ViewBag.sortColumn;
+    object RouteValue(string sortColumn)
+        => new
+        {
+            userIdentityId = ViewBag.userIdentityId,
+            wageReceiverId= ViewBag.wageReceiverId,
+            accountNumber= ViewBag.accountNumber,
+            description= ViewBag.description,
+            fixedSalary = ViewBag.fixedSalary,
+            percentSalary = ViewBag.percentSalary,
+            registerDateFrom = ViewBag.registerDateFrom,
+            registerDateTo = ViewBag.registerDateTo,
+
+
+            pageNumber = ViewBag.pageNumber,
+            pageSize = ViewBag.pageSize,
+            sortColumn = sortColumn,
+            lastColumn = ViewBag.lastColumn,
+            isDesc = ViewBag.isDesc
+        };
+}
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
+
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+
+            <partial name="./Partial/_FilterTablePartial" />
+
+            @await Html.PartialAsync("~/Views/Shared/Generic/_CreateButtonWithPageSize.cshtml", "حقوق جدید")
+            <div class="table-responsive text-center">
+                <table class="table table-bordered table-hover mb-4">
+                    <thead>
+                        <tr>
+
+                            <th style="width: 162px;">@Html.ActionLink("کد", "Index", "CharityWage", new {userIdentity = ViewBag.userIdentity , accountNumber = ViewBag.accountNumber , description = ViewBag.description , registerDate = ViewBag.registerDate, ViewBag.wageReceiverId ,  sortColumn = "Id", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Id" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("حقوق گیرنده", "Index", "CharityWage", new {userIdentity = ViewBag.userIdentity , accountNumber = ViewBag.accountNumber , description = ViewBag.description , registerDate = ViewBag.registerDate, ViewBag.wageReceiverId ,  sortColumn = "wageReceiverId", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "UserIdentity" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("ثبت کننده", "Index", "CharityWage", new {userIdentity = ViewBag.userIdentity , accountNumber = ViewBag.accountNumber , description = ViewBag.description , registerDate = ViewBag.registerDate, ViewBag.wageReceiverId ,  sortColumn = "userIdentityId", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "UserIdentity" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("شماره حساب/کارت", "Index", "CharityWage", new {userIdentity = ViewBag.userIdentity , accountNumber = ViewBag.accountNumber , description = ViewBag.description , registerDate = ViewBag.registerDate, ViewBag.wageReceiverId ,  sortColumn = "AccountNumber", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "AccountNumber" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("شرح سند", "Index", "CharityWage", new {userIdentity = ViewBag.userIdentity , accountNumber = ViewBag.accountNumber , description = ViewBag.description , registerDate = ViewBag.registerDate, ViewBag.wageReceiverId ,  sortColumn = "Description", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Description" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "CharityWage", new {userIdentity = ViewBag.userIdentity , accountNumber = ViewBag.accountNumber , description = ViewBag.description , registerDate = ViewBag.registerDate, ViewBag.wageReceiverId ,  sortColumn = "RegisterDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "RegisterDate" })</th>
+
+                            <th style="width: 162px;">عملیات</th>
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            @{
+#pragma warning disable CS8602 // Possible null reference assignment.
+                                <td>@item.WageReceiver.FirstName @item.WageReceiver.LastName</td>
+                                <td>@item.UserIdentity.FirstName @item.UserIdentity.LastName</td>
+#pragma warning disable CS8602 // Possible null reference assignment.
+                            }
+                            <td>@item.AccountNumber </td>
+                            <td>@item.Description </td>
+                            <td>
+                                @Html.ConvertPersianDateTime(item.RegisterDate)
+                            </td>
+
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
+                                    <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
+                                        <a href="@Url.Action("CharityWageDeposits", "CharityDeposit", new { wageId = item.Id })" class="dropdown-item" target="_blank"><i class="flaticon-home-fill-1 mr-1"></i>واریزیها</a>
+                                        <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
+                                        <a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    <tfoot>
+                        <tr>
+                            <th style="width: 162px;">کد</th>
+                            <th style="width: 162px;">حقوق گیرنده</th>
+                            <th style="width: 162px;">ثبت کننده</th>
+                            <th style="width: 162px;">شماره حساب/کارت</th>
+                            <th style="width: 162px;">شرح سند</th>
+                            <th style="width: 162px;">تاریخ ثبت</th>
+
+                            <th>عملیات</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <partial name="./Partial/_PaginationCount" model="Tuple.Create(new PaginationInfo(Model),RouteValue(sortColumn))" />
+
+        </div>
+    </div>
+</div>
+
+@section Styles{
+    <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+}
+
+    @section Scripts{
+    <script src="~/plugins/select2/select2.min.js"></script>
+    <script src="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+
+    <script>
+        // With postfix
+        $("input[name='PercentSalary']").TouchSpin({
+            postfix: '%',
+        });
+
+        $("#wageReceiverId").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class23');
+
+    </script>
+    }

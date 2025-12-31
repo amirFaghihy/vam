@@ -1,0 +1,257 @@
+﻿@model X.PagedList.IPagedList<UserAccount>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.PageTitle = "حساب ها";
+    breadCrumb.Title = "حساب ها";
+
+    breadCrumb.Links = new List<string[]> { new string[2] { Url.Action("Index"), breadCrumb.PageTitle } };
+
+}
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
+
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+
+            <partial name="./Partial/_FilterTablePartial" />
+
+            @await Html.PartialAsync("~/Views/Shared/Generic/_CreateButtonWithPageSize.cshtml", "حساب جدید")
+            <div class="table-responsive text-center">
+                <table class="table table-bordered table-hover mb-4" style="min-height: 300px;">
+                    <thead>
+                        <tr>
+
+                            <th style="width: 162px;">@Html.ActionLink("کد", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "Id", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Id" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("صاحب حساب", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "AccountOwnerId", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "AccountOwnerId" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("نام بانک", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "BankName", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "BankName" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("عنوان حساب", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "Title", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Title" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("شماره حساب", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "AccountNumber", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "AccountNumber" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("مانده حساب", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "AccountNumber", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "AccountNumber" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "UserAccount", new { accountOwnerId = ViewBag.accountOwnerId, bankName = ViewBag.bankName, title = ViewBag.title, accountNumber = ViewBag.accountNumber, registerDate = ViewBag.registerDate, sortColumn = "RegisterDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "RegisterDate" })</th>
+
+                            <th style="width: 162px;">عملیات</th>
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>
+                                <span id="@item.AccountOwnerId" data-userId="@item.AccountOwnerId" class="get-user-data"></span>
+                            </td>
+                            <td>@item.BankName </td>
+                            <td>@item.Title </td>
+                            <td>@item.AccountNumber </td>
+                            <td id="tdPrice-@(item.Id)">
+                                <span id="totalPriceAfterTransaction-@(item.Id)" data-id="@(item.Id)" class="total-price-after-transaction"></span>
+                            </td>
+                            <td>
+                                @Html.ConvertToPersianDateTime(item.RegisterDate)
+                            </td>
+
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
+                                    <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
+                                        <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item btn btn-info mb-2"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
+                                        <a href="@Url.Action("Create", "UserAccountDepositWithdrawal", new {area="Loans", userAccountId = item.Id, accountTransactionType=TransactionType.واریز })" class="dropdown-item btn btn-success mb-2" target="_blank"><i class="flaticon-home-fill-1 mr-1"></i>واریز</a>
+                                        <a href="@Url.Action("Create", "UserAccountDepositWithdrawal", new {area="Loans", userAccountId = item.Id, accountTransactionType=TransactionType.برداشت })" class="dropdown-item btn btn-danger mb-2" target="_blank"><i class="flaticon-home-fill-1 mr-1"></i>برداشت</a>
+                                        <a href="@Url.Action("Index", "UserAccountDepositWithdrawal", new {area="Loans", UserAccountId = item.Id, pageSize = 100 })" class="dropdown-item btn btn-secondary  mb-2" target="_blank"><i class="flaticon-home-fill-1 mr-1"></i>واریز/برداشتها</a>
+                                        <a href="@Url.Action("Index", "CharityLoan", new {area="Loans", loanReceiverId = item.AccountOwnerId })" class="dropdown-item btn btn-warning mb-2" target="_blank"><i class="flaticon-home-fill-1 mr-1"></i>وام ها</a>
+                                        <a href="@Url.Action("SummaryReport", "UserAccount", new {area="Loans", userAccountId = item.Id, loanReceiverId = item.AccountOwnerId })" class="dropdown-item btn mb-2 have_hover" style="background-color: #009688;" target="_blank"><i class="flaticon-home-fill-1 mr-1"></i>گزارش تجمیعی</a>
+                                        @*<a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>*@
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    <tfoot>
+                        <tr>
+                            <th style="width: 162px;">کد</th>
+                            <th style="width: 162px;">صاحب حساب</th>
+                            <th style="width: 162px;">نام بانک</th>
+                            <th style="width: 162px;">عنوان حساب</th>
+                            <th style="width: 162px;">شماره حساب</th>
+                            <th style="width: 162px;">مانده حساب</th>
+                            <th style="width: 162px;">تاریخ ثبت</th>
+
+                            <th>عملیات</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <partial name="./Partial/_PaginationCount" model="new PaginationInfo(Model)" />
+
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="~/plugins/select2/select2.min.js"></script>
+
+    <script>
+
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function select2dropdowns() {
+            $("#accountOwnerId").select2({
+                tags: true,
+            }).data('select2').$dropdown.addClass('class23');
+
+
+            $("#bankName").select2({
+                tags: true,
+            }).data('select2').$dropdown.addClass('class58');
+        }
+
+        async function lastRemaining() {
+
+            // تعریف یک آرایه برای ذخیره آی‌دی‌ها
+            var arraccountUsersIds = [];
+            // گرفتن تمام عناصر span با کلاس "get-user-data"
+            $("span.total-price-after-transaction").each(function () {
+                // افزودن آی‌دی هر عنصر به آرایه
+                arraccountUsersIds.push($(this).data("id"));
+            });
+
+            var strAccountIds = JSON.stringify(arraccountUsersIds);
+
+            $.ajax({
+                url: '/Loans/UserAccount/GetLatestRemaining',
+                type: 'POST',
+                dataType: 'json', // نوع داده دریافتی از بک‌اند
+                data: { stringAccountIds: strAccountIds },
+                success: function (result) {
+
+                    if (result == null) {
+                        alert('خطایی رخ داده است، برای بارگزاری اطلاعات صفحه را رفرش کنید.')
+                    }
+                    else {
+
+                        var depositWithdrawal = result.depositWithdrawal;
+
+                        for (var i = 0; i < depositWithdrawal.length; i++) {
+
+                            if (depositWithdrawal[i].totalPriceAfterTransaction > 0) {
+                                $('#tdPrice-' + depositWithdrawal[i].userAccountId).css('background-color', '#8dbf42');
+                            }
+                            else if (depositWithdrawal[i].totalPriceAfterTransaction < 0) {
+                                $('#tdPrice-' + depositWithdrawal[i].userAccountId).css('background-color', '#e7515a');
+                            }
+
+                            $('#totalPriceAfterTransaction-' + depositWithdrawal[i].userAccountId).html(numberWithCommas(depositWithdrawal[i].totalPriceAfterTransaction));
+                        }
+                    }
+
+                },
+                error: function () {
+                    // Request failed, handle the error here
+                }
+            });
+
+        }
+
+        function getFillDropDown() {
+            $.ajax({
+                url: '/filldropdownajax',
+                method: 'POST',
+                data: { accountOwnerId: "" },
+                success: function (data) {
+                    var listAccountOwner = data.listAccountOwner;
+                    var listBankName = data.listBankName;
+
+                    $.each(listAccountOwner, function (index, item) {
+                        $('#accountOwnerId').append($('<option/>', {
+                            value: item.value,
+                            text: item.text,
+                            selected: item.selected
+                        }));
+                    });
+
+                    $.each(listBankName, function (index, item) {
+                        $('#bankName').append($('<option/>', {
+                            value: item.value,
+                            text: item.text,
+                            selected: item.selected
+                        }));
+                    });
+                },
+                error: function () {
+                    //alert('خطایی رخ داده است !!!');
+                }
+            });
+
+        }
+
+        function GetUsersData() {
+
+            // تعریف یک آرایه برای ذخیره آی‌دی‌ها
+            var arrUsersIds = [];
+            // گرفتن تمام عناصر span با کلاس "get-user-data"
+            $("span.get-user-data").each(function () {
+                // افزودن آی‌دی هر عنصر به آرایه
+                arrUsersIds.push($(this).attr('id'));
+            });
+
+            var usersIds = JSON.stringify(arrUsersIds);
+
+            $.ajax({
+                url: '/find-user-data',
+                type: 'POST',
+                dataType: 'json', // نوع داده دریافتی از بک‌اند
+                data: { stringUserIds: usersIds },
+                success: function (result) {
+
+                    if (result == null) {
+                        alert('خطایی رخ داده است، برای بارگزاری اطلاعات صفحه را رفرش کنید.')
+                    }
+                    else {
+
+                        var usersDataResult = result.data;
+
+                        for (var i = 0; i < usersDataResult.length; i++) {
+                            // انتخاب تمام تگ‌هایی که ویژگی data-userId
+                            var elementsWithSameUserId = $('[data-userId="' + usersDataResult[i].id + '"]');
+
+                            // تنظیم مقدار جدید به تمام تگ‌های انتخاب شده
+                            elementsWithSameUserId.each(function () {
+                                if (usersDataResult[i].fatherName == "" || usersDataResult[i].fatherName == null) {
+                                    $(this).html(usersDataResult[i].firstName + " " + usersDataResult[i].lastName);
+                                }
+                                else {
+                                    $(this).html(usersDataResult[i].firstName + " " + usersDataResult[i].lastName + " | " + usersDataResult[i].fatherName);
+                                }
+                            });
+
+                            //$("#" + usersDataResult[i].id).html(usersDataResult[i].firstName + usersDataResult[i].lastName);
+                        }
+                    }
+
+                },
+                error: function (xhr, status, error) {
+                    // Request failed, handle the error here
+                    console.error('Error: ' + error);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            lastRemaining();
+            GetUsersData();
+            getFillDropDown();
+            select2dropdowns();
+        });
+    </script>
+}

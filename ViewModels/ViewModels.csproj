@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Charity\**" />
+    <EmbeddedResource Remove="Charity\**" />
+    <None Remove="Charity\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="8.4.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Aban.Domain\Aban.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

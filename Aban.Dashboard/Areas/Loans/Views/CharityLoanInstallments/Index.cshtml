@@ -1,0 +1,207 @@
+﻿@model X.PagedList.IPagedList<CharityLoanInstallments>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.PageTitle = "اقساط وام ها";
+    breadCrumb.Title = "اقساط وام ها";
+
+    breadCrumb.Links = new List<string[]> { new string[2] { Url.Action("Index"), breadCrumb.PageTitle } };
+
+    string sortColumn = ViewBag.sortColumn;
+    object RouteValue(string sortColumn)
+        => new
+        {
+            charityLoanId = ViewBag.charityLoanId,
+            installmentAmount = ViewBag.installmentAmount,
+            paymentDateFrom = ViewBag.paymentDateFrom,
+            paymentDateTo = ViewBag.paymentDateTo,
+            accountNumber = ViewBag.accountNumber,
+            registerDateFrom = ViewBag.registerDateFrom,
+            registerDateTo = ViewBag.registerDateTo,
+            isdone = ViewBag.isdone,
+
+
+            pageNumber = ViewBag.pageNumber,
+            pageSize = ViewBag.pageSize,
+            sortColumn = sortColumn,
+            lastColumn = ViewBag.lastColumn,
+            isDesc = ViewBag.isDesc
+        };
+
+}
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
+
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+
+            <partial name="./Partial/_FilterTablePartial" />
+
+            @await Html.PartialAsync("~/Views/Shared/Generic/_CreateButtonWithPageSize.cshtml", "قسط جدید")
+            <div class="table-responsive text-center">
+                <table class="table table-bordered table-hover mb-4">
+                    <thead>
+                        <tr>
+
+                            <th style="width: 162px;">@Html.ActionLink("کد", "Index", "CharityLoanInstallments", new { charityLoan = ViewBag.charityLoan, installmentAmount = ViewBag.installmentAmount, paymentDate = ViewBag.paymentDate, registerDate = ViewBag.registerDate, isdone = ViewBag.isdone, sortColumn = "Id", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Id" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("شناسه وام/وام گیرنده", "Index", "CharityLoanInstallments", new { charityLoan = ViewBag.charityLoan, installmentAmount = ViewBag.installmentAmount, paymentDate = ViewBag.paymentDate, registerDate = ViewBag.registerDate, isdone = ViewBag.isdone, sortColumn = "CharityLoan", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "CharityLoan" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("مبلغ قسط", "Index", "CharityLoanInstallments", new { charityLoan = ViewBag.charityLoan, installmentAmount = ViewBag.installmentAmount, paymentDate = ViewBag.paymentDate, registerDate = ViewBag.registerDate, isdone = ViewBag.isdone, sortColumn = "InstallmentAmount", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "InstallmentAmount" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("موعد پرداخت", "Index", "CharityLoanInstallments", new { charityLoan = ViewBag.charityLoan, installmentAmount = ViewBag.installmentAmount, paymentDate = ViewBag.paymentDate, registerDate = ViewBag.registerDate, isdone = ViewBag.isdone, sortColumn = "PaymentDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "PaymentDate" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تاریخ پرداخت", "Index", "CharityLoanInstallments", new { charityLoan = ViewBag.charityLoan, installmentAmount = ViewBag.installmentAmount, paymentDate = ViewBag.paymentDate, registerDate = ViewBag.registerDate, isdone = ViewBag.isdone, sortColumn = "RegisterDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "RegisterDate" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "CharityLoanInstallments", new { charityLoan = ViewBag.charityLoan, installmentAmount = ViewBag.installmentAmount, paymentDate = ViewBag.paymentDate, registerDate = ViewBag.registerDate, isdone = ViewBag.isdone, sortColumn = "RegisterDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "RegisterDate" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("پرداخت شده است ؟", "Index", "CharityLoanInstallments", new { charityLoan = ViewBag.charityLoan, installmentAmount = ViewBag.installmentAmount, paymentDate = ViewBag.paymentDate, registerDate = ViewBag.registerDate, isdone = ViewBag.isdone, sortColumn = "IsDone", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "IsDone" })</th>
+
+                            <th style="width: 162px;">عملیات</th>
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.CharityLoan?.LoanReceiver?.FirstName @item.CharityLoan?.LoanReceiver?.LastName</td>
+                            <td>@item.InstallmentAmount.ToString("N0")</td>
+                            <td style="@(item.PaymentDue <= DateTime.Today.AddDays(1) && !item.IsDone ? "background-color: #e7515a" : "" )">
+                                @Html.ConvertToPersianDate(item.PaymentDue)
+                            </td>
+                            <td>
+                                @if (item.PaymentDate != null)
+                                {
+                                    <span>
+                                        @Html.ConvertToPersianDateTime(item.PaymentDate.Value)
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span>
+                                        هنوز پرداخت نشده است.
+                                    </span>
+                                }
+                            </td>
+                            <td>
+                                @Html.ConvertToPersianDate(item.RegisterDate)
+                            </td>
+                            <td>
+                                @if (item.IsDone)
+                                {
+                                    <i class="fa fa-check" style="color: #8dbf42"></i>
+                                    @(item.PaymentMethod == Aban.Domain.Enumerations.Enumeration.TransactionMethod.برداشت_سیستمی ? "پرداخت قسط سیستمی" : "")
+                                }
+                                else
+                                {
+                                    <i class="fa fa-times" style="color: #e7515a"></i>
+                                }
+                            </td>
+
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
+                                    <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
+                                        <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item btn btn-success mb-2"><i class="flaticon-home-fill-1 mr-1"></i> ویرایش </a>
+                                        @if (!item.IsDone)
+                                        {
+                                            <a data-itemid="@item.Id" data-loanid="@item.CharityLoanId" class="dropdown-item btn btn-warning mb-2" onclick="showModal(this);"><i class="flaticon-home-fill-1 mr-1"></i> پرداخت قسط </a>
+                                            <a href="@Url.Action("PostponingInstallment", new{ loanInstallmentId = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item btn mb-2" style="background-color: #5c1ac3;"><i class="flaticon-home-fill-1 mr-1"></i> تعویق قسط </a>
+                                        }
+                                        @*<a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>*@
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    <tfoot>
+                        <tr>
+                            <th style="width: 162px;">کد</th>
+                            <th style="width: 162px;">شناسه وام/وام گیرنده</th>
+                            <th style="width: 162px;">مبلغ قسط</th>
+                            <th style="width: 162px;">موعد پرداخت</th>
+                            <th style="width: 162px;">تاریخ پرداخت</th>
+                            <th style="width: 162px;">تاریخ ثبت</th>
+                            <th style="width: 162px;">پرداخت شده است ؟</th>
+
+                            <th>عملیات</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <partial name="./Partial/_PaginationCount" model="Tuple.Create(new PaginationInfo(Model),RouteValue(sortColumn))" />
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="installmentPayment" tabindex="-1" role="dialog" aria-labelledby="installmentPaymentLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="installmentPaymentLabel">تأیید واریز قسط</h5>
+                @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <i class="fa-li fa fa-check-square"></i>
+                </button>*@
+            </div>
+            <div class="modal-body">
+                <p class="modal-text">
+                    <div class="col-md-12">
+                        <form id="payinstallmentform" asp-action="PayInstallment" class="needs-validation" novalidate>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <lable for="paymentDateString"> تاریخ پرداخت </lable>
+                                        <input id="paymentDateString" name="paymentDateString" class="form-control mb-4 PersianDatePicker" type="text" autocomplete="off" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <lable for="paymentDateString"> ساعت پرداخت </lable>
+                                        <input id="paymentDateStringTimeString" name="paymentDateStringTimeString" class="form-control mb-4 clockPicker" type="text" autocomplete="off" value="00:00" />
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="loanInstallmentId" name="loanInstallmentId" value="" />
+                            <input type="hidden" id="loanId" name="loanId" value="" />
+                        </form>
+                    </div>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> انصراف</button>
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('payinstallmentform').submit();"> پرداخت </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+
+    <style>
+        .flatpickr-calendar.open {
+            z-index: 2000;
+            left: 500px !important;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script src="~/plugins/select2/select2.min.js"></script>
+    <script src="~/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+
+    <script>
+        // With postfix
+        $("input[name='PercentSalary']").TouchSpin({
+            postfix: '%',
+        });
+
+        function showModal(tag) {
+            $('#loanInstallmentId').val(tag.dataset.itemid);
+            $('#loanId').val(tag.dataset.loanid);
+            $('#installmentPayment').modal();
+        }
+    </script>
+}

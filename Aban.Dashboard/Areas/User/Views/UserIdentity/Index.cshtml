@@ -1,0 +1,212 @@
+﻿@model X.PagedList.IPagedList<UserIdentity>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.PageTitle = "مدیریت کاربران";
+    breadCrumb.Title = "مدیریت کاربران";
+
+    breadCrumb.Links = new List<string[]> {
+#pragma warning disable CS8601 // Possible null reference assignment.
+        new string[2] { Url.Action("Index"), breadCrumb.PageTitle }
+#pragma warning disable CS8601 // Possible null reference assignment.
+    };
+
+    string sortColumn = ViewBag.sortColumn;
+    object RouteValue(string sortColumn)
+
+           => new
+           {
+               id = ViewBag.id,
+               userName = ViewBag.userName,
+               phoneNumber = ViewBag.phoneNumber,
+               firstName = ViewBag.firstName,
+               lastName = ViewBag.lastName,
+               nationalCode = ViewBag.nationalCode,
+               ismale = ViewBag.ismale,
+               islocked = ViewBag.islocked,
+               isconfirm = ViewBag.isconfirm,
+               birthDateFrom = ViewBag.birthDateFrom,
+               birthDateTo = ViewBag.birthDateTo,
+               registerDateFrom = ViewBag.registerDateFrom,
+               registerDateTo = ViewBag.registerDateTo,
+               roleNames = ViewBag.rolesList,
+
+
+               pageNumber = ViewBag.pageNumber,
+               pageSize = ViewBag.pageSize,
+               sortColumn = sortColumn,
+               isDesc = ViewBag.isDesc,
+               lastColumn = ViewBag.lastColumn
+           };
+
+}
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
+
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+
+            <partial name="_FilterTablePartial" />
+
+            @await Html.PartialAsync("~/Views/Shared/Generic/_CreateButtonWithPageSize.cshtml", "کاربر جدید")
+            <div class="table-responsive text-center">
+                <table class="table table-bordered table-hover mb-4">
+                    <thead>
+                        <tr>
+
+                            <th style="width: 162px;">@Html.ActionLink("کد", "Index", "UserIdentity", RouteValue("Id"), new { @id = "Id" })
+                            <th style="width: 162px;">@Html.ActionLink("نام", "Index", "UserIdentity", RouteValue("FirstName"), new { @id = "FirstName" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("نام خانوادگی", "Index", "UserIdentity", RouteValue("LastName"), new { @id = "LastName" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("شماره موبایل", "Index", "UserIdentity", RouteValue("PhoneNumber"), new { @id = "PhoneNumber" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("جنسیت", "Index", "UserIdentity", RouteValue("IsMale"), new { @id = "IsMale" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("مسدود؟", "Index", "UserIdentity", RouteValue("IsLocked"), new { @id = "IsLocked" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تأیید شده؟", "Index", "UserIdentity", RouteValue("IsConfirm"), new { @id = "IsConfirm" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "UserIdentity", RouteValue("RegisterDate"), new { @id = "RegisterDate" })</th>
+
+                            <th style="width: 162px;">عملیات</th>
+                        </tr>
+                    </thead>
+                    @if (Model != null && Model.Count() != 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr style="@(item.IsLocked?"background-color:#fd041b;":"")">
+                                <td>@item.Id.Split("-").FirstOrDefault()</td>
+                                <td>@item.FirstName </td>
+                                <td>@item.LastName </td>
+                                <td>@item.PhoneNumber </td>
+                                @*<td>@item.NationalCode </td>*@
+                                <td>
+                                    @(item.IsMale ? "آقا" : "خانم")
+                                </td>
+                                <td>
+                                    @if (item.IsLocked)
+                                    {
+                                        <i class="fa fa-check" style="color: #8dbf42"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-times" style="color: #e7515a"></i>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.IsConfirm)
+                                    {
+                                        <i class="fa fa-check" style="color: #8dbf42"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-times" style="color: #e7515a"></i>
+                                    }
+                                </td>
+                                @*<td>
+                        @if (item.BirthDate != null)
+                        {
+                        <span>
+                        @Html.ConvertToPersianDate(item.BirthDate.Value)
+                        </span>
+                        }
+                        </td>*@
+                                <td>
+                                    @Html.ConvertToPersianDateTime(item.RegisterDate)
+                                </td>
+
+                                <td>
+
+                                    <div class="btn-group" role="group">
+                                        <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
+                                        <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
+                                            <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item btn btn-info mb-2"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
+                                            @if (item.IsLocked)
+                                            {
+                                                <a href="@Url.Action("EditIsLocked", new { id = item.Id, isLocked = false })" class="dropdown-item btn btn-success mb-2 btn-showloader" onclick="return confirm('آیا اطمینان دارید ؟');"><i class="flaticon-home-fill-1 mr-1"></i>رفع مسدودی</a>
+                                            }
+                                            else
+                                            {
+                                                <a href="@Url.Action("EditIsLocked", new { id = item.Id, isLocked = true })" class="dropdown-item btn btn-danger mb-2 btn-showloader" onclick="return confirm('آیا اطمینان دارید ؟');"><i class="flaticon-home-fill-1 mr-1"></i>مسدود کردن</a>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    @*<div class="input-group-append button-center">
+                            <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false">عملیات </button>
+                            <ul class="dropdown-menu float-right dropdown-menu-rtl" x-placement="bottom-start" style="text-align:right;position: absolute; will-change: top, left;">
+                            <li><a href="@Url.Action("Edit", new { id = item.Id })"><span class="fa fa-edit"></span> ویرایش</a></li>
+                            <li><a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');"><span class="fa fa-remove"></span> حذف</a></li>
+                            </ul>
+                            </div>*@
+                                </td>
+                            </tr>
+                        }
+                    }
+                    <tfoot>
+                        <tr>
+                            <th style="width: 162px;">کد</th>
+                            <th style="width: 162px;">نام</th>
+                            <th style="width: 162px;">نام خانوادگی</th>
+                            <th style="width: 162px;">شماره موبایل</th>
+                            <th style="width: 162px;">جنسیت</th>
+                            <th style="width: 162px;">مسدود؟</th>
+                            <th style="width: 162px;">تأیید شده ؟</th>
+                            <th style="width: 162px;">تاریخ تغییر</th>
+
+                            <th>عملیات</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <partial name="_PaginationCount" model="Tuple.Create(new PaginationInfo(Model),RouteValue(sortColumn))" />
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="usereModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title">پیغام سیستم</h5>
+            </div>
+            <div class="modal-body">
+                <div id="modal-text">
+                    پیغام سیستم !!!
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info" data-dismiss="modal"><i class="flaticon-cancel-12"></i> بستن </button>
+                @*<button type="button" class="btn btn-primary"> ذخیره </button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="custom_load_screen" style="display: none;">
+    <div class="loader">
+        <div class="loader-content">
+            <div class="spinner-grow align-self-center"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+@section Styles{
+    <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
+}
+
+    @section Scripts{
+    <script src="~/plugins/select2/select2.min.js"></script>
+
+    <script>
+
+        $("#roleNames").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class23');
+
+    </script>
+}

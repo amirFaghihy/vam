@@ -1,0 +1,71 @@
+﻿@model CharityAddition
+
+@{
+    ViewData["Title"] = $"ویرایش {Model.Title}";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.Title = $"ویرایش {Model.Title}";
+    breadCrumb.PageTitle = "افزودن";
+
+    breadCrumb.Links = new List<string[]>
+{
+#pragma warning disable CS8601 // Possible null reference assignment.
+    new string[2]{Url.Action("Index","Home", new {area= "Charity" }),"خانه" },
+    new string[2]{Url.Action("Index","CharityDeducation", new {area= "Charity" }),"اضافات" }
+#pragma warning disable CS8601 // Possible null reference assignment.
+    };
+}
+
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+            <form id="mainform" asp-area="Charity" asp-controller="CharityAddition" asp-action="Edit" enctype="multipart/form-data" method="post" class="section contact">
+                @Html.ValidationSummary(true)
+                @*<div asp-validation-summary="All"></div>
+                <div asp-validation-summary="ModelOnly"></div>*@
+                <fieldset>
+                    <partial name="./Partial/_CreateOrEditPartial" model="Model" />
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Styles{
+    <link href="~/assets/css/forms/switches.css" rel="stylesheet" />
+    <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
+
+    @*------------Time Picker -----------*@
+    <link href="~/plugins/flatpickr/flatpickr.css" rel="stylesheet" />
+    <link href="~/plugins/flatpickr/custom-flatpickr.css" rel="stylesheet" />
+    @*------------Time Picker -----------*@
+    }
+
+    @section Scripts{
+    <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+    <script src="~/plugins/select2/select2.min.js"></script>
+
+    @*------------Time Picker -----------*@
+    <script src="~/plugins/flatpickr/flatpickr.js"></script>
+    @*------------Time Picker -----------*@
+
+    <script>
+
+        flatpickr(document.getElementById('documentRegisterDateTimeTime'), {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            defaultDate: "@DateTime.Now.ToString("HH:mm")"
+        });
+
+
+        $("#UserIdentityReciverId").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class23');
+
+    </script>
+    }

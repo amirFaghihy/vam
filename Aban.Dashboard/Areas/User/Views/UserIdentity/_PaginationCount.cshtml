@@ -1,0 +1,68 @@
+﻿@model Tuple<PaginationInfo,object>
+
+@{
+    int PageNumber = Model.Item1.PageNumber;
+    int PageCount = Model.Item1.PageCount;
+
+    int PageStrat = ((PageNumber - 1) * PageCount) + 1;
+
+    int PageEnd = PageCount * PageNumber;
+    PageCount = PageStrat + PageCount;
+
+    if (PageCount > Model.Item1.TotalItemCount)
+    {
+        PageCount = Model.Item1.TotalItemCount;
+    }
+
+    List<SelectListItem>? filterRoles = ViewBag.rolesList as List<SelectListItem>;
+    List<string>? filterNames = new List<string>();
+
+    if (filterRoles != null && filterRoles.Count() != 0)
+    {
+        filterNames = filterRoles.Where(x => x.Selected == true).Select(x => x.Value).ToList();
+    }
+}
+<br />
+<div class="row">
+    <div class="offset-md-5 col-md-4">
+        <div class="" id="">
+            @Html.PagedListPager((IPagedList)Model.Item1, x => Url.Action("Index", new
+            {
+            id = ViewBag.id,
+            userName = ViewBag.userName,
+            phoneNumber = ViewBag.phoneNumber,
+            firstName = ViewBag.firstName,
+            lastName = ViewBag.lastName,
+            nationalCode = ViewBag.nationalCode,
+            ismale = ViewBag.ismale,
+            islocked = ViewBag.islocked,
+            isconfirm = ViewBag.isconfirm,
+            birthDateFrom = ViewBag.birthDateFrom,
+            birthDateTo = ViewBag.birthDateTo,
+            registerDateFrom = ViewBag.registerDateFrom,
+            registerDateTo = ViewBag.registerDateTo,
+            roleNames = filterNames,
+
+            pageNumber = x,
+            pageSize = ViewBag.pageSize,
+            sortColumn = ViewBag.sortColumn,
+            isDesc = ViewBag.isDesc,
+            //lastColumn = ViewBag.lastColumn
+
+            }), new X.PagedList.Web.Common.PagedListRenderOptions
+            {
+            PageClasses = new string[] { "page-link" },
+            UlElementClasses = new string[] { "pagination" },
+            LiElementClasses = new string[] { "page-item" },
+            //DisplayItemSliceAndTotal = true,
+            //DisplayPageCountAndCurrentLocation=true,
+            MaximumPageNumbersToDisplay = 5,
+            DisplayLinkToFirstPage = X.PagedList.Web.Common.PagedListDisplayMode.Always,
+            DisplayLinkToLastPage = X.PagedList.Web.Common.PagedListDisplayMode.Always,
+            })
+        </div>
+    </div>
+    <div class="col-md-3">
+        نمایش رکوردهای @(Model.Item1.PageCount < Model.Item1.PageNumber ? 0 : PageStrat) الی @PageCount  از  @Model.Item1.TotalItemCount رکورد
+    </div>
+</div>

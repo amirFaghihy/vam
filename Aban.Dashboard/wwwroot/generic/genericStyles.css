@@ -1,0 +1,7 @@
+.select2-container--default {
+    width: 100% !important;
+}
+
+.have_hover:hover {
+    background-color: #0e1726 !important;
+}

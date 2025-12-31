@@ -1,0 +1,50 @@
+{
+  "Paths": {
+    "ProjectName": "پروژه وام",
+    "ViewDirectoryName": "Loans",
+    "HomePageUrl": "/Loans/Home/Index",
+    "LoginURL": "~/cms/Authentication/login",
+    "WebsiteURL": "https://localhost:7261",
+    "HostingEnvironmentPath": "D:\\Projects\\ABAN\\Aban\\Aban.Dashboard\\wwwroot"
+  },
+
+
+  "Identity": {
+    "LoginPath": "/User/UserIdentity/Login",
+    "AfterLoginRedirect": "",
+    "RegisterPath": "/User/UserIdentity/Signup",
+    "AfterRegisterRedirect": "",
+    "LogOutPath": "/User/UserIdentity/logout",
+    "AfterLogOutPath": "/User/UserIdentity/Login",
+    "CookieName": "Aban.Identity",
+    "AccessDeniedPath": "",
+    "RequiredUniqueChars": "0",
+    "RequireUppercase": "False",
+    "RequireLowercase": "False",
+    "RequireDigit": "False",
+    "RequiredLength": "6",
+    "AllowedUserNameCharacters": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890.-_",
+    "RequireUniqueEmail": "True",
+    "SlidingExpiration": "True",
+    "DefaultLockoutTimeSpanType": "Minutes",
+    "ExpiredefaultLockoutTimeSpan": "500",
+    "ExpireTimeType": "Minutes",
+    "ExpireTimeSpan": "500",
+    "OptionalParamiters": "",
+    "RequireConfirmedEmail": "False",
+    "RequireConfirmedPhoneNumber": "False",
+    "RequireConfirmedAccount": "False",
+    "RequireNonAlphanumeric": "False",
+    "isPersistent": "False" //در صورتی که فالس باشد، با بسته شدن بروزر، کوکی پاک میشود
+  },
+
+  "FarazSMS": {
+    "UserName": "09111111111",
+    "Password": "123456", //2280202638
+    "FromNumuber": "100020400",
+    "PatternCode": "9zlcl1zxoc", //104
+    "APIURL": "http://188.0.240.110/api/select",
+    "IsTest": "True",
+    "StaticCode": "1000"
+  }
+}

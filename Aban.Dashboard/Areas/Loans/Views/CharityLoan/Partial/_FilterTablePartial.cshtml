@@ -1,0 +1,162 @@
+﻿<div id="toggleAccordion">
+    <div class="card">
+        <a href="#filterPanel" role="menu" class="collapsed btn btn-success" style="margin-bottom:15px;" data-toggle="collapse" data-target="#defaultAccordionOne" aria-expanded="true" aria-controls="defaultAccordionOne">
+            جستجو
+            <i style="margin-right:5px;" class="fa fa-chevron-left" id="Icon"></i>
+        </a>
+        <div id="defaultAccordionOne" class="collapse" aria-labelledby="..." data-parent="#toggleAccordion">
+            <div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
+                <form class="section contact" asp-action="Index" method="get">
+
+                    <div class="info">
+                        <div class="row">
+                            <div class="col-md-11 mx-auto">
+                                <div class="row">
+
+                                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                        <div role="form">
+                                            <div class="form-group">
+                                                <label for="userIdentityId">ثبت کننده</label>
+                                                <select name="userIdentityId" id="userIdentityId" type="text" class="form-control" asp-items="@ViewBag.listUserIdentity">
+                                                    <option value="">-- انتخاب --</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                        <div role="form">
+                                            <div class="form-group">
+                                                <label for="loanReceiverId">دریافت کننده</label>
+                                                <select name="loanReceiverId" id="loanReceiverId" type="text" class="form-control basic" asp-items="@ViewBag.listLoanReceiver">
+                                                    <option value="">-- انتخاب --</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="loanAmount">مبلغ وام</label>
+                                            <input class="form-control mb-4" name="loanAmount" value="@ViewBag.loanAmount" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="amount">مقدار</label>
+                                            <input class="form-control mb-4" name="amount" id="amount" value="@ViewBag.amount" onkeyup="formatNumber(this.id, this.value)" onclick="select()" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="percentSalary">درصد سود وام</label>
+                                            <input class="form-control" name="percentSalary" value="@ViewBag.percentSalary" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="isDone">پرداخت شده ؟</label>
+                                            @{
+                                                bool? isDone = ViewBag.isdone;
+                                            }
+                                            <select class="form-control mb-4" name="isDone" asp-for="@isDone">
+                                                <option value="">-- انتخاب --</option>
+                                                <option value="true">پرداخت شده</option>
+                                                <option value="false">پرداخت نشده</option>
+                                            </select>
+                                            @*<div class="form-group mt-30">
+                                                <label class="switch s-icons s-outline s-outline-primary mb-4 mr-2">
+                                                    <input type="checkbox" name="isdone" value="@(ViewBag.isdone == null ? false : true)">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </div>*@
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <lable>تاریخ پرداخت از </lable>
+                                            <input id="paymentStartDateFrom" name="paymentStartDateFrom" value="@(ViewBag.paymentStartDateFrom != null ? $"{ViewBag.paymentStartDateFrom}":"" )" class="form-control mb-4 PersianDatePicker" type="text" readonly />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <lable>تا</lable>
+                                            <input id="paymentStartDateTo" name="paymentStartDateTo" value="@(ViewBag.paymentStartDateTo != null ? $"{ViewBag.paymentStartDateTo}":"" )" class="form-control mb-4 PersianDatePicker" type="text" readonly />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <lable>تاریخ ثبت از </lable>
+                                            <input id="registerDateFrom" name="registerDateFrom" value="@(ViewBag.registerDateFrom != null ? $"{ViewBag.registerDateFrom}":"" )" class="form-control mb-4 PersianDatePicker" type="text" readonly />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <lable>تا</lable>
+                                            <input id="registerDateTo" name="registerDateTo" value="@(ViewBag.registerDateTo != null ? $"{ViewBag.registerDateTo}":"" )" class="form-control mb-4 PersianDatePicker" type="text" readonly />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <lable>اندازه ی صفحه</lable>
+                                            <select class="form-control mb-4" name="pageSize">
+                                                <option value="10" id="10">10</option>
+                                                <option value="25" id="25">25</option>
+                                                <option value="50" id="50">50</option>
+                                                <option value="100" id="100">100</option>
+                                            </select>
+                                            <span class="text-danger"></span>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+
+                                                <div class="col-md-6">
+
+                                                    <lable></lable>
+                                                    <button class="btn btn-success mb-2 btn-showloader" style="width:100%" type="submit">اعمال فیلتر</button>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <lable></lable>
+                                                    <a class="btn btn-danger mb-2 btn-showloader" href="@Url.Action("Index")" style="width:100%" id="clear">پاک کردن</a>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="lastHeader" value="@ViewBag.lastColumn" />
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+﻿@model string
+
+<div class="row">
+    <div class="col-md-12">
+        @*  <a class="btn btn-primary" href="@Url.Action("Create")"><i class="fa fa-plus"></i>&nbsp; @Aban.Resource.Layout.Layout.NewRecord</a>*@
+        <div class="form-group">
+            <a class="btn btn-primary btn-showloader" href="@Url.Action("Create")">@(string.IsNullOrEmpty(Model) ? "رکورد جدید" : Model)</a>
+        </div>
+    </div>
+    @*<div class="col-md-4">
+    <div class="dataTables_length" id="DataTables_Table_0_length">
+    <label>
+    @Aban.Resource.Layout.Layout.ShowRecords
+    <select name="pageSize" aria-controls="DataTables_Table_0" id="SelectTableNum" class="form-control input-sm">
+    <option value="10">10</option>
+    <option value="25">25</option>
+    <option value="50">50</option>
+    <option value="100">100</option>
+    </select>
+    </label>
+    </div>
+    </div>*@
+</div>
+<br />

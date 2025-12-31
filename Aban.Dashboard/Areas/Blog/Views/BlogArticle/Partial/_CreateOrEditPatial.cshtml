@@ -1,0 +1,99 @@
+﻿@model BlogArticle
+<div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
+    <div class="info">
+        <div class="r!importantw">
+            <div class="col-md-11 mx-auto">
+                <div class="row">
+
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("right")" />
+                        <br />
+                        <br />
+                    </div>
+
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="IsDelete" />
+
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="WriterId"></label>
+                            <select asp-for="WriterId" asp-items="ViewBag.listWriter" class="chosen-select form-control">
+                                <option value="">انتخاب</option>
+                            </select>
+                            <span asp-validation-for="WriterId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="Title"></label>
+                            <input asp-for="Title" type="text" class="form-control">
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="BlogArticleURL"></label>
+                            <input asp-for="BlogArticleURL" type="text" class="form-control">
+                            <span asp-validation-for="BlogArticleURL" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label asp-for="Isvisible"></label>
+                            <div class="form-group mt-30">
+                                <label class="switch s-icons s-outline s-outline-success mr-2">
+                                    <input type="checkbox" asp-for="Isvisible">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="form-group">
+                            <label asp-for="Intro"></label>
+                            <textarea asp-for="Intro" type="text" class="form-control"></textarea>
+                            <span asp-validation-for="Intro" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="form-group">
+                            <label asp-for="Description"></label>
+                            <textarea class="form-control" asp-for="Description"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    @*
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <div class="form-group">
+                    <label asp-for="ImageName"></label>
+                    <input asp-for="ImageName" type="text" class="form-control">
+                    <span asp-validation-for="ImageName" class="text-danger"></span>
+                    </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <div class="form-group">
+                    <label asp-for="VideoName"></label>
+                    <input asp-for="VideoName" type="text" class="form-control">
+                    <span asp-validation-for="VideoName" class="text-danger"></span>
+                    </div>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="form-group">
+                    <label asp-for="Videolink"></label>
+                    <input asp-for="Videolink" type="text" class="form-control">
+                    <span asp-validation-for="Videolink" class="text-danger"></span>
+                    </div>
+                    </div>
+                    *@
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("left")" />

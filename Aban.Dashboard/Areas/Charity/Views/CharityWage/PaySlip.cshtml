@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html>
+<html lang="fa">
+<head>
+    @model List<PaySlipViewModel>
+    @{
+        Layout = "";
+    }
+    <meta charset="utf-8">
+
+    <link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/assets/js/libs/jquery-3.1.1.min.js"></script>
+    <script src="~/bootstrap/js/popper.min.js"></script>
+
+    <title>آخرین واریزی ها</title>
+</head>
+<body>
+
+    @{
+
+        double netReceipts = 0; // خالص دریافتی
+        double sumOfAdditions = 0;
+        double sumOfDeducations = 0;
+        double sumOfInstallments = 0;
+    }
+
+    <h2>گزارش آخرین واریزی‌ها</h2>
+    @foreach (var item in Model)
+    {
+        <div id="divmain">
+
+
+            <br>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>تاریخ واریزی</th>
+                        <th>از تاریخ:  &nbsp; @Html.ConvertToPersianDate(item.WageDateFrom)</th>
+                        <th>تا تاریخ: @Html.ConvertToPersianDate(item.WageDateTo)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>نام: @item.FirstName</td>
+                        <td>نام خانوادگی:  @item.LastName</td>
+                        <td>فرزند: @item.FatherName</td>
+                    </tr>
+                    <tr>
+                        <td>حقوق ثابت: @item.FixedSalary.ToString("N0") ريال</td>
+                        <td>درصد: @item.PercentSalary %</td>
+                        <td> <a href="@Url.Action("CharityWageDeposits", "CharityDeposit", new{area="Charity", wageId = item.CharityWageId })" target="_blank" style="text-decoration: none; color: #000"> جمع واریزی: @item.TotalOfDeposits.ToString("N0") ريال </a> </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            جمع اضافات: &nbsp;
+                            @if (item.CharityAdditions != null && item.CharityAdditions.Count() != 0)
+                            {
+                                sumOfAdditions = item.CharityAdditions.Select(x => x.Amount).Sum();
+                                <span>@sumOfAdditions.ToString("N0") ريال</span>
+                            }
+                            else
+                            {
+                                sumOfAdditions = 0;
+                                <span> - </span>
+                            }
+                        </td>
+                        <td>
+                            جمع کسورات: &nbsp;
+                            @if (item.CharityDeducations != null && item.CharityDeducations.Count() != 0)
+                            {
+                                sumOfDeducations = item.CharityDeducations.Select(x => x.Amount).Sum();
+                                <span>@sumOfDeducations.ToString("N0") ريال</span>
+                            }
+                            else
+                            {
+                                sumOfDeducations = 0;
+                                <span> - </span>
+                            }
+                        </td>
+                        <td>
+                            جمع اقساط وام: &nbsp;
+                            @if (item.CharityLoanInstallments != null && item.CharityLoanInstallments.Count() != 0)
+                            {
+                                sumOfInstallments = item.CharityLoanInstallments.Select(x => x.InstallmentAmount).Sum();
+                                <span>@sumOfInstallments.ToString("N0") ريال</span>
+                            }
+                            else
+                            {
+                                sumOfInstallments = 0;
+                                <span> - </span>
+                            }
+                        </td>
+
+                        @{
+                            netReceipts = (item.TotalOfDeposits * item.PercentSalary / 100) + item.FixedSalary;
+
+                            if (sumOfAdditions != 0)
+                            {
+                                netReceipts += sumOfAdditions;
+                            }
+
+                            if (sumOfDeducations != 0)
+                            {
+                                netReceipts -= sumOfDeducations;
+                            }
+
+                            if (sumOfInstallments != 0)
+                            {
+                                netReceipts -= sumOfInstallments;
+                            }
+                        }
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td style="@(netReceipts < 0 ? "background-color: #ff7e7e;" : "background-color: #7eff94") ">
+
+                            خالص دریافتی: &nbsp;
+
+                            @netReceipts.ToString("N0") ریال
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+    }
+
+    <style>
+        #divmain {
+            direction: rtl;
+            width: 95%;
+            border: solid;
+            margin: 20px;
+            border-width: 1px;
+            text-align: center;
+            font-family: 'b nazanin';
+        }
+
+        p {
+            font-size: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            font-family: 'b nazanin';
+        }
+    </style>
+
+    <script>
+
+    </script>
+
+</body>
+</html>

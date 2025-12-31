@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.15">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="8.4.7" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Aban.Common\Aban.Common.csproj" />
+    <ProjectReference Include="..\Aban.DataLayer\Aban.DataLayer.csproj" />
+    <ProjectReference Include="..\Aban.Domain\Aban.Domain.csproj" />
+    <ProjectReference Include="..\Aban.Service\Aban.Service.csproj" />
+    <ProjectReference Include="..\PersianTranslation\PersianTranslation.csproj" />
+  </ItemGroup>
+
+</Project>

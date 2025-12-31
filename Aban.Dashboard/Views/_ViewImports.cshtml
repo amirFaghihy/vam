@@ -1,0 +1,11 @@
+﻿@using Aban.Dashboard
+@using Aban.Common.Utility
+@using Aban.Dashboard.Helpers
+@using Aban.Service.Interfaces;
+@using Aban.ViewModel
+@using Aban.Domain.Entities
+@using Newtonsoft.Json;
+@inject IUserIdentityService _userIdentityService;
+@inject Microsoft.Extensions.Options.IOptions<Aban.Domain.Configuration.PathsConfiguration> _pathsConfiguratin;
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

@@ -1,0 +1,100 @@
+﻿@model CharityLoanInstallments
+<div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
+    <div class="info">
+        <div class="r!importantw">
+            <div class="col-md-11 mx-auto">
+                <div class="row">
+
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-md-12" style="float: right !important; margin-bottom: 15px;">
+                            <div class="text-right">
+                                <a style="cursor:pointer" class="btn btn-success mb-2 pr-5 pl-5 submit-form">ذخیره</a>
+                                <a class="btn btn-danger mb-2 btn-showloader" href="/Loans/CharityLoanInstallments/Index">انصراف</a>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                    </div>
+
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="CharityLoanId"></label>
+                            <select asp-for="CharityLoanId" asp-items="ViewBag.listCharityLoan" class="chosen-select form-contro basic">
+                                <option value="">-- انتخاب --</option>
+                            </select>
+                            <span asp-validation-for="CharityLoanId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="InstallmentAmount"></label>
+                            <input asp-for="InstallmentAmount" type="text" class="form-control" onkeyup="formatNumber(this.id, this.value)" value="@Model.InstallmentAmount.ToString("N0")" onclick="select()">
+                            <span asp-validation-for="InstallmentAmount" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="PaymentDue"></label>
+                            @if (Model.PaymentDue != new DateTime())
+                            {
+                                <input id="PaymentDue" name="paymentDueString" type="text" class="form-control mb-4 PersianDatePicker" value="@Html.ConvertToPersianDate(Model.PaymentDue)" autocomplete="off" />
+                            }
+                            else
+                            {
+                                <input id="PaymentDue" name="paymentDueString" type="text" class="form-control mb-4 PersianDatePicker" autocomplete="off" />
+                            }
+                            <span asp-validation-for="PaymentDue" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="PaymentDate"></label>
+                            @if (Model.PaymentDate != null)
+                            {
+                                <input id="PaymentDate" name="paymentDateString" type="text" class="form-control mb-4 PersianDatePicker" value="@Html.ConvertToPersianDate(Model.PaymentDate.Value)" autocomplete="off" />
+                            }
+                            else
+                            {
+                                <input id="PaymentDate" name="paymentDateString" type="text" class="form-control mb-4 PersianDatePicker" autocomplete="off" />
+                            }
+                            <span asp-validation-for="PaymentDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label for="paymentDateStringTimeString">ساعت پرداخت</label>
+                            @{
+                                var valueTime = (Model.PaymentDate != default ? Model.PaymentDate!.Value.ToString("HH:mm") : "00:00");
+                            }
+                            <input type="text" class="form-control clockPicker" id="paymentDateStringTimeString" readonly="readonly" name="paymentDateStringTimeString" value="@valueTime" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="IsDone"></label>
+                            <div class="form-group mt-30">
+                                <label class="switch s-icons s-outline s-outline-success mb-4 mr-2">
+                                    <input type="checkbox" asp-for="IsDone">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12" style="float: left !important; margin-bottom: 15px;">
+    <div class="text-left">
+        <a style="cursor:pointer" class="btn btn-success mb-2 pr-5 pl-5 submit-form">ذخیره</a>
+        <a class="btn btn-danger mb-2 btn-showloader" href="/Loans/CharityLoanInstallments/Index">انصراف</a>
+    </div>
+</div>

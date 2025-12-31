@@ -1,0 +1,104 @@
+﻿@model X.PagedList.IPagedList<UserAccountDepositWithdrawal>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
+    breadCrumb.PageTitle = "واریز/براشت ها";
+    breadCrumb.Title = "واریز/براشت ها";
+
+    breadCrumb.Links = new List<string[]> { new string[2] { Url.Action("Index"), breadCrumb.PageTitle } };
+
+}
+@await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
+
+<div class="row layout-top-spacing">
+    <div class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+
+            <partial name="./Partial/_FilterTablePartial" />
+
+            @await Html.PartialAsync("~/Views/Shared/Generic/_CreateButtonWithPageSize.cshtml", "واریز/برداشت جدید")
+            <div class="table-responsive text-center">
+                <table class="table table-bordered table-hover mb-4">
+                    <thead>
+                        <tr>
+
+                            <th style="width: 162px;">@Html.ActionLink("کد", "Index", "UserAccountDepositWithdrawal", new { userAccountId = ViewBag.userAccountId, price = ViewBag.price, totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction, accountTransactionType = ViewBag.accountTransactionType, transactionDateTime = ViewBag.transactionDateTime, registerDate = ViewBag.registerDate, sortColumn = "Id", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Id" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("حساب", "Index", "UserAccountDepositWithdrawal", new { userAccountId = ViewBag.userAccountId, price = ViewBag.price, totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction, accountTransactionType = ViewBag.accountTransactionType, transactionDateTime = ViewBag.transactionDateTime, registerDate = ViewBag.registerDate, sortColumn = "UserAccountId", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "UserAccountId" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("مبلغ واریز/برداشت", "Index", "UserAccountDepositWithdrawal", new { userAccountId = ViewBag.userAccountId, price = ViewBag.price, totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction, accountTransactionType = ViewBag.accountTransactionType, transactionDateTime = ViewBag.transactionDateTime, registerDate = ViewBag.registerDate, sortColumn = "Price", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "Price" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("مانده بعد از تراکنش", "Index", "UserAccountDepositWithdrawal", new { userAccountId = ViewBag.userAccountId, price = ViewBag.price, totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction, accountTransactionType = ViewBag.accountTransactionType, transactionDateTime = ViewBag.transactionDateTime, registerDate = ViewBag.registerDate, sortColumn = "TotalPriceAfterTransaction", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "TotalPriceAfterTransaction" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("واریز/برداشت", "Index", "UserAccountDepositWithdrawal", new { userAccountId = ViewBag.userAccountId, price = ViewBag.price, totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction, accountTransactionType = ViewBag.accountTransactionType, transactionDateTime = ViewBag.transactionDateTime, registerDate = ViewBag.registerDate, sortColumn = "AccountTransactionType", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "AccountTransactionType" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تاریخ تراکنش", "Index", "UserAccountDepositWithdrawal", new { userAccountId = ViewBag.userAccountId, price = ViewBag.price, totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction, accountTransactionType = ViewBag.accountTransactionType, transactionDateTime = ViewBag.transactionDateTime, registerDate = ViewBag.registerDate, sortColumn = "TransactionDateTime", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "TransactionDateTime" })</th>
+                            <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "UserAccountDepositWithdrawal", new { userAccountId = ViewBag.userAccountId, price = ViewBag.price, totalPriceAfterTransaction = ViewBag.totalPriceAfterTransaction, accountTransactionType = ViewBag.accountTransactionType, transactionDateTime = ViewBag.transactionDateTime, registerDate = ViewBag.registerDate, sortColumn = "RegisterDate", isDesc = ViewBag.isDesc, lastColumn = ViewBag.lastColumn, pageNumber = ViewBag.pageNumber, pageSize = ViewBag.pageSize }, new { @id = "RegisterDate" })</th>
+
+                            @*<th style="width: 162px;">عملیات</th>*@
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.UserAccount!.AccountOwner!.FirstName @item.UserAccount.AccountOwner.LastName @(string.IsNullOrEmpty(item.UserAccount.AccountOwner.FatherName) ? "" : ("| " + item.UserAccount.AccountOwner.FatherName)) </td>
+                            <td>@item.Price.ToString("N0")</td>
+                            <td>@item.TotalPriceAfterTransaction.ToString("N0")</td>
+                            <td style="background-color: @(item.AccountTransactionType == Aban.Domain.Enumerations.Enumeration.TransactionType.واریز ? "#8dbf42;" : item.AccountTransactionType == Aban.Domain.Enumerations.Enumeration.TransactionType.پرداخت_قسط ? "#e2a03f;" : item.AccountTransactionMethod == Aban.Domain.Enumerations.Enumeration.TransactionMethod.برداشت_سیستمی ? "#5c1ac3" : "#e7515a;")">
+                                @item.AccountTransactionType
+                                <br />
+                                @(item.AccountTransactionMethod == Aban.Domain.Enumerations.Enumeration.TransactionMethod.برداشت_سیستمی ? "پرداخت قسط سیستمی" : "")
+                            </td>
+                            <td>
+                                @Html.ConvertToPersianDateTime(item.TransactionDateTime)
+                            </td>
+                            <td>
+                                @Html.ConvertToPersianDateTime(item.RegisterDate)
+                            </td>
+                        </tr>
+                    }
+                    <tfoot>
+                        <tr>
+                            <th style="width: 162px;">کد</th>
+                            <th style="width: 162px;">حساب</th>
+                            <th style="width: 162px;">مبلغ واریز/برداشت</th>
+                            <th style="width: 162px;">مانده بعد از تراکنش</th>
+                            <th style="width: 162px;">واریز/برداشت</th>
+                            <th style="width: 162px;">تاریخ تراکنش</th>
+                            <th style="width: 162px;">تاریخ ثبت</th>
+
+                            @*<th>عملیات</th>*@
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <partial name="./Partial/_PaginationCount" model="new PaginationInfo(Model)" />
+
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="~/plugins/select2/select2.min.js"></script>
+
+    <script>
+
+        $("#UserAccountId").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class23');
+
+        $("#accountTransactionType").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class23');
+
+
+        $("#accountTransactionMethod").select2({
+            tags: true,
+        }).data('select2').$dropdown.addClass('class58');
+    </script>
+}

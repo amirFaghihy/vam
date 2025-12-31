@@ -1,0 +1,55 @@
+﻿@model PaginationInfo
+
+@{ int PageNumber = Model.PageNumber;
+    int PageCount = Model.PageCount;
+
+    int PageStrat = ((PageNumber - 1) * PageCount) + 1;
+
+    int PageEnd = PageCount * PageNumber;
+    PageCount = PageStrat + PageCount;
+
+    if (PageCount > Model.TotalItemCount)
+    {
+        PageCount = Model.TotalItemCount;
+    }
+}
+<br />
+<div class="row">
+    <div class="offset-md-5 col-md-4">
+        <div class="" id="">
+            @Html.PagedListPager((IPagedList)Model, x => Url.Action("Index", new
+       {
+            guaranteeUserId = ViewBag.guaranteeUserId,
+            chequeNumber = ViewBag.chequeNumber,
+            bankName = ViewBag.bankName,
+            chequePrice = ViewBag.chequePrice,
+            bankDraftNumber = ViewBag.bankDraftNumber,
+            bankDraftPrice = ViewBag.bankDraftPrice,
+            goldGuarantee = ViewBag.goldGuarantee,
+            paySlip = ViewBag.paySlip,
+            registerDateFrom = ViewBag.registerDateFrom,
+            registerDateTo = ViewBag.registerDateTo,
+
+
+            pageNumber = x,
+            pageSize = ViewBag.pageSize,
+            sortColumn = ViewBag.sortColumn,
+            //lastColumn = ViewBag.lastColumn,
+            isDesc = ViewBag.isDesc
+       }), new X.PagedList.Web.Common.PagedListRenderOptions
+       {
+           PageClasses = new string[] { "page-link" },
+           UlElementClasses = new string[] { "pagination" },
+           LiElementClasses = new string[] { "page-item" },
+           //DisplayItemSliceAndTotal = true,
+           //DisplayPageCountAndCurrentLocation=true,
+           MaximumPageNumbersToDisplay = 5,
+           DisplayLinkToFirstPage = X.PagedList.Web.Common.PagedListDisplayMode.Always,
+           DisplayLinkToLastPage = X.PagedList.Web.Common.PagedListDisplayMode.Always,
+       })
+        </div>
+    </div>
+    <div class="col-md-3">
+        نمایش رکوردهای @(Model.PageCount < Model.PageNumber ? 0 : PageStrat) الی @PageCount  از  @Model.TotalItemCount رکورد
+    </div>
+</div>

@@ -1,0 +1,81 @@
+﻿@model UserAccount
+<div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
+    <div class="info">
+        <div class="r!importantw">
+            <div class="col-md-11 mx-auto">
+                <div class="row">
+
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-md-12" style="float: right !important; margin-bottom: 15px;">
+                            <div class="text-right">
+                                <a style="cursor:pointer" class="btn btn-success mb-2 pr-5 pl-5 submit-form">ذخیره</a>
+                                <a class="btn btn-danger mb-2 btn-showloader" href="/Loans/UserAccount/Index">انصراف</a>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                    </div>
+
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="IsDelete" />
+
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="AccountOwnerId"></label>
+
+                            <select asp-for="AccountOwnerId" asp-items="ViewBag.listAccountOwner" class="form-control">
+                                <option value="">-- انتخاب --</option>
+                            </select>
+                            <span asp-validation-for="AccountOwnerId" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                            <div class="form-group">
+                                <label asp-for="BankName"></label>
+                                <select asp-for="BankName" asp-items="ViewBag.listBankName" class="form-control">
+                                    <option value="">انتخاب</option>
+                                </select>
+                                <span asp-validation-for="BankName" class="text-danger"></span>
+                            </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div role="form">
+                            <div class="form-group">
+                                <label asp-for="Title"></label>
+                                <input asp-for="Title" type="text" class="form-control">
+                                <span asp-validation-for="Title" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <div role="form">
+                            <div class="form-group">
+                                <label asp-for="AccountNumber"></label> <span id="latestAccountNumber"></span>
+                                <input asp-for="AccountNumber" class="form-control">
+                                <span asp-validation-for="AccountNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div role="form">
+                            <div class="form-group">
+                                <label asp-for="Description"></label>
+                                <textarea asp-for="Description" class="form-control"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12" style="float: left !important; margin-bottom: 15px;">
+    <div class="text-left">
+        <a style="cursor:pointer" class="btn btn-success mb-2 pr-5 pl-5 submit-form">ذخیره</a>
+        <a class="btn btn-danger mb-2 btn-showloader" href="/Loans/UserAccount/Index">انصراف</a>
+    </div>
+</div>

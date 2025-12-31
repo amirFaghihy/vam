@@ -1,0 +1,59 @@
+﻿@model BlogCategory
+
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("left")" />
+        <br />
+        <br />
+    </div>
+</div>
+<div class="row">
+
+    @Html.HiddenFor(X => X.Id)
+    @Html.HiddenFor(X => X.UserIdentityId)
+
+    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+        <div role="form">
+            <div class="form-group">
+                <label asp-for="ParentId"></label>
+                <select asp-for="ParentId" asp-items="ViewBag.listParent" class="chosen-select form-control">
+                    <option value="">انتخاب</option>
+                </select>
+                <span asp-validation-for="ParentId" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+        <div role="form">
+            <div class="form-group">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" type="text" class="form-control">
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+        <div class="form-group">
+            <label asp-for="IsVisible"></label>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" asp-for="IsVisible" class="js-switch">
+                    <span asp-validation-for="IsVisible" class="text-danger"></span>
+                </label>
+            </div>
+            @*<span asp-validation-for="IsVisible" class="text-danger"></span>*@
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+        <div role="form">
+            <div class="form-group">
+                <label asp-for="BlogCategoryURL"></label>
+                <input asp-for="BlogCategoryURL" type="text" class="form-control">
+                <span asp-validation-for="BlogCategoryURL" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<partial name="~/Views/Shared/Generic/_SaveAndCancelButton.cshtml" model="@("right")" />
