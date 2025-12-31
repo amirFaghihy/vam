@@ -1,68 +1,39 @@
 ﻿using Aban.Common;
 using Aban.Common.Utility;
-using Aban.Domain.Entities.Loans;
-using Aban.Domain.Entities.Messages; // اضافه شده برای مدیریت پیام‌ها
-using Aban.Service.Interfaces.Generic;
-using Aban.Service.Interfaces.Loans;
-using Aban.Service.Interfaces.User;
+using Aban.Domain.Entities;
+using Aban.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using static Aban.Domain.Enumerations.Enumeration;
 
 namespace Aban.Dashboard.Areas.Loans.Controllers
 {
     [Area("Loans")]
     [Authorize(Roles = "Admin")]
-    public class CharityLoanController : Controller // تغییر مهم: ارث‌بری مستقیم از Controller
+    public class CharityLoanController : GenericController
     {
         #region constructor
 
-        private readonly IGenericService<CharityLoan> _charityLoanGenericService;
-        private readonly ICharityLoanService _charityLoanService;
-        private readonly IUserIdentityService _userIdentityService;
-        private readonly ICharityLoanInstallmentsService _installmentsService;
-        private readonly IGuaranteeService _guaranteeService;
+        private readonly ICharityLoanService charityLoanService;
+        private readonly IUserIdentityService userIdentityService;
+        private readonly ICharityLoanInstallmentsService charityLoanInstallmentsService;
+        private readonly IGuaranteeService guaranteeService;
+
 
         public CharityLoanController(
-            IGenericService<CharityLoan> charityLoanGenericService,
             ICharityLoanService charityLoanService,
             IUserIdentityService userIdentityService,
-            ICharityLoanInstallmentsService installmentsService,
+            ICharityLoanInstallmentsService charityLoanInstallmentsService,
             IGuaranteeService guaranteeService
             )
         {
-            _charityLoanGenericService = charityLoanGenericService;
-            _charityLoanService = charityLoanService;
-            _userIdentityService = userIdentityService;
-            _installmentsService = installmentsService;
-            _guaranteeService = guaranteeService;
+            this.charityLoanService = charityLoanService;
+            this.userIdentityService = userIdentityService;
+            this.charityLoanInstallmentsService = charityLoanInstallmentsService;
+            this.guaranteeService = guaranteeService;
         }
 
         #endregion
-
-        // متد کمکی برای ارسال پیام به ویو
-        protected void SetMessage(ResultStatusOperation result)
-        {
-            if (result == null) return;
-            TempData["Message"] = result.Message;
-            TempData["Type"] = result.Type.ToString();
-        }
-
-        protected void SetMessageException(ResultStatusOperation result, MessageTypeActionMethod method)
-        {
-             TempData["Message"] = result.Message + " | " + result.Exception?.Message;
-             TempData["Type"] = "Danger";
-        }
-
-        protected ControllerInfo fillControllerInfo(string actionName)
-        {
-             return new ControllerInfo { ControllerName = "CharityLoan", ActionName = actionName };
-        }
 
         [HttpGet]
         public async Task<IActionResult> Index(
@@ -86,6 +57,10 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         {
             try
             {
+
+
+                #region selectedValue
+
                 ViewBag.pageNumber = pageNumber;
                 ViewBag.pageSize = pageSize;
                 ViewBag.sortColumn = sortColumn;
@@ -93,10 +68,21 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 ViewBag.isDesc = isDesc;
                 ViewBag.guaranteeId = guaranteeId;
                 ViewBag.loanReceiverId = loanReceiverId;
-                
+                ViewBag.loanAmount = loanAmount;
+                ViewBag.percentSalary = percentSalary;
+                ViewBag.accountNumber = accountNumber;
+                ViewBag.givingLoanMethod = givingLoanMethod;
+                ViewBag.paymentStartDateFrom = paymentStartDateFrom;
+                ViewBag.paymentStartDateTo = paymentStartDateTo;
+                ViewBag.numberOfInstallments = numberOfInstallments;
+                ViewBag.registerDateFrom = registerDateFrom;
+                ViewBag.registerDateTo = registerDateTo;
+                ViewBag.isdone = isdone;
+
+
                 if (ViewBag.lastColumn == ViewBag.sortColumn)
                 {
-                    ViewBag.isDesc = !isDesc;
+                    ViewBag.isDesc = isDesc == true ? false : true;
                     isDesc = ViewBag.isDesc;
                 }
                 else
@@ -105,85 +91,113 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
                 }
                 ViewBag.lastColumn = ViewBag.sortColumn;
 
-                await FillDropDown();
+                #endregion
 
-                DateTime? _paymentStartDateFrom = string.IsNullOrEmpty(paymentStartDateFrom) ? null : await paymentStartDateFrom.ToConvertPersianDateToDateTimeAsync(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
-                DateTime? _paymentStartDateTo = string.IsNullOrEmpty(paymentStartDateTo) ? null : await paymentStartDateTo.ToConvertPersianDateToDateTimeAsync(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
-                DateTime? _registerDateFrom = string.IsNullOrEmpty(registerDateFrom) ? null : await registerDateFrom.ToConvertPersianDateToDateTimeAsync(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
-                DateTime? _registerDateTo = string.IsNullOrEmpty(registerDateTo) ? null : await registerDateTo.ToConvertPersianDateToDateTimeAsync(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
+                FillDropDown();
 
-                var result = _charityLoanService.SpecificationGetData(
+                #region DateTime Convertor
+
+                DateTime? _paymentStartDateFrom = null;
+                DateTime? _paymentStartDateTo = null;
+                DateTime? _registerDateFrom = null;
+                DateTime? _registerDateTo = null;
+
+
+                if (!string.IsNullOrEmpty(paymentStartDateFrom))
+                {
+                    _paymentStartDateFrom = await paymentStartDateFrom.ToConvertPersianDateToDateTimeAsync(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
+                }
+                if (!string.IsNullOrEmpty(paymentStartDateTo))
+                {
+                    _paymentStartDateTo = await paymentStartDateTo.ToConvertPersianDateToDateTimeAsync(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
+                }
+
+                if (!string.IsNullOrEmpty(registerDateFrom))
+                {
+                    _registerDateFrom = await registerDateFrom.ToConvertPersianDateToDateTimeAsync(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
+                }
+                if (!string.IsNullOrEmpty(registerDateTo))
+                {
+                    _registerDateTo = await registerDateTo.ToConvertPersianDateToDateTimeAsync(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
+                }
+
+                #endregion
+
+
+                Tuple<IQueryable<CharityLoan>, ResultStatusOperation> result = charityLoanService.SpecificationGetData(
                     guaranteeId, loanReceiverId, loanAmount, percentSalary, accountNumber, givingLoanMethod,
                     _paymentStartDateFrom, _paymentStartDateTo, numberOfInstallments, _registerDateFrom, _registerDateTo,
                     isdone);
 
-                return View(_charityLoanService.Pagination(result.Item1, true, pageNumber, pageSize, isDesc, sortColumn));
+                return View(charityLoanService.Pagination(result.Item1, true, pageNumber, pageSize, isDesc, sortColumn));
+                //return View(result.Item1.ToPagedList(pageNumber, pageSize));
             }
             catch (Exception exception)
             {
                 SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), MessageTypeActionMethod.Index);
-                return RedirectToAction("Index", "Home"); 
+                return RedirectToAction("ShowException", "Error", new { area = "" });
             }
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             try
             {
-                ViewBag.loanReceiverId = "";
-                ViewBag.guaranteeId = 0;
-                await FillDropDown();
+                FillDropDown();
                 return View(new CharityLoan());
             }
             catch (Exception exception)
             {
                 SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), MessageTypeActionMethod.Index);
-                return RedirectToAction("Index");
+                return RedirectToAction("ShowException", "Error", new { area = "" });
             }
+
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CharityLoan model)
+        public async Task<IActionResult> Create(
+            CharityLoan model,
+            string paymentStartDateString)
         {
-            string paymentStartDateString = Request.Form["paymentStartDateString"];
-
             try
             {
-                if (!string.IsNullOrEmpty(paymentStartDateString))
-                {
-                    model.PaymentStartDate = paymentStartDateString.ToConvertPersianDateToDateTime(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
-                }
-                else
-                {
-                    model.PaymentStartDate = DateTime.Now;
-                }
 
-                var resultFillModel = _charityLoanService.FillModel(model);
-                resultFillModel = await _charityLoanService.Insert(fillControllerInfo("Guarantee"), resultFillModel.Item1);
-                
-                if (resultFillModel.Item2.Type == MessageTypeResult.Success)
-                {
-                    var installments = _installmentsService.CreateListOfModel(resultFillModel.Item1);
-                    var charityLoanInstallments = await _installmentsService.InsertRange(true, installments);
+                #region DateTime Convertor
 
-                    SetMessage(charityLoanInstallments.Item2);
-                    return RedirectToAction(nameof(Index));
-                }
-                else
+                DateTime _paymentStartDate = paymentStartDateString.ToConvertPersianDateToDateTime(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
+                TimeSpan _paymentStartDateTime = TimeSpan.Zero;
+                model.PaymentStartDate = _paymentStartDate.MergeDateAndTime(_paymentStartDateTime);
+
+                #endregion
+
+                Tuple<CharityLoan, ResultStatusOperation> resultFillModel = charityLoanService.FillModel(model);
+                resultFillModel = await charityLoanService.Insert(fillControllerInfo("Guarantee"), resultFillModel.Item1);
+                switch (resultFillModel.Item2.Type)
                 {
-                    SetMessage(resultFillModel.Item2);
-                    ViewBag.loanReceiverId = resultFillModel.Item1.LoanReceiverId;
-                    ViewBag.guaranteeId = resultFillModel.Item1.GuaranteeId;
-                    await FillDropDown();
-                    return View(resultFillModel.Item1);
+                    case MessageTypeResult.Success:
+                        Tuple<IEnumerable<CharityLoanInstallments>, ResultStatusOperation> charityLoanInstallments =
+                            await charityLoanInstallmentsService.InsertRange(true, charityLoanInstallmentsService.CreateListOfModel(resultFillModel.Item1));
+
+                        SetMessage(charityLoanInstallments.Item2);
+                        return RedirectToAction(nameof(Index));
+
+                    case MessageTypeResult.Danger:
+                    case MessageTypeResult.Warning:
+                        SetMessage(resultFillModel.Item2);
+                        FillDropDown();
+                        return View(resultFillModel.Item1);
+
+                    default:
+                        SetMessage(resultFillModel.Item2);
+                        return RedirectToAction(nameof(Index));
                 }
             }
             catch (Exception exception)
             {
                 SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), MessageTypeActionMethod.Index);
-                return RedirectToAction("Index");
+                return RedirectToAction("ShowException", "Error");
             }
         }
 
@@ -192,60 +206,76 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         {
             try
             {
-                if (id == null) return RedirectToAction("Index");
-
-                var resultFindModel = await _charityLoanService.Find(id.Value);
-
-                if (resultFindModel.Item1 == null) return NotFound();
+                if (id == null)
+                {
+                    SetMessageEditnotFound();
+                    return RedirectToAction("Index");
+                }
+                Tuple<CharityLoan, ResultStatusOperation> resultFindModel = await charityLoanService.Find(id.Value);
 
                 ViewBag.loanReceiverId = resultFindModel.Item1.LoanReceiverId;
-                ViewBag.guaranteeId = resultFindModel.Item1.GuaranteeId;
-
                 SetMessage(resultFindModel.Item2);
-                await FillDropDown();
+                switch (resultFindModel.Item2.Type)
+                {
+                    case MessageTypeResult.Success:
+                        FillDropDown();
 
-                return View(resultFindModel.Item1);
+                        return View(resultFindModel.Item1);
+
+                    case MessageTypeResult.Danger:
+                    case MessageTypeResult.Warning:
+                        FillDropDown();
+                        return View(resultFindModel.Item1);
+
+                    default:
+                        return RedirectToAction(nameof(Index));
+                }
             }
             catch (Exception exception)
             {
                 SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), MessageTypeActionMethod.Index);
-                return RedirectToAction("Index");
+                return RedirectToAction("ShowException", "Error");
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(CharityLoan model)
+        public async Task<IActionResult> Edit(
+            CharityLoan model,
+            string paymentStartDateString)
         {
-            string paymentStartDateString = Request.Form["paymentStartDateString"];
-
             try
             {
-                if (!string.IsNullOrEmpty(paymentStartDateString))
-                {
-                    model.PaymentStartDate = paymentStartDateString.ToConvertPersianDateToDateTime(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
-                }
 
-                var resultEdit = await _charityLoanService.Update(fillControllerInfo("Guarantee"), model);
+                #region DateTime Convertor
+
+                DateTime _paymentStartDate = paymentStartDateString.ToConvertPersianDateToDateTime(DateTimeFormat.yyyy_mm_dd, DateTimeSpiliter.slash);
+                TimeSpan _paymentStartDateTime = TimeSpan.Zero;
+                model.PaymentStartDate = _paymentStartDate.MergeDateAndTime(_paymentStartDateTime);
+
+                #endregion
+
+                Tuple<CharityLoan, ResultStatusOperation> resultEdit = await charityLoanService.Update(fillControllerInfo("Guarantee"), model);
 
                 SetMessage(resultEdit.Item2);
-                
-                if (resultEdit.Item2.Type == MessageTypeResult.Success)
+                switch (resultEdit.Item2.Type)
                 {
-                    return RedirectToAction(nameof(Index));
-                }
-                else
-                {
-                    ViewBag.loanReceiverId = model.LoanReceiverId;
-                    ViewBag.guaranteeId = model.GuaranteeId;
-                    await FillDropDown();
-                    return View(model);
+                    case MessageTypeResult.Success:
+                        return RedirectToAction(nameof(Index));
+
+                    case MessageTypeResult.Danger:
+                    case MessageTypeResult.Warning:
+                        FillDropDown();
+                        return View(resultEdit.Item1);
+
+                    default:
+                        return RedirectToAction(nameof(Index));
                 }
             }
             catch (Exception exception)
             {
                 SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), MessageTypeActionMethod.Index);
-                return RedirectToAction("Index");
+                return RedirectToAction("ShowException", "Error");
             }
         }
 
@@ -254,51 +284,45 @@ namespace Aban.Dashboard.Areas.Loans.Controllers
         {
             try
             {
-                if (id == null) return RedirectToAction("Index");
-
-                var resultFindModel = await _charityLoanService.Find(id.Value);
-                
+                if (id == null)
+                {
+                    SetMessageEditnotFound();
+                    return RedirectToAction("Index");
+                }
+                Tuple<CharityLoan, ResultStatusOperation> resultFindModel = await charityLoanService.Find(id.Value);
+                SetMessage(resultFindModel.Item2);
                 if (resultFindModel.Item1 != null)
                 {
-                    var installments = _installmentsService.SpecificationGetData(resultFindModel.Item1.Id).Item1.ToList();
-                    installments.ForEach(x => x.IsDelete = true);
-                    await _installmentsService.UpdateRange(true, installments, false);
+                    List<CharityLoanInstallments> charityLoanInstallments = charityLoanInstallmentsService.SpecificationGetData(resultFindModel.Item1.Id).Item1.ToList();
+                    charityLoanInstallments.ForEach(x => x.IsDelete = true);
+                    await charityLoanInstallmentsService.UpdateRange(true, charityLoanInstallments, false);
 
                     resultFindModel.Item1.IsDelete = true;
-                    var updateResult = await _charityLoanService.Update(true, resultFindModel.Item1);
-                    SetMessage(updateResult.Item2);
+
+                    SetMessage(charityLoanService.Update(true, resultFindModel.Item1).Result.Item2);
+
                 }
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception exception)
             {
                 SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), MessageTypeActionMethod.Index);
-                return RedirectToAction("Index");
+                return RedirectToAction("ShowException", "Error");
             }
         }
 
-        private async Task FillDropDown()
+        private void FillDropDown()
         {
             try
             {
-                string selectedUser = ViewBag.loanReceiverId as string;
-                int? selectedGuarantee = ViewBag.guaranteeId as int?;
-
-                var allUsers = await _userIdentityService.GetAllAsync();
-                ViewBag.listLoanReceiver = new SelectList(
-                    allUsers.Select(u => new 
-                    { 
-                        Id = u.Id, 
-                        FullName = u.FirstName + " " + u.LastName + (!string.IsNullOrEmpty(u.FatherName) ? $" (پدر: {u.FatherName})" : "") 
-                    }), 
-                    "Id", "FullName", selectedUser);
-
-                var allGuarantees = await _guaranteeService.GetAllAsync();
-                ViewBag.listGuarantee = new SelectList(allGuarantees, "Id", "Description", selectedGuarantee);
+                string loanReceiverId = ViewBag.loanReceiverId;
+                int guaranteeId = ViewBag.guaranteeId == null ? 0 : ViewBag.guaranteeId;
+                ViewBag.listLoanReceiver = userIdentityService.ReadAllWithFatherName(loanReceiverId);
+                ViewBag.listGuarantee = guaranteeService.ReadAll(guaranteeId);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Console.WriteLine(ex.Message);
+                SetMessageException(new ResultStatusOperation("", "", MessageTypeResult.Danger, false, exception), MessageTypeActionMethod.Index);
             }
         }
     }

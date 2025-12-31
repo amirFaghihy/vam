@@ -1,10 +1,9 @@
 ﻿@model X.PagedList.IPagedList<Guarantee>
-@using Aban.Common.HtmlHelper
+
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    // اصلاح نام‌فضا طبق کد اصلی شما
     Aban.ViewModel.BreadCrumb breadCrumb = new Aban.ViewModel.BreadCrumb();
     breadCrumb.PageTitle = "ضمانت ها";
     breadCrumb.Title = "ضمانت ها";
@@ -25,15 +24,18 @@
             registerDateFrom = ViewBag.registerDateFrom,
             registerDateTo = ViewBag.registerDateTo,
 
+
             pageNumber = ViewBag.pageNumber,
             pageSize = ViewBag.pageSize,
             sortColumn = sortColumn,
             lastColumn = ViewBag.lastColumn,
             isDesc = ViewBag.isDesc
         };
-}
 
+}
 @await Html.PartialAsync("~/Views/Shared/Generic/_BreadCrumb.cshtml", breadCrumb)
+
+
 
 <div class="row layout-top-spacing">
     <div class="col-lg-12 col-12 layout-spacing">
@@ -46,6 +48,7 @@
                 <table class="table table-bordered table-hover mb-4">
                     <thead>
                         <tr>
+
                             <th style="width: 162px;">@Html.ActionLink("کد", "Index", "Guarantee", RouteValue("Id"), new { @id = "Id" })</th>
                             <th style="width: 162px;">@Html.ActionLink("ضامن", "Index", "Guarantee", RouteValue("guaranteeUserId"), new { @id = "" })</th>
                             <th style="width: 162px;">@Html.ActionLink("شماره چک", "Index", "Guarantee", RouteValue("ChequeNumber"), new { @id = "ChequeNumber" })</th>
@@ -56,37 +59,37 @@
                             <th style="width: 162px;">@Html.ActionLink("مشخصات طلا", "Index", "Guarantee", RouteValue("GoldGuarantee"), new { @id = "GoldGuarantee" })</th>
                             <th style="width: 162px;">@Html.ActionLink("فیش حقوقی", "Index", "Guarantee", RouteValue("PaySlip"), new { @id = "PaySlip" })</th>
                             <th style="width: 162px;">@Html.ActionLink("تاریخ ثبت", "Index", "Guarantee", RouteValue("RegisterDate"), new { @id = "RegisterDate" })</th>
+
                             <th style="width: 162px;">عملیات</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>@item.Id</td>
-                                <td>@(item.GuaranteeUser?.FirstName) @(item.GuaranteeUser?.LastName)</td>
-                                <td>@item.ChequeNumber </td>
-                                <td>@item.BankName </td>
-                                <td>@item.ChequePrice </td>
-                                <td>@item.BankDraftNumber </td>
-                                <td>@item.BankDraftPrice </td>
-                                <td>@item.GoldGuarantee </td>
-                                <td>@item.PaySlip </td>
-                                <td>
-                                    @Html.ConvertToPersianDateTime(item.RegisterDate)
-                                </td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
-                                        <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
-                                            <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
-                                            <a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>
-                                        </div>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.GuaranteeUser!.FirstName @item.GuaranteeUser.LastName</td>
+                            <td>@item.ChequeNumber </td>
+                            <td>@item.BankName </td>
+                            <td>@item.ChequePrice </td>
+                            <td>@item.BankDraftNumber </td>
+                            <td>@item.BankDraftPrice </td>
+                            <td>@item.GoldGuarantee </td>
+                            <td>@item.PaySlip </td>
+                            <td>
+                                @Html.ConvertToPersianDateTime(item.RegisterDate)
+                            </td>
+
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button id="btndefault" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">عملیات</button>
+                                    <div class="dropdown-menu" aria-labelledby="btndefault" style="will-change: transform;">
+                                        <a href="@Url.Action("Edit", new { id = item.Id })" class="dropdown-item"><i class="flaticon-home-fill-1 mr-1"></i>ویرایش</a>
+                                        <a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('آیا اطمینان دارید ؟');" class="dropdown-item"><i class="flaticon-gear-fill mr-1"></i>حذف</a>
                                     </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
+                                </div>
+                            </td>
+                        </tr>
+                    }
                     <tfoot>
                         <tr>
                             <th style="width: 162px;">کد</th>
@@ -99,12 +102,14 @@
                             <th style="width: 162px;">مشخصات طلا</th>
                             <th style="width: 162px;">فیش حقوقی</th>
                             <th style="width: 162px;">تاریخ ثبت</th>
+
                             <th>عملیات</th>
                         </tr>
                     </tfoot>
                 </table>
             </div>
-            <partial name="./Partial/_PaginationCount" model="new Aban.ViewModel.PaginationInfo(Model)" />
+            <partial name="./Partial/_PaginationCount" model="new PaginationInfo(Model)" />
+
         </div>
     </div>
 </div>
@@ -113,15 +118,18 @@
     <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
 }
 
-@section Scripts{
+    @section Scripts{
     <script src="~/plugins/select2/select2.min.js"></script>
+
     <script>
+
         $("#guaranteeUserId").select2({
             tags: true,
         }).data('select2').$dropdown.addClass('class23');
+
 
         $("#bankName").select2({
             tags: true,
         }).data('select2').$dropdown.addClass('class58');
     </script>
-}
+    }

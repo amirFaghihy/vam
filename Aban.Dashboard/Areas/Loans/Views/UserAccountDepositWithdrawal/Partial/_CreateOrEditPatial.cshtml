@@ -1,16 +1,14 @@
 ﻿@model UserAccountDepositWithdrawal
-@using Aban.Common
-
 <div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
     <div class="info">
-        <div class="row">
+        <div class="r!importantw">
             <div class="col-md-11 mx-auto">
                 <div class="row">
 
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="col-md-12" style="float: right !important; margin-bottom: 15px;">
                             <div class="text-right">
-                                <a style="cursor:pointer" class="btn btn-success mb-2 pr-5 pl-5" onclick="DirectSave(this)">ذخیره</a>
+                                <a style="cursor:pointer" class="btn btn-success mb-2 pr-5 pl-5 submit-form">ذخیره</a>
                                 <a class="btn btn-danger mb-2 btn-showloader" href="/Loans/UserAccountDepositWithdrawal/Index">انصراف</a>
                             </div>
                         </div>
@@ -24,7 +22,7 @@
                     <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
                         <div class="form-group">
                             <label asp-for="UserAccountId"></label>
-                            <select asp-for="UserAccountId" asp-items="ViewBag.listUserAccount" class="form-control basic">
+                            <select asp-for="UserAccountId" asp-items="ViewBag.listUserAccount" class="form-control">
                                 <option value="">انتخاب</option>
                             </select>
                             <span asp-validation-for="UserAccountId" class="text-danger"></span>
@@ -48,17 +46,20 @@
                             <span asp-validation-for="AccountTransactionType" class="text-danger"></span>
                         </div>
                     </div>
-
                     <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
                         <div class="form-group">
                             <label asp-for="AccountTransactionMethod"></label>
                             @{
+                                // دریافت viewbag از کنترلر
                                 var items = ViewBag.listAccountTransactionMethod as List<SelectListItem>;
-                                if (items != null)
-                                {
-                                    var itemToRemove = items.FirstOrDefault(x => x.Value == "6");
-                                    if (itemToRemove != null) items.Remove(itemToRemove);
-                                }
+
+                                #pragma warning disable CS8604
+                                // پیدا کردن آیتم مورد نظر از لیست
+                                var itemToRemove = items.FirstOrDefault(x => x.Value == "6");
+
+                                // حذف آیتم مورد نظر از لیست
+                                items.Remove(itemToRemove);
+
                             }
                             <select asp-for="AccountTransactionMethod" asp-items="items" class="form-control">
                                 <option value="">انتخاب</option>
@@ -67,13 +68,15 @@
                         </div>
                     </div>
 
+
+
                     <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
                         <div class="form-group">
                             <label for="TransactionDateTimeString">تاریخ واریز/برداشت</label>
                             @{
                                 var valueDate = (Model.TransactionDateTime != default ? Model.TransactionDateTime.ToConvertDateTimeToPersianDate() : DateTime.Now.ToConvertDateTimeToPersianDate());
                             }
-                            <input name="TransactionDateTimeString" id="TransactionDateTimeString" value="@valueDate" type="text" class="form-control PersianDatePicker" readonly style="background-color: white; cursor: pointer;" />
+                            <input name="TransactionDateTimeString" id="TransactionDateTimeString" value="@valueDate" type="text" class="form-control PersianDatePicker" />
                             <span asp-validation-for="TransactionDateTime" class="text-danger"></span>
                         </div>
                     </div>
@@ -84,15 +87,7 @@
                             @{
                                 var valueTime = (Model.TransactionDateTime != default ? Model.TransactionDateTime.ToString("HH:mm") : "00:00");
                             }
-                            <input type="text" 
-                                   class="form-control clockPicker" 
-                                   id="TransactionTimeString" 
-                                   name="TransactionTimeString" 
-                                   value="@valueTime" 
-                                   readonly 
-                                   style="background-color: white; cursor: pointer;"
-                                   data-val="false" 
-                                   autocomplete="off" />
+                            <input type="text" class="form-control clockPicker" id="TransactionTimeString" readonly="readonly" name="TransactionTimeString" value="@valueTime" />
                         </div>
                     </div>
 
@@ -104,6 +99,31 @@
                         </div>
                     </div>
 
+                    @*<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <div role="form">
+                    <div class="form-group">
+                    <label asp-for="TransactionDateTime"></label>
+                    <input id="TransactionDateTime" name="TransactionDateTimeString" type="text" class="form-control mb-4 PersianDatePicker" readonly value="تاریخ" />
+                    <span asp-validation-for="TransactionDateTime" class="text-danger"></span>
+                    </div>
+                    </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <div role="form">
+                    <div class="form-group">
+                    <label class=""> ساعت </label>
+                    <div class="input-group clockpicker" data-autoclose="true">
+                    <input name="TransactionDateTimeTime" type="text" class="form-control" value="@Model.TransactionDateTime.ToString("HH:mm")" readonly>
+                    <button type="button" class="input-group-addon btn-primary">
+                    <i class="fa fa-clock-o"></i>
+                    </button>
+                    </div>
+                    <span asp-validation-for="TransactionDateTime" class="text-danger"></span>
+                    </div>
+                    </div>
+                    </div>*@
+
+
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="form-group">
                             <label asp-for="Description"></label>
@@ -111,6 +131,7 @@
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
                     </div>
+
 
                 </div>
             </div>
@@ -120,43 +141,7 @@
 
 <div class="col-md-12" style="float: left !important; margin-bottom: 15px;">
     <div class="text-left">
-        <a style="cursor:pointer" class="btn btn-success mb-2 pr-5 pl-5" onclick="DirectSave(this)">ذخیره</a>
+        <a style="cursor:pointer" class="btn btn-success mb-2 pr-5 pl-5 submit-form">ذخیره</a>
         <a class="btn btn-danger mb-2 btn-showloader" href="/Loans/UserAccountDepositWithdrawal/Index">انصراف</a>
     </div>
 </div>
-
-<script>
-    // جلوگیری از نمایش خطاهای چارت در کنسول که بی ربط هستند
-    window.addEventListener('unhandledrejection', function (event) {
-        if (event.reason && event.reason.message && event.reason.message.includes('Element not found')) {
-            event.preventDefault();
-        }
-    });
-
-    function DirectSave(element) {
-        var form = $(element).closest('form');
-
-        // حذف باگ اعتبارسنجی ساعت
-        try {
-            if ($('#TransactionTimeString').length > 0) {
-                $('#TransactionTimeString').removeAttr('step');
-                // حذف قانون استپ از کتابخانه اعتبارسنجی
-                if($.fn.rules) {
-                     $('#TransactionTimeString').rules('remove', 'step'); 
-                }
-            }
-        } catch(e) { console.log(e); }
-
-        // اگر فرم معتبر بود، مستقیم ارسال کن (بدون هیچ سوالی)
-        if (form.valid()) {
-            // اطمینان از پر بودن ساعت
-            var timeVal = $('#TransactionTimeString').val();
-            if (!timeVal) {
-                alert('لطفا ساعت را وارد کنید');
-                return;
-            }
-            // ارسال نهایی
-            form.submit();
-        }
-    }
-</script>
